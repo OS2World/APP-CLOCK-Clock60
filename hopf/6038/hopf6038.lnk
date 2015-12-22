@@ -1,0 +1,4 @@
+hopf6038.OBJ zeitrout.obj zeitini.obj init.obj sz_wz.obj common.obj /nod /EXEPACK /MAP /ALIGN:16 
+hopf6038.sys   
+hopf6038.map,os2286, 
+hopf6038.def;  

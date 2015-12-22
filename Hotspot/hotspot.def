@@ -1,0 +1,9 @@
+;-------------------------------------
+; PMFORMAT.DEF module definition file
+;-------------------------------------
+
+NAME           HOTSPOT  WINDOWCOMPAT
+
+DESCRIPTION    '@#NB:6.00.20#@Hotspot editor for wpdcf77.dll'
+
+PROTMODE

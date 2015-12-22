@@ -1,0 +1,28 @@
+
+all: \
+    .\TimeServ.exe
+
+.\ShareMem.obj: \
+    ..\ShareMem.cpp \
+    {.;..;..\..;$(INCLUDE);}sharemem.hpp \
+    {.;..;..\..;$(INCLUDE);}dcfioctl.h
+
+.\NetBIOS.obj: \
+    ..\NetBIOS.cpp \
+    {.;..;..\..;$(INCLUDE);}NetBIOS.hpp
+
+.\DCF77.obj: \
+    ..\DCF77.CPP \
+    {.;..;..\..;$(INCLUDE);}sharemem.hpp \
+    {.;..;..\..;$(INCLUDE);}dcf77.hpp \
+    {.;..;..\..;$(INCLUDE);}dcfioctl.h
+
+.\TimeServ.obj: \
+    .\TimeServ.cpp \
+    {.;..;..\..;$(INCLUDE);}dcfioctl.h \
+    {.;..;..\..;$(INCLUDE);}sharemem.hpp \
+    {.;..;..\..;$(INCLUDE);}netbios.hpp \
+    {.;..;..\..;$(INCLUDE);}dcf77.hpp \
+    {.;..;..\..;$(INCLUDE);}timeserv.hpp
+
+

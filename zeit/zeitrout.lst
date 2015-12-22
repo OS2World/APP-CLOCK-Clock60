@@ -1,0 +1,2130 @@
+;	Static Name Aliases
+;
+;	$S1355_usLevelMax	EQU	usLevelMax
+;	$S1356_uscLevel	EQU	uscLevel
+;	$S1324_hername	EQU	hername
+;	$S1325_retname	EQU	retname
+;	$S1328_dt	EQU	dt
+;	$S1497_firstbyte	EQU	firstbyte
+;	$S1554_oldBit	EQU	oldBit
+;	$S1555_ucActualSecond	EQU	ucActualSecond
+;	$S1556_uscLow	EQU	uscLow
+;	$S1557_uscHigh	EQU	uscHigh
+	TITLE   zeitrout.c
+	.286p
+	.287
+INCLUDELIB	SLIBCE
+_TEXT	SEGMENT  WORD PUBLIC 'CODE'
+_TEXT	ENDS
+_DATA	SEGMENT  WORD PUBLIC 'DATA'
+_DATA	ENDS
+CONST	SEGMENT  WORD PUBLIC 'CONST'
+CONST	ENDS
+_BSS	SEGMENT  WORD PUBLIC 'BSS'
+_BSS	ENDS
+DGROUP	GROUP	CONST, _BSS, _DATA
+	ASSUME DS: DGROUP, SS: DGROUP
+PUBLIC  _uccSavety
+PUBLIC  _traeger
+PUBLIC  _uscIntervall
+PUBLIC  _initflag
+PUBLIC  _ucThrMaxValue
+PUBLIC  _szConfigFile
+PUBLIC  _ucPortTyp
+PUBLIC  _ucBitPos
+PUBLIC  _ucPol
+PUBLIC  _ucPower
+PUBLIC  _ucAutoMode
+PUBLIC  _ucTimeZone
+PUBLIC  _ucSavety
+PUBLIC  _sOffset
+PUBLIC  _usIntervall
+PUBLIC  _usPortAddr
+PUBLIC  _minold
+PUBLIC  _hourold
+PUBLIC  _dayold
+PUBLIC  _monold
+PUBLIC  _yearold
+PUBLIC  _goodmin
+PUBLIC  _badmin
+PUBLIC  _uscClockSet
+PUBLIC  _flStatus
+PUBLIC  _ticcount
+EXTRN	_outbyte:NEAR
+EXTRN	_inbyte:NEAR
+EXTRN	_TestSeg:NEAR
+EXTRN	_LvlWait:NEAR
+EXTRN	_LvlInsert:NEAR
+EXTRN	_LvlComIns:NEAR
+EXTRN	_LvlIsReady:NEAR
+EXTRN	_lastDay:NEAR
+EXTRN	_setClock:NEAR
+EXTRN	_f_strcpy:FAR
+EXTRN	_registerTimer:NEAR
+_BSS      SEGMENT
+COMM NEAR	_usThrCarrier:	BYTE:	 2
+COMM NEAR	_usThrPolarity:	BYTE:	 2
+COMM NEAR	_usThrMinute:	BYTE:	 2
+COMM NEAR	_usThrBitlen:	BYTE:	 2
+COMM NEAR	_ucThrValues:	 1:	 21
+COMM NEAR	_ucThrMaxIndex:	 1:	 2
+COMM NEAR	_DataDCFOrg:	BYTE:	 14
+COMM NEAR	_iTrace:	 2:	 2
+COMM NEAR	_data:	 1:	 60
+_BSS      ENDS
+EXTRN	_usTimerMode:WORD
+_BSS      SEGMENT
+COMM NEAR	_usTickLen:	BYTE:	 2
+COMM NEAR	_usTTicks:	BYTE:	 2
+COMM NEAR	_bIsHRTimerAvail:	BYTE:	 2
+COMM NEAR	_usThreshold:	BYTE:	 2
+_BSS      ENDS
+_DATA      SEGMENT
+_szConfigFile	DB	00H
+ 	DB	259 DUP(0)
+
+_ucPortTyp	DB	00H
+_ucBitPos	DB	00H
+_ucPol	DB	00H
+_ucPower	DB	00H
+_ucAutoMode	DB	00H
+_ucTimeZone	DB	00H
+_ucSavety	DB	02H
+	ORG	$+1
+_sOffset	DW	00H
+_usIntervall	DW	03cH
+_usPortAddr	DW	00H
+$S1324_hername	DB	'(c) Geppert             ',  00H
+	ORG	$+1
+$S1325_retname	DB	'(c) noller & breining   ',  00H
+	ORG	$+1
+_minold	DW	00H
+_hourold	DW	00H
+_dayold	DW	00H
+_monold	DW	00H
+_yearold	DW	00H
+_goodmin	DW	00H
+_badmin	DW	00H
+_uscClockSet	DW	00H
+_flStatus	DW	00H
+_ticcount	DW	00H
+_uccSavety	DB	00H
+	ORG	$+1
+_traeger	DW	064H
+_uscIntervall	DW	00H
+_initflag	DB	00H
+	ORG	$+1
+_ucThrMaxValue	DB	0ffH
+	DB	0ffH
+$S1355_usLevelMax	DW	00H
+$S1356_uscLevel	DW	00H
+$S1497_firstbyte	DB	00H
+$S1554_oldBit	DB	00H
+$S1555_ucActualSecond	DB	00H
+	ORG	$+1
+$S1556_uscLow	DW	00H
+$S1557_uscHigh	DW	00H
+_DATA      ENDS
+_BSS      SEGMENT
+$S1328_dt	DB 09H DUP (?)
+_BSS      ENDS
+_TEXT      SEGMENT
+	ASSUME	CS: _TEXT
+; Line 1
+; Line 52
+; Line 32
+; Line 649
+; Line 37
+; Line 52
+; Line 1865
+; Line 59
+; Line 61
+; Line 43
+; Line 85
+; Line 102
+; Line 4923
+; Line 716
+; Line 5153
+; Line 86
+; Line 2848
+; Line 87
+; Line 121
+; Line 54
+; Line 32
+; Line 55
+; Line 56
+; Line 4
+; Line 57
+; Line 58
+; Line 139
+	PUBLIC	_initdata
+_initdata	PROC NEAR
+	enter	2,0
+;	j = -2
+; Line 141
+	mov	WORD PTR [bp-2],0	;j
+$FC1361:
+; Line 142
+	mov	bx,WORD PTR [bp-2]	;j
+	mov	BYTE PTR _data[bx],1
+	inc	WORD PTR [bp-2]	;j
+	cmp	WORD PTR [bp-2],60	;j
+	jl	$FC1361
+; Line 144
+	mov	BYTE PTR $S1328_dt+2,0
+; Line 145
+	leave	
+	ret	
+
+_initdata	ENDP
+; Line 148
+	PUBLIC	_strcpy
+_strcpy	PROC NEAR
+	enter	12,0
+;	pszTemp = -4
+;	pszSrc = -8
+;	pszSource = 8
+;	pszDest = 4
+; Line 149
+	mov	ax,WORD PTR [bp+4]	;pszDest
+	mov	dx,WORD PTR [bp+6]
+	mov	WORD PTR [bp-4],ax	;pszTemp
+	mov	WORD PTR [bp-2],dx
+; Line 150
+	mov	ax,WORD PTR [bp+8]	;pszSource
+	mov	dx,WORD PTR [bp+10]
+	mov	WORD PTR [bp-8],ax	;pszSrc
+	mov	WORD PTR [bp-6],dx
+; Line 152
+$D1369:
+; Line 153
+; Line 154
+	les	bx,DWORD PTR [bp-8]	;pszSrc
+	mov	al,BYTE PTR es:[bx]
+	les	bx,DWORD PTR [bp-4]	;pszTemp
+	inc	WORD PTR [bp-4]	;pszTemp
+	mov	BYTE PTR es:[bx],al
+; Line 155
+	les	bx,DWORD PTR [bp-8]	;pszSrc
+	inc	WORD PTR [bp-8]	;pszSrc
+	cmp	BYTE PTR es:[bx],0
+	jne	$D1369
+; Line 157
+	mov	ax,WORD PTR [bp+4]	;pszDest
+	mov	dx,WORD PTR [bp+6]
+; Line 158
+	leave	
+	ret	
+
+_strcpy	ENDP
+; Line 162
+	PUBLIC	_ruecksetzen
+_ruecksetzen	PROC NEAR
+; Line 166
+	sub	al,al
+	mov	BYTE PTR $S1328_dt,al
+	mov	BYTE PTR $S1328_dt+1,al
+	mov	BYTE PTR $S1328_dt+3,al
+	mov	BYTE PTR $S1328_dt+4,al
+; Line 167
+	mov	WORD PTR $S1328_dt+5,0
+; Line 168
+	and	BYTE PTR _flStatus+1,253
+; Line 171
+	ret	
+
+_ruecksetzen	ENDP
+; Line 174
+	PUBLIC	_bittochar
+_bittochar	PROC NEAR
+	enter	2,0
+;	retvalue = -2
+;	length = 6
+;	cdata = 4
+; Line 175
+	mov	BYTE PTR [bp-2],0	;retvalue
+; Line 177
+	mov	bx,WORD PTR [bp+4]	;cdata
+	cmp	BYTE PTR [bx],0
+	je	$I1379
+; Line 178
+	mov	BYTE PTR [bp-2],1	;retvalue
+; Line 179
+$I1379:
+	cmp	BYTE PTR [bp+6],1	;length
+	jle	$I1385
+; Line 180
+; Line 181
+	cmp	BYTE PTR [bx+1],0
+	je	$I1381
+; Line 182
+	add	BYTE PTR [bp-2],2	;retvalue
+; Line 183
+$I1381:
+	cmp	BYTE PTR [bp+6],2	;length
+	jle	$I1385
+; Line 184
+; Line 185
+	cmp	BYTE PTR [bx+2],0
+	je	$I1383
+; Line 186
+	add	BYTE PTR [bp-2],4	;retvalue
+; Line 187
+$I1383:
+	cmp	BYTE PTR [bp+6],3	;length
+	jle	$I1385
+; Line 188
+; Line 189
+	cmp	BYTE PTR [bx+3],0
+	je	$I1385
+; Line 190
+	add	BYTE PTR [bp-2],8	;retvalue
+; Line 191
+$I1385:
+; Line 192
+; Line 193
+; Line 195
+	mov	al,BYTE PTR [bp-2]	;retvalue
+; Line 196
+	leave	
+	ret	
+
+_bittochar	ENDP
+; Line 199
+	PUBLIC	_getbSignal
+_getbSignal	PROC NEAR
+	enter	4,0
+;	bSignal = -2
+;	ucBP = -4
+; Line 201
+	mov	al,BYTE PTR _ucBitPos
+	mov	BYTE PTR [bp-4],al	;ucBP
+; Line 203
+	mov	BYTE PTR [bp-2],0	;bSignal
+	jmp	SHORT $F1390
+$FC1391:
+; Line 204
+; Line 205
+	test	BYTE PTR [bp-4],1	;ucBP
+	jne	$FB1392
+; Line 207
+	shr	BYTE PTR [bp-4],1	;ucBP
+; Line 208
+	inc	BYTE PTR [bp-2]	;bSignal
+$F1390:
+	cmp	BYTE PTR [bp-4],0	;ucBP
+	jne	$FC1391
+$FB1392:
+; Line 210
+	cmp	BYTE PTR _ucAutoMode,1
+	je	$I1395
+	cmp	BYTE PTR _ucAutoMode,0
+	jne	$I1394
+$I1395:
+; Line 211
+	mov	BYTE PTR [bp-2],32	;bSignal
+; Line 212
+$I1394:
+	mov	al,BYTE PTR [bp-2]	;bSignal
+; Line 213
+	leave	
+	ret	
+
+_getbSignal	ENDP
+; Line 216
+	PUBLIC	_fillDataDCF
+_fillDataDCF	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	pDataDCF = 4
+; Line 217
+	mov	al,BYTE PTR _ucPower
+	and	al,7
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx],al
+; Line 218
+	call	_getbSignal
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+1],al
+; Line 219
+	mov	al,BYTE PTR _ucPortTyp
+	sub	ah,ah
+	jmp	SHORT $S1398
+; Line 220
+; Line 221
+$SC1402:
+; Line 222
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],5
+; Line 223
+	jmp	SHORT $SB1399
+; Line 224
+$SC1403:
+; Line 225
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],21
+; Line 226
+	jmp	SHORT $SB1399
+; Line 227
+$SC1404:
+; Line 228
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+1],16
+; Line 229
+$SC1405:
+; Line 230
+	mov	ax,WORD PTR _usPortAddr
+	sub	ax,744
+	je	$SC1413
+	sub	ax,16
+	je	$SC1411
+	sub	ax,240
+	je	$SC1412
+	sub	ax,16
+	jne	$SB1399
+; Line 231
+; Line 233
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],1
+; Line 245
+	jmp	SHORT $SB1399
+; Line 235
+$SC1411:
+; Line 236
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],2
+; Line 237
+	jmp	SHORT $SB1399
+; Line 238
+$SC1412:
+; Line 239
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],3
+; Line 240
+	jmp	SHORT $SB1399
+; Line 241
+$SC1413:
+; Line 242
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],4
+; Line 243
+	jmp	SHORT $SB1399
+; Line 247
+$SC1414:
+; Line 248
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+1],16
+; Line 249
+$SC1415:
+; Line 250
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	BYTE PTR es:[bx+2],17
+; Line 251
+	jmp	SHORT $SB1399
+$S1398:
+	cmp	ax,5
+	ja	$SB1399
+	shl	ax,1
+	xchg	ax,bx
+	jmp	WORD PTR cs:$L20000[bx]
+$L20000:
+		DW	$SC1402
+		DW	$SC1403
+		DW	$SC1405
+		DW	$SC1415
+		DW	$SC1404
+		DW	$SC1414
+$SB1399:
+; Line 254
+	mov	ax,WORD PTR _usThreshold
+	les	bx,DWORD PTR [bp+4]	;pDataDCF
+	mov	WORD PTR es:[bx+8],ax
+; Line 255
+	mov	ax,WORD PTR _usTickLen
+	mov	WORD PTR es:[bx+10],ax
+; Line 256
+	mov	ax,WORD PTR _usTimerMode
+	mov	WORD PTR es:[bx+12],ax
+; Line 257
+	mov	al,BYTE PTR _ucSavety
+	mov	BYTE PTR es:[bx+3],al
+; Line 258
+	mov	ax,WORD PTR _usPortAddr
+	mov	WORD PTR es:[bx+4],ax
+; Line 259
+	mov	ax,WORD PTR _usIntervall
+	mov	WORD PTR es:[bx+6],ax
+; Line 262
+	leave	
+	ret	
+
+_fillDataDCF	ENDP
+; Line 265
+	PUBLIC	_ioctl
+_ioctl	PROC NEAR
+	push	bp
+	mov	bp,sp
+	push	di
+	push	si
+;	usCategFkt = 12
+;	pIOBuffer = 8
+;	pParm = 4
+; Line 266
+	mov	ax,WORD PTR [bp+12]	;usCategFkt
+	jmp	$S1421
+; Line 267
+; Line 268
+$SC1425:
+; Line 269
+	push	23
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	jne	$I1426
+; Line 270
+$L20012:
+	mov	ax,-32493
+	jmp	$EX1420
+; Line 272
+$I1426:
+	and	BYTE PTR _flStatus+1,251
+; Line 273
+	cmp	BYTE PTR _ucAutoMode,1
+	je	$I1428
+	cmp	BYTE PTR _ucAutoMode,0
+	jne	$I1427
+$I1428:
+; Line 274
+	or	BYTE PTR _flStatus+1,4
+; Line 276
+$I1427:
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	BYTE PTR es:[bx],1
+; Line 277
+	mov	BYTE PTR es:[bx+1],5
+; Line 278
+	mov	BYTE PTR es:[bx+2],4
+; Line 279
+	mov	al,BYTE PTR _ucPol
+	mov	BYTE PTR es:[bx+3],al
+; Line 280
+	mov	al,BYTE PTR _bIsHRTimerAvail
+	mov	BYTE PTR es:[bx+4],al
+; Line 281
+	mov	ax,WORD PTR _flStatus
+	mov	WORD PTR es:[bx+5],ax
+; Line 282
+	mov	ax,WORD PTR _badmin
+	mov	WORD PTR es:[bx+7],ax
+; Line 283
+	mov	ax,WORD PTR _goodmin
+	mov	WORD PTR es:[bx+9],ax
+; Line 284
+	mov	ax,WORD PTR _uscClockSet
+	mov	WORD PTR es:[bx+11],ax
+; Line 285
+	mov	WORD PTR es:[bx+13],-2273
+; Line 286
+	mov	WORD PTR es:[bx+15],127
+; Line 287
+	mov	WORD PTR es:[bx+17],1
+; Line 288
+	mov	WORD PTR es:[bx+19],15
+; Line 289
+	mov	WORD PTR es:[bx+21],7
+; Line 290
+$L20013:
+	sub	ax,ax
+	jmp	$EX1420
+; Line 292
+$SC1429:
+; Line 293
+	push	9
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	jne	$JCC633
+	jmp	$L20012
+$JCC633:
+; Line 295
+	mov	al,BYTE PTR $S1328_dt
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	BYTE PTR es:[bx],al
+; Line 296
+	mov	al,BYTE PTR $S1328_dt+1
+	mov	BYTE PTR es:[bx+1],al
+; Line 297
+	mov	al,BYTE PTR $S1328_dt+2
+	mov	BYTE PTR es:[bx+2],al
+; Line 298
+	mov	al,BYTE PTR $S1328_dt+3
+	mov	BYTE PTR es:[bx+3],al
+; Line 299
+	mov	al,BYTE PTR $S1328_dt+4
+	mov	BYTE PTR es:[bx+4],al
+; Line 300
+	mov	ax,WORD PTR $S1328_dt+5
+	mov	WORD PTR es:[bx+5],ax
+; Line 301
+	mov	ax,WORD PTR $S1328_dt+7
+	mov	WORD PTR es:[bx+7],ax
+	jmp	SHORT $L20013
+; Line 304
+$SC1431:
+; Line 305
+	push	3
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	je	$L20016
+; Line 307
+	mov	al,BYTE PTR _ucTimeZone
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	BYTE PTR es:[bx],al
+; Line 308
+	mov	ax,WORD PTR _sOffset
+	mov	WORD PTR es:[bx+1],ax
+	jmp	SHORT $L20013
+; Line 311
+$SC1433:
+; Line 312
+	push	14
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	je	$L20016
+; Line 315
+	push	1
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;pParm
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	jne	$L20015
+; Line 318
+$L20016:
+	jmp	$L20012
+$L20015:
+	les	bx,DWORD PTR [bp+4]	;pParm
+	mov	al,BYTE PTR es:[bx]
+	sub	ah,ah
+	or	ax,ax
+	je	$SC1440
+	dec	ax
+	je	$SC1441
+	jmp	$L20012
+; Line 319
+; Line 320
+$SC1440:
+; Line 321
+	mov	ax,WORD PTR _usTTicks
+	mul	WORD PTR _usTickLen
+	shr	ax,2
+	mov	cx,ax
+	mov	ax,WORD PTR _usTickLen
+	mul	WORD PTR _usThrBitlen
+	add	ax,cx
+	mov	WORD PTR _usThreshold,ax
+; Line 322
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_fillDataDCF
+	pop	bx
+	pop	bx
+; Line 323
+	jmp	$L20013
+; Line 325
+$SC1441:
+; Line 326
+	mov	si,OFFSET DGROUP:_DataDCFOrg
+	les	di,DWORD PTR [bp+8]	;pIOBuffer
+	mov	cx,7
+	rep	movsw
+; Line 327
+	jmp	$L20013
+; Line 329
+$SC1443:
+; Line 335
+	push	3
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	jne	$JCC852
+	jmp	$L20012
+$JCC852:
+; Line 337
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	cmp	BYTE PTR es:[bx],0
+	jne	$I1445
+; Line 338
+	mov	BYTE PTR _ucTimeZone,0
+; Line 339
+	jmp	SHORT $I1446
+$I1445:
+; Line 340
+	mov	BYTE PTR _ucTimeZone,1
+$I1446:
+; Line 341
+	cmp	WORD PTR es:[bx+1],-13
+	jg	$JCC883
+	jmp	$L20012
+$JCC883:
+	cmp	WORD PTR es:[bx+1],13
+	jge	$L20018
+; Line 342
+	mov	ax,WORD PTR es:[bx+1]
+	mov	WORD PTR _sOffset,ax
+; Line 343
+	jmp	$L20013
+$SC1449:
+; Line 348
+	push	14
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	jne	$L20017
+; Line 352
+$L20018:
+	jmp	$L20012
+$L20017:
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	al,BYTE PTR es:[bx+2]
+	sub	ah,ah
+	jmp	SHORT $S1451
+; Line 353
+; Line 354
+$SC1455:
+; Line 355
+	mov	BYTE PTR _ucPortTyp,0
+; Line 356
+	mov	WORD PTR _usPortAddr,513
+; Line 357
+	jmp	$SB1452
+; Line 358
+$SC1456:
+; Line 359
+	mov	BYTE PTR _ucPortTyp,1
+; Line 360
+$L20014:
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	ax,WORD PTR es:[bx+4]
+	mov	WORD PTR _usPortAddr,ax
+; Line 361
+	jmp	SHORT $SB1452
+; Line 362
+$SC1457:
+; Line 363
+	mov	BYTE PTR _ucPortTyp,2
+; Line 364
+	mov	WORD PTR _usPortAddr,1016
+; Line 365
+	jmp	SHORT $SB1452
+; Line 366
+$SC1458:
+; Line 367
+	mov	BYTE PTR _ucPortTyp,2
+; Line 368
+	mov	WORD PTR _usPortAddr,760
+; Line 369
+	jmp	SHORT $SB1452
+; Line 370
+$SC1459:
+; Line 371
+	mov	BYTE PTR _ucPortTyp,2
+; Line 372
+	mov	WORD PTR _usPortAddr,1000
+; Line 373
+	jmp	SHORT $SB1452
+; Line 374
+$SC1460:
+; Line 375
+	mov	BYTE PTR _ucPortTyp,2
+; Line 376
+	mov	WORD PTR _usPortAddr,744
+; Line 377
+	jmp	SHORT $SB1452
+; Line 378
+$SC1461:
+; Line 379
+	mov	BYTE PTR _ucPortTyp,3
+	jmp	SHORT $L20014
+$S1451:
+	dec	ax
+	cmp	ax,20
+	ja	$SB1452
+	shl	ax,1
+	xchg	ax,bx
+	jmp	WORD PTR cs:$L20001[bx]
+$L20001:
+		DW	$SC1457
+		DW	$SC1458
+		DW	$SC1459
+		DW	$SC1460
+		DW	$SC1455
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SC1461
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SB1452
+		DW	$SC1456
+$SB1452:
+; Line 388
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	test	BYTE PTR es:[bx+1],16
+	je	$I1465
+; Line 389
+; Line 390
+	cmp	BYTE PTR _ucPortTyp,2
+	jne	$I1464
+; Line 391
+; Line 392
+	mov	BYTE PTR _ucPortTyp,4
+; Line 393
+	mov	BYTE PTR _ucAutoMode,2
+; Line 394
+; Line 395
+$I1464:
+	cmp	BYTE PTR _ucPortTyp,3
+	jne	$I1465
+; Line 396
+; Line 397
+	mov	BYTE PTR _ucPortTyp,5
+; Line 398
+	mov	BYTE PTR _ucAutoMode,2
+; Line 399
+; Line 400
+$I1465:
+; Line 403
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	cmp	WORD PTR es:[bx+6],0
+	je	$I1466
+; Line 404
+	mov	ax,WORD PTR es:[bx+6]
+	mov	WORD PTR _usIntervall,ax
+; Line 407
+$I1466:
+	cmp	BYTE PTR es:[bx+3],0
+	je	$I1467
+; Line 408
+	mov	al,BYTE PTR es:[bx+3]
+	mov	BYTE PTR _ucSavety,al
+; Line 411
+$I1467:
+	test	BYTE PTR es:[bx],4
+	je	$I1468
+; Line 412
+	mov	BYTE PTR _ucPower,255
+; Line 413
+	jmp	SHORT $I1469
+$I1468:
+; Line 414
+	mov	al,BYTE PTR es:[bx]
+	and	al,3
+	mov	BYTE PTR _ucPower,al
+$I1469:
+; Line 417
+	test	BYTE PTR es:[bx+1],32
+	je	$I1470
+; Line 418
+	mov	BYTE PTR _ucAutoMode,0
+; Line 419
+	jmp	SHORT $I1471
+$I1470:
+; Line 420
+; Line 421
+	mov	cl,BYTE PTR es:[bx+1]
+	and	cl,7
+	mov	al,1
+	shl	al,cl
+	mov	BYTE PTR _ucBitPos,al
+; Line 422
+	mov	BYTE PTR _ucAutoMode,2
+; Line 423
+$I1471:
+; Line 426
+	mov	ax,WORD PTR _usTimerMode
+	cmp	WORD PTR es:[bx+12],ax
+	je	$I1476
+; Line 427
+; Line 429
+	cmp	WORD PTR es:[bx+12],2
+	je	$I1474
+	cmp	WORD PTR es:[bx+12],3
+	je	$JCC1233
+	jmp	$L20012
+$JCC1233:
+$I1474:
+; Line 430
+; Line 432
+	push	WORD PTR es:[bx+10]
+	push	WORD PTR es:[bx+12]
+	call	_registerTimer
+	pop	bx
+	pop	bx
+	or	ax,ax
+	jne	$I1476
+; Line 433
+	mov	ax,-32500
+	jmp	$EX1420
+; Line 434
+; Line 435
+$I1476:
+; Line 437
+; Line 439
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	ax,WORD PTR es:[bx+8]
+	mov	WORD PTR _usThreshold,ax
+; Line 440
+	sub	dx,dx
+	div	WORD PTR _usTickLen
+	mov	WORD PTR _usThrBitlen,ax
+; Line 441
+	cmp	WORD PTR es:[bx+12],2
+	jne	$I1477
+; Line 442
+; Line 445
+	mov	ax,WORD PTR _usThreshold
+	sub	dx,dx
+	div	WORD PTR _usTickLen
+	mov	ax,dx
+	shl	ax,2
+	sub	dx,dx
+	div	WORD PTR _usTickLen
+	mov	WORD PTR _usTTicks,ax
+; Line 446
+; Line 447
+	jmp	$L20013
+$I1477:
+; Line 448
+; Line 450
+	mov	WORD PTR _usTTicks,0
+; Line 451
+	jmp	$L20013
+; Line 455
+$SC1479:
+; Line 456
+	push	260
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	je	$L20020
+; Line 460
+	push	ds
+	push	OFFSET DGROUP:_szConfigFile
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	FAR PTR _f_strcpy
+	add	sp,8
+	jmp	$L20013
+; Line 463
+$SC1481:
+; Line 464
+	push	3
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;pIOBuffer
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	je	$L20020
+; Line 466
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	ax,WORD PTR es:[bx]
+	inc	ax
+	inc	ax
+	push	ax
+	push	es
+	push	bx
+	call	_TestSeg
+	add	sp,6
+	or	ax,ax
+	jne	$L20019
+; Line 469
+$L20020:
+	jmp	$L20012
+$L20019:
+	call	_LvlIsReady
+	or	ax,ax
+	jne	$I1484
+; Line 470
+	mov	ax,-32492
+	jmp	SHORT $EX1420
+; Line 472
+$I1484:
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	push	WORD PTR es:[bx]
+	lea	ax,WORD PTR [bx+2]
+	push	es
+	push	ax
+	call	_LvlWait
+	add	sp,6
+	les	bx,DWORD PTR [bp+8]	;pIOBuffer
+	mov	WORD PTR es:[bx],ax
+	jmp	$L20013
+$S1421:
+	sub	ax,-28608
+	jne	$JCC1445
+	jmp	$SC1443
+$JCC1445:
+	dec	ax
+	jne	$JCC1451
+	jmp	$SC1449
+$JCC1451:
+	sub	ax,31
+	jne	$JCC1459
+	jmp	$SC1431
+$JCC1459:
+	dec	ax
+	jne	$JCC1465
+	jmp	$SC1433
+$JCC1465:
+	dec	ax
+	jne	$JCC1471
+	jmp	$SC1425
+$JCC1471:
+	dec	ax
+	jne	$JCC1477
+	jmp	$SC1429
+$JCC1477:
+	sub	ax,4
+	jne	$JCC1485
+	jmp	$SC1479
+$JCC1485:
+	dec	ax
+	jne	$JCC1491
+	jmp	$SC1481
+$JCC1491:
+; Line 476
+	mov	ax,-32509
+; Line 477
+$EX1420:
+	pop	si
+	pop	di
+	leave	
+	ret	
+
+_ioctl	ENDP
+; Line 480
+	PUBLIC	_getcom
+_getcom	PROC NEAR
+	enter	2,0
+;	zw = -2
+; Line 484
+	cmp	BYTE PTR _ucPower,4
+	jae	$I1488
+; Line 485
+; Line 486
+	mov	ax,WORD PTR _usPortAddr
+	add	ax,4
+	push	ax
+	call	_inbyte
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;zw
+; Line 487
+	and	BYTE PTR [bp-2],252	;zw
+; Line 489
+	mov	al,BYTE PTR _ucPower
+	or	BYTE PTR [bp-2],al	;zw
+	mov	al,BYTE PTR [bp-2]	;zw
+	sub	ah,ah
+	push	ax
+	mov	ax,WORD PTR _usPortAddr
+	add	ax,4
+	push	ax
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 490
+; Line 492
+$I1488:
+	cmp	BYTE PTR _ucPol,0
+	jne	$I1489
+; Line 493
+; Line 495
+	mov	BYTE PTR _ucPol,255
+; Line 496
+	push	131
+	mov	ax,WORD PTR _usPortAddr
+	add	ax,3
+	push	ax
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 497
+	push	0
+	push	WORD PTR _usPortAddr
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 498
+	push	9
+	mov	ax,WORD PTR _usPortAddr
+	inc	ax
+	push	ax
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 499
+	push	3
+	mov	ax,WORD PTR _usPortAddr
+	add	ax,3
+	push	ax
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 501
+; Line 503
+$I1489:
+; Line 504
+	mov	ax,WORD PTR _usPortAddr
+	add	ax,5
+	push	ax
+	call	_inbyte
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;zw
+	test	al,1
+	jne	$I1490
+; Line 505
+; Line 506
+	push	255
+	call	_LvlComIns
+	pop	bx
+; Line 507
+	mov	al,255
+	leave	
+	ret	
+; Line 508
+; Line 510
+$I1490:
+	push	WORD PTR _usPortAddr
+	call	_inbyte
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;zw
+; Line 512
+	mov	WORD PTR _iTrace,1
+; Line 513
+	sub	ah,ah
+	mov	WORD PTR _iTrace+2,ax
+; Line 519
+	push	ax
+	call	_LvlComIns
+	pop	bx
+; Line 521
+	mov	al,BYTE PTR [bp-2]	;zw
+	and	al,63
+	cmp	al,1
+	sbb	al,al
+	neg	al
+; Line 522
+	leave	
+	ret	
+
+_getcom	ENDP
+; Line 525
+	PUBLIC	_getbit
+_getbit	PROC NEAR
+	enter	2,0
+;	zw = -2
+;	port = 4
+; Line 528
+	push	WORD PTR [bp+4]	;port
+	call	_inbyte
+	pop	bx
+; Line 529
+	xor	al,BYTE PTR _ucPol
+	and	al,BYTE PTR _ucBitPos
+; Line 530
+	leave	
+	ret	
+
+_getbit	ENDP
+; Line 533
+	PUBLIC	_getbit_auto
+_getbit_auto	PROC NEAR
+	enter	4,0
+;	zw = -2
+;	ebit = -4
+;	port = 4
+; Line 537
+	push	WORD PTR [bp+4]	;port
+	call	_inbyte
+	pop	bx
+	and	al,240
+	mov	BYTE PTR [bp-2],al	;zw
+; Line 540
+	cmp	BYTE PTR _ucAutoMode,0
+	jne	$I1500
+; Line 541
+; Line 542
+	mov	BYTE PTR $S1497_firstbyte,al
+; Line 543
+	mov	BYTE PTR _ucAutoMode,1
+; Line 544
+; Line 547
+$I1500:
+	cmp	BYTE PTR _ucAutoMode,1
+	jne	$I1501
+	mov	al,BYTE PTR $S1497_firstbyte
+	cmp	BYTE PTR [bp-2],al	;zw
+	je	$I1501
+; Line 548
+; Line 551
+	xor	al,BYTE PTR [bp-2]	;zw
+	mov	BYTE PTR _ucBitPos,al
+	test	al,16
+	je	$I1502
+; Line 552
+	mov	BYTE PTR _ucBitPos,16
+; Line 553
+$I1502:
+	test	BYTE PTR _ucBitPos,32
+	je	$I1503
+; Line 554
+	mov	BYTE PTR _ucBitPos,32
+; Line 555
+$I1503:
+	test	BYTE PTR _ucBitPos,64
+	je	$I1504
+; Line 556
+	mov	BYTE PTR _ucBitPos,64
+; Line 557
+$I1504:
+	test	BYTE PTR _ucBitPos,128
+	je	$I1505
+; Line 558
+	mov	BYTE PTR _ucBitPos,128
+; Line 559
+$I1505:
+	mov	BYTE PTR _ucAutoMode,3
+; Line 560
+; Line 562
+$I1501:
+; Line 563
+	mov	al,BYTE PTR [bp-2]	;zw
+	xor	al,BYTE PTR _ucPol
+	and	al,BYTE PTR _ucBitPos
+	mov	BYTE PTR [bp-2],al	;zw
+	push	ax
+	call	_LvlInsert
+	pop	bx
+; Line 564
+	mov	al,BYTE PTR [bp-2]	;zw
+; Line 565
+	leave	
+	ret	
+
+_getbit_auto	ENDP
+; Line 568
+	PUBLIC	_getTime
+_getTime	PROC NEAR
+	enter	18,0
+	push	si
+;	sOffs = -2
+;	sParity1 = -6
+;	sParity2 = -8
+;	sParity3 = -10
+;	usc = -4
+; Line 569
+	mov	ax,WORD PTR _sOffset
+	mov	WORD PTR [bp-2],ax	;sOffs
+; Line 576
+	inc	WORD PTR _badmin
+; Line 577
+	and	BYTE PTR _flStatus+1,253
+; Line 580
+	sub	ax,ax
+	mov	WORD PTR [bp-10],ax	;sParity3
+	mov	WORD PTR [bp-8],ax	;sParity2
+	mov	WORD PTR [bp-6],ax	;sParity1
+; Line 581
+	mov	WORD PTR [bp-4],ax	;usc
+$FC1514:
+; Line 582
+	mov	bx,WORD PTR [bp-4]	;usc
+	mov	al,BYTE PTR _data[bx]
+	sub	ah,ah
+	add	WORD PTR [bp-6],ax	;sParity1
+	inc	WORD PTR [bp-4]	;usc
+	cmp	WORD PTR [bp-4],29	;usc
+	jb	$FC1514
+; Line 583
+	mov	WORD PTR [bp-4],29	;usc
+$FC1517:
+; Line 584
+	mov	bx,WORD PTR [bp-4]	;usc
+	mov	al,BYTE PTR _data[bx]
+	sub	ah,ah
+	add	WORD PTR [bp-8],ax	;sParity2
+	inc	WORD PTR [bp-4]	;usc
+	cmp	WORD PTR [bp-4],36	;usc
+	jb	$FC1517
+; Line 585
+	mov	WORD PTR [bp-4],36	;usc
+$FC1520:
+; Line 586
+	mov	bx,WORD PTR [bp-4]	;usc
+	mov	al,BYTE PTR _data[bx]
+	sub	ah,ah
+	add	WORD PTR [bp-10],ax	;sParity3
+	inc	WORD PTR [bp-4]	;usc
+	cmp	WORD PTR [bp-4],59	;usc
+	jb	$FC1520
+; Line 590
+	test	BYTE PTR [bp-6],1	;sParity1
+	jne	$I1523
+	test	BYTE PTR [bp-8],1	;sParity2
+	jne	$I1523
+	test	BYTE PTR [bp-10],1	;sParity3
+	je	$I1522
+$I1523:
+; Line 591
+; Line 593
+	call	_ruecksetzen
+; Line 594
+	pop	si
+	leave	
+	ret	
+; Line 595
+; Line 596
+$I1522:
+	mov	WORD PTR $S1328_dt+7,5
+; Line 597
+	mov	BYTE PTR $S1328_dt+2,0
+; Line 598
+	push	4
+	push	OFFSET DGROUP:_data+21
+	call	_bittochar
+	pop	bx
+	pop	bx
+	push	3
+	push	OFFSET DGROUP:_data+25
+	mov	WORD PTR [bp-12],ax
+	call	_bittochar
+	pop	bx
+	pop	bx
+	mov	cl,10
+	imul	cl
+	add	al,BYTE PTR [bp-12]
+	mov	BYTE PTR $S1328_dt+1,al
+; Line 599
+	push	4
+	push	OFFSET DGROUP:_data+29
+	call	_bittochar
+	pop	bx
+	pop	bx
+	push	2
+	push	OFFSET DGROUP:_data+33
+	mov	WORD PTR [bp-14],ax
+	call	_bittochar
+	pop	bx
+	pop	bx
+	mov	cl,10
+	imul	cl
+	add	al,BYTE PTR [bp-14]
+	mov	BYTE PTR $S1328_dt,al
+; Line 600
+	push	4
+	push	OFFSET DGROUP:_data+36
+	call	_bittochar
+	pop	bx
+	pop	bx
+	push	2
+	push	OFFSET DGROUP:_data+40
+	mov	WORD PTR [bp-16],ax
+	call	_bittochar
+	pop	bx
+	pop	bx
+	mov	cl,10
+	imul	cl
+	add	al,BYTE PTR [bp-16]
+	mov	BYTE PTR $S1328_dt+3,al
+; Line 601
+	push	4
+	push	OFFSET DGROUP:_data+45
+	call	_bittochar
+	pop	bx
+	pop	bx
+	push	1
+	push	OFFSET DGROUP:_data+49
+	mov	WORD PTR [bp-18],ax
+	call	_bittochar
+	pop	bx
+	pop	bx
+	mov	cl,10
+	imul	cl
+	add	al,BYTE PTR [bp-18]
+	mov	BYTE PTR $S1328_dt+4,al
+; Line 602
+	push	4
+	push	OFFSET DGROUP:_data+50
+	call	_bittochar
+	pop	bx
+	pop	bx
+	cbw	
+	push	4
+	push	OFFSET DGROUP:_data+54
+	mov	si,ax
+	call	_bittochar
+	pop	bx
+	pop	bx
+	mov	cl,10
+	imul	cl
+	add	si,ax
+	mov	WORD PTR $S1328_dt+5,si
+; Line 604
+	cmp	BYTE PTR _data+15,0
+	jne	$I1524
+; Line 605
+	and	BYTE PTR _flStatus,254
+; Line 606
+	jmp	SHORT $I1525
+$I1524:
+; Line 607
+	or	BYTE PTR _flStatus,1
+$I1525:
+; Line 608
+	cmp	BYTE PTR _data+16,0
+	jne	$I1526
+; Line 609
+	and	BYTE PTR _flStatus,253
+; Line 610
+	jmp	SHORT $I1527
+$I1526:
+; Line 611
+	or	BYTE PTR _flStatus,2
+$I1527:
+; Line 612
+	cmp	BYTE PTR _data+17,0
+	jne	$I1528
+; Line 613
+	and	BYTE PTR _flStatus,247
+; Line 614
+	jmp	SHORT $I1529
+$I1528:
+; Line 615
+	or	BYTE PTR _flStatus,8
+$I1529:
+; Line 616
+	cmp	BYTE PTR _data+18,0
+	jne	$I1530
+; Line 617
+	and	BYTE PTR _flStatus,239
+; Line 618
+	jmp	SHORT $I1531
+$I1530:
+; Line 619
+	or	BYTE PTR _flStatus,16
+$I1531:
+; Line 620
+	cmp	BYTE PTR _data+19,0
+	jne	$I1532
+; Line 621
+	and	BYTE PTR _flStatus,251
+; Line 622
+	jmp	SHORT $I1533
+$I1532:
+; Line 623
+	or	BYTE PTR _flStatus,4
+$I1533:
+; Line 626
+	cmp	BYTE PTR $S1328_dt+1,59
+	jbe	$JCC2243
+	jmp	$I1523
+$JCC2243:
+	cmp	BYTE PTR $S1328_dt,23
+	ja	$L20026
+	cmp	si,99
+	ja	$L20026
+	cmp	BYTE PTR $S1328_dt+4,1
+	jb	$L20026
+	cmp	BYTE PTR $S1328_dt+4,12
+	ja	$L20026
+	cmp	BYTE PTR $S1328_dt+3,1
+	jb	$L20026
+	cmp	BYTE PTR $S1328_dt+3,31
+	jbe	$L20025
+; Line 631
+; Line 633
+$L20026:
+	jmp	$I1523
+$L20025:
+	cmp	si,90
+	jbe	$L20004
+	mov	ax,1900
+	jmp	SHORT $L20005
+$L20004:
+	mov	ax,2000
+$L20005:
+	add	WORD PTR $S1328_dt+5,ax
+; Line 637
+	cmp	BYTE PTR _ucTimeZone,1
+	jne	$I1539
+; Line 638
+; Line 639
+	test	BYTE PTR _flStatus,8
+	je	$I1537
+; Line 640
+	sub	WORD PTR [bp-2],2	;sOffs
+; Line 641
+	jmp	SHORT $I1539
+$I1537:
+	test	BYTE PTR _flStatus,16
+	je	$I1539
+; Line 642
+	dec	WORD PTR [bp-2]	;sOffs
+; Line 643
+$I1539:
+; Line 646
+	mov	al,BYTE PTR [bp-2]	;sOffs
+	add	BYTE PTR $S1328_dt,al
+	cmp	BYTE PTR $S1328_dt,23
+	jbe	$I1545
+; Line 647
+; Line 648
+	mov	BYTE PTR $S1328_dt,0
+; Line 649
+	inc	BYTE PTR $S1328_dt+3
+; Line 650
+	push	WORD PTR $S1328_dt+5
+	mov	al,BYTE PTR $S1328_dt+4
+	sub	ah,ah
+	push	ax
+	call	_lastDay
+	pop	bx
+	pop	bx
+	mov	cl,BYTE PTR $S1328_dt+3
+	sub	ch,ch
+	cmp	ax,cx
+	jge	$I1545
+; Line 651
+; Line 652
+	mov	BYTE PTR $S1328_dt+3,1
+; Line 654
+	inc	BYTE PTR $S1328_dt+4
+	cmp	BYTE PTR $S1328_dt+4,12
+	jbe	$I1545
+; Line 655
+; Line 656
+	mov	BYTE PTR $S1328_dt+4,1
+; Line 657
+	inc	WORD PTR $S1328_dt+5
+; Line 658
+; Line 659
+; Line 660
+; Line 661
+$I1545:
+; Line 680
+	mov	al,BYTE PTR $S1328_dt+1
+	sub	ah,ah
+	cmp	ax,WORD PTR _minold
+	jne	$I1547
+	mov	al,BYTE PTR $S1328_dt
+	cmp	ax,WORD PTR _hourold
+	jne	$I1547
+	mov	al,BYTE PTR $S1328_dt+3
+	cmp	ax,WORD PTR _dayold
+	jne	$I1547
+	mov	al,BYTE PTR $S1328_dt+4
+	cmp	ax,WORD PTR _monold
+	jne	$I1547
+	mov	ax,WORD PTR _yearold
+	cmp	WORD PTR $S1328_dt+5,ax
+	jne	$I1547
+; Line 681
+	inc	BYTE PTR _uccSavety
+; Line 682
+	jmp	SHORT $I1548
+$I1547:
+; Line 683
+	mov	BYTE PTR _uccSavety,0
+$I1548:
+; Line 685
+	mov	ax,WORD PTR $S1328_dt+5
+	mov	WORD PTR _yearold,ax
+; Line 686
+	mov	al,BYTE PTR $S1328_dt+4
+	sub	ah,ah
+	mov	WORD PTR _monold,ax
+; Line 687
+	mov	al,BYTE PTR $S1328_dt+3
+	mov	WORD PTR _dayold,ax
+; Line 688
+	mov	al,BYTE PTR $S1328_dt
+	mov	WORD PTR _hourold,ax
+; Line 689
+	mov	cl,BYTE PTR $S1328_dt+1
+	sub	ch,ch
+	inc	cx
+	mov	WORD PTR _minold,cx
+; Line 690
+	cmp	cx,59
+	jbe	$I1549
+; Line 691
+; Line 692
+	mov	WORD PTR _minold,0
+; Line 693
+	inc	ax
+	mov	WORD PTR _hourold,ax
+; Line 694
+; Line 695
+$I1549:
+	cmp	ax,24
+	jne	$I1550
+; Line 696
+; Line 697
+	mov	WORD PTR _hourold,0
+; Line 698
+	inc	WORD PTR _dayold
+; Line 699
+; Line 702
+$I1550:
+	inc	WORD PTR _goodmin
+; Line 703
+	dec	WORD PTR _badmin
+; Line 704
+	or	BYTE PTR _flStatus+1,2
+; Line 706
+	mov	al,BYTE PTR _ucSavety
+	cmp	BYTE PTR _uccSavety,al
+	jb	$EX1507
+; Line 709
+	mov	BYTE PTR _uccSavety,al
+; Line 712
+	inc	WORD PTR _uscIntervall
+	mov	ax,WORD PTR _usIntervall
+	cmp	WORD PTR _uscIntervall,ax
+	jb	$EX1507
+; Line 714
+	mov	WORD PTR _uscIntervall,0
+; Line 718
+	push	OFFSET DGROUP:$S1328_dt
+	call	_setClock
+	pop	bx
+; Line 719
+	inc	WORD PTR _uscClockSet
+; Line 722
+$EX1507:
+	pop	si
+	leave	
+	ret	
+
+_getTime	ENDP
+; Line 725
+	PUBLIC	_timerHandler
+_timerHandler	PROC FAR
+	enter	12,0
+	push	ds
+	mov	ax,DGROUP
+	mov	ds,ax
+	ASSUME DS: DGROUP
+;	i = -6
+;	port = -4
+;	zw = -2
+;	bit = -8
+; Line 735
+	inc	BYTE PTR _initflag
+; Line 738
+	cmp	WORD PTR _traeger,0
+	je	$I1562
+; Line 739
+	dec	WORD PTR _traeger
+; Line 740
+$I1562:
+	cmp	WORD PTR _traeger,0
+	jne	$I1563
+; Line 741
+; Line 742
+	and	BYTE PTR _flStatus+1,254
+; Line 743
+	call	_ruecksetzen
+; Line 744
+; Line 747
+$I1563:
+	cmp	BYTE PTR $S1328_dt+2,59
+	jbe	$I1564
+; Line 748
+; Line 750
+	mov	BYTE PTR $S1328_dt+2,0
+; Line 751
+	call	_ruecksetzen
+; Line 752
+; Line 755
+$I1564:
+	cmp	BYTE PTR _ucPortTyp,4
+	je	$I1566
+	cmp	BYTE PTR _ucPortTyp,5
+	jne	$I1565
+$I1566:
+; Line 756
+; Line 759
+	call	_getcom
+	sub	ah,ah
+	test	ax,-2
+	jne	$I1567
+; Line 760
+; Line 761
+	mov	bl,BYTE PTR $S1328_dt+2
+	sub	bh,bh
+	mov	BYTE PTR _data[bx],al
+; Line 762
+	inc	BYTE PTR $S1328_dt+2
+; Line 763
+	mov	WORD PTR $S1557_uscHigh,0
+; Line 764
+	mov	ax,WORD PTR _usThrCarrier
+	mov	WORD PTR _traeger,ax
+; Line 765
+	or	BYTE PTR _flStatus+1,1
+; Line 766
+; Line 767
+$I1567:
+	mov	ax,WORD PTR $S1557_uscHigh
+	cmp	WORD PTR _usThrMinute,ax
+	jb	$JCC2711
+	jmp	$L20028
+$JCC2711:
+; Line 768
+; Line 770
+	cmp	BYTE PTR $S1328_dt+2,58
+	jbe	$I1570
+; Line 771
+; Line 772
+	call	_getTime
+; Line 773
+	test	BYTE PTR _flStatus+1,2
+	jne	$I1570
+; Line 774
+	mov	BYTE PTR _ucPol,0
+; Line 775
+$I1570:
+; Line 776
+	imul	ax,WORD PTR _usThrMinute,40
+	cmp	ax,WORD PTR $S1557_uscHigh
+	jae	$I1571
+; Line 777
+; Line 778
+	inc	WORD PTR _badmin
+; Line 779
+	mov	WORD PTR $S1557_uscHigh,0
+; Line 780
+	mov	BYTE PTR _ucPol,0
+; Line 781
+; Line 782
+$I1571:
+	call	_initdata
+; Line 783
+; Line 784
+	jmp	$L20028
+$I1565:
+; Line 787
+; Line 788
+	cmp	BYTE PTR _ucPortTyp,2
+	je	$I1574
+	cmp	BYTE PTR _ucPortTyp,3
+	jne	$I1573
+$I1574:
+; Line 789
+; Line 790
+	mov	ax,WORD PTR _usPortAddr
+	add	ax,6
+	mov	WORD PTR [bp-4],ax	;port
+; Line 792
+	cmp	BYTE PTR _ucPower,4
+	jae	$I1576
+; Line 793
+; Line 794
+	dec	ax
+	dec	ax
+	push	ax
+	call	_inbyte
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;zw
+; Line 795
+	and	BYTE PTR [bp-2],252	;zw
+; Line 797
+	mov	al,BYTE PTR _ucPower
+	or	BYTE PTR [bp-2],al	;zw
+	mov	al,BYTE PTR [bp-2]	;zw
+	sub	ah,ah
+	push	ax
+	mov	ax,WORD PTR [bp-4]	;port
+	dec	ax
+	dec	ax
+	push	ax
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 798
+; Line 799
+; Line 800
+	jmp	SHORT $I1576
+$I1573:
+; Line 802
+	mov	ax,WORD PTR _usPortAddr
+	mov	WORD PTR [bp-4],ax	;port
+$I1576:
+; Line 804
+	push	WORD PTR [bp-4]	;port
+	call	_getbit_auto
+	pop	bx
+	or	al,al
+	jne	$JCC2854
+	jmp	$I1577
+$JCC2854:
+; Line 805
+; Line 807
+	cmp	BYTE PTR $S1554_oldBit,1
+	jne	$I1578
+; Line 808
+; Line 812
+	mov	ax,WORD PTR _usThrCarrier
+	mov	WORD PTR _traeger,ax
+; Line 813
+	or	BYTE PTR _flStatus+1,1
+; Line 814
+	mov	al,BYTE PTR $S1328_dt+2
+	cmp	BYTE PTR $S1555_ucActualSecond,al
+	jne	$I1580
+	cmp	WORD PTR _usTTicks,0
+	jne	$I1579
+$I1580:
+; Line 815
+; Line 816
+	mov	ax,WORD PTR _usThrBitlen
+	cmp	WORD PTR $S1557_uscHigh,ax
+	jbe	$L20006
+	mov	al,1
+	jmp	SHORT $L20007
+$L20006:
+	sub	al,al
+$L20007:
+	mov	bl,BYTE PTR $S1328_dt+2
+	sub	bh,bh
+	mov	BYTE PTR _data[bx],al
+; Line 817
+	cmp	WORD PTR _usTimerMode,3
+	jne	$I1581
+	push	WORD PTR $S1557_uscHigh
+	call	_insertThrValue
+	pop	bx
+	or	ax,ax
+	je	$I1581
+; Line 818
+	call	_calcThreshold
+; Line 820
+$I1581:
+	mov	WORD PTR _iTrace,1
+; Line 821
+	mov	ax,WORD PTR $S1557_uscHigh
+	mov	WORD PTR _iTrace+2,ax
+; Line 824
+; Line 825
+$I1579:
+	mov	ax,WORD PTR $S1557_uscHigh
+	cmp	WORD PTR _usThrPolarity,ax
+	jae	$I1582
+; Line 826
+; Line 828
+	not	BYTE PTR _ucPol
+; Line 830
+	call	_initdata
+; Line 831
+	call	_ruecksetzen
+; Line 832
+; Line 833
+$I1582:
+	inc	BYTE PTR $S1328_dt+2
+; Line 834
+; Line 836
+$I1578:
+	mov	BYTE PTR $S1554_oldBit,0
+; Line 837
+	mov	WORD PTR $S1557_uscHigh,0
+; Line 838
+	inc	WORD PTR $S1556_uscLow
+; Line 839
+; Line 840
+	pop	ds
+	leave	
+	ret	
+$I1577:
+; Line 841
+; Line 846
+	mov	ax,WORD PTR $S1556_uscLow
+	cmp	WORD PTR _usThrMinute,ax
+	jae	$I1585
+; Line 847
+; Line 849
+	cmp	BYTE PTR $S1328_dt+2,58
+	jbe	$I1586
+; Line 850
+; Line 852
+	call	_getTime
+; Line 854
+; Line 855
+	jmp	SHORT $I1587
+$I1586:
+; Line 856
+; Line 857
+	and	BYTE PTR _flStatus+1,253
+; Line 858
+	inc	WORD PTR _badmin
+; Line 859
+$I1587:
+; Line 860
+	call	_initdata
+; Line 861
+; Line 862
+$I1585:
+	mov	BYTE PTR $S1554_oldBit,1
+; Line 864
+	mov	ax,WORD PTR _usThrBitlen
+	cmp	WORD PTR $S1557_uscHigh,ax
+	jne	$I1588
+	mov	al,BYTE PTR $S1328_dt+2
+	cmp	BYTE PTR $S1555_ucActualSecond,al
+	je	$I1588
+	cmp	WORD PTR _usTTicks,0
+	je	$I1588
+; Line 865
+;	hticcnt = -12
+;	realticcnt = -10
+; Line 874
+	mov	WORD PTR [bp-12],0	;hticcnt
+; Line 875
+	mov	ax,WORD PTR _ticcount
+	mul	WORD PTR _usTTicks
+	shr	ax,2
+	mov	WORD PTR [bp-10],ax	;realticcnt
+; Line 876
+	jmp	SHORT $L20027
+$FC1592:
+	mov	ax,WORD PTR [bp-10]	;realticcnt
+	cmp	WORD PTR [bp-12],ax	;hticcnt
+	jge	$FB1593
+; Line 877
+	inc	WORD PTR [bp-12]	;hticcnt
+$L20027:
+	push	WORD PTR [bp-4]	;port
+	call	_getbit
+	pop	bx
+	or	al,al
+	je	$FC1592
+$FB1593:
+; Line 878
+	mov	ax,WORD PTR [bp-10]	;realticcnt
+	cmp	WORD PTR [bp-12],ax	;hticcnt
+	jl	$L20008
+	mov	al,1
+	jmp	SHORT $L20009
+$L20008:
+	sub	al,al
+$L20009:
+	mov	bl,BYTE PTR $S1328_dt+2
+	sub	bh,bh
+	mov	BYTE PTR _data[bx],al
+; Line 879
+	mov	al,BYTE PTR $S1328_dt+2
+	mov	BYTE PTR $S1555_ucActualSecond,al
+; Line 881
+; Line 883
+$I1588:
+	mov	WORD PTR $S1556_uscLow,0
+; Line 884
+$L20028:
+	inc	WORD PTR $S1557_uscHigh
+; Line 885
+; Line 886
+; Line 887
+	pop	ds
+	leave	
+	ret	
+
+_timerHandler	ENDP
+; Line 890
+	PUBLIC	_start
+_start	PROC NEAR
+; Line 891
+	call	_initdata
+; Line 892
+	jmp	_ruecksetzen
+; Line 893
+
+_start	ENDP
+; Line 896
+	PUBLIC	_insertThrValue
+_insertThrValue	PROC NEAR
+	enter	2,0
+;	us = -2
+;	bitlen = 4
+; Line 901
+	sub	WORD PTR [bp+4],5	;bitlen
+	cmp	WORD PTR [bp+4],20	;bitlen
+	jbe	$I1598
+; Line 902
+; Line 904
+	sub	ax,ax
+	leave	
+	ret	
+; Line 905
+; Line 908
+$I1598:
+	cmp	BYTE PTR _ucThrMaxValue,255
+	je	$I1600
+	cmp	BYTE PTR _ucThrMaxValue+1,255
+	jne	$I1599
+$I1600:
+; Line 909
+; Line 910
+	mov	WORD PTR [bp-2],0	;us
+$FC1602:
+; Line 911
+	mov	bx,WORD PTR [bp-2]	;us
+	mov	BYTE PTR _ucThrValues[bx],0
+	inc	WORD PTR [bp-2]	;us
+	cmp	WORD PTR [bp-2],21	;us
+	jb	$FC1602
+; Line 912
+; Line 915
+$I1599:
+	mov	bx,WORD PTR [bp+4]	;bitlen
+	inc	BYTE PTR _ucThrValues[bx]
+; Line 916
+	mov	ax,1
+; Line 917
+	leave	
+	ret	
+
+_insertThrValue	ENDP
+; Line 920
+	PUBLIC	_calcThreshold
+_calcThreshold	PROC NEAR
+	enter	8,0
+	push	si
+;	us = -4
+;	j = -6
+;	usPrevValue = -2
+;	bFlag = -8
+; Line 928
+	sub	al,al
+	mov	BYTE PTR _ucThrMaxIndex+1,al
+	mov	BYTE PTR _ucThrMaxIndex,al
+	mov	BYTE PTR _ucThrMaxValue+1,al
+	mov	BYTE PTR _ucThrMaxValue,al
+; Line 929
+	sub	ax,ax
+	mov	WORD PTR [bp-2],ax	;usPrevValue
+	mov	WORD PTR [bp-6],ax	;j
+	mov	WORD PTR [bp-4],ax	;us
+	jmp	SHORT $F1609
+$I1612:
+; Line 946
+; Line 948
+	mov	WORD PTR [bp-8],1	;bFlag
+; Line 949
+$I1615:
+; Line 950
+	mov	bx,WORD PTR [bp-4]	;us
+	mov	al,BYTE PTR _ucThrValues[bx]
+	sub	ah,ah
+	mov	WORD PTR [bp-2],ax	;usPrevValue
+; Line 951
+	inc	WORD PTR [bp-4]	;us
+$F1609:
+	cmp	WORD PTR [bp-4],21	;us
+	jae	$FB1611
+; Line 930
+; Line 931
+	mov	bx,WORD PTR [bp-4]	;us
+	mov	al,BYTE PTR _ucThrValues[bx]
+	sub	ah,ah
+	cmp	ax,WORD PTR [bp-2]	;usPrevValue
+	jbe	$I1612
+; Line 932
+; Line 934
+	cmp	WORD PTR [bp-8],0	;bFlag
+	je	$I1613
+	mov	si,WORD PTR [bp-6]	;j
+	mov	al,BYTE PTR _ucThrMaxIndex[si]
+	sub	bx,ax
+	cmp	bx,5
+	jbe	$I1613
+; Line 935
+; Line 936
+	xor	BYTE PTR [bp-6],1	;j
+; Line 937
+	mov	WORD PTR [bp-8],0	;bFlag
+; Line 938
+; Line 939
+$I1613:
+	mov	bx,WORD PTR [bp-6]	;j
+	mov	si,WORD PTR [bp-4]	;us
+	mov	al,BYTE PTR _ucThrValues[si]
+	cmp	BYTE PTR _ucThrMaxValue[bx],al
+	jae	$I1615
+; Line 940
+; Line 941
+	mov	cx,si
+	mov	BYTE PTR _ucThrMaxIndex[bx],cl
+; Line 942
+	mov	BYTE PTR _ucThrMaxValue[bx],al
+; Line 943
+; Line 944
+; Line 945
+	jmp	SHORT $I1615
+$FB1611:
+; Line 953
+	mov	al,BYTE PTR _ucThrMaxIndex
+	sub	ah,ah
+	mov	cl,BYTE PTR _ucThrMaxIndex+1
+	sub	ch,ch
+	sub	ax,cx
+	mov	WORD PTR [bp-6],ax	;j
+	cmp	ax,5
+	ja	$I1617
+	cmp	ax,-5
+	jae	$EX1604
+$I1617:
+; Line 954
+	mov	al,BYTE PTR _ucThrMaxIndex+1
+	sub	ah,ah
+	mov	cl,BYTE PTR _ucThrMaxIndex
+	sub	ch,ch
+	add	ax,cx
+	cwd	
+	sub	ax,dx
+	sar	ax,1
+	add	ax,5
+	mov	WORD PTR _usThrBitlen,ax
+; Line 959
+$EX1604:
+	pop	si
+	leave	
+	ret	
+
+_calcThreshold	ENDP
+_TEXT	ENDS
+END

@@ -1,0 +1,242 @@
+;	Static Name Aliases
+;
+	TITLE   timer.c
+	.286p
+	.287
+INCLUDELIB	SLIBCE
+_TEXT	SEGMENT  WORD PUBLIC 'CODE'
+_TEXT	ENDS
+_DATA	SEGMENT  WORD PUBLIC 'DATA'
+_DATA	ENDS
+CONST	SEGMENT  WORD PUBLIC 'CONST'
+CONST	ENDS
+_BSS	SEGMENT  WORD PUBLIC 'BSS'
+_BSS	ENDS
+DGROUP	GROUP	CONST, _BSS, _DATA
+	ASSUME DS: DGROUP, SS: DGROUP
+EXTRN	DEVHELP_RESETTIMER:FAR
+EXTRN	DEVHELP_ATTACHDD:FAR
+EXTRN	DEVHELP_SETTIMER:FAR
+EXTRN	_getbit:NEAR
+EXTRN	_timerHandler:FAR
+EXTRN	_iTimerHandler:FAR
+EXTRN	_pInfoSeg:DWORD
+EXTRN	_usTimerMode:WORD
+EXTRN	_ticcount:WORD
+EXTRN	_initflag:BYTE
+EXTRN	_usTickLen:WORD
+EXTRN	_bIsHRTimerAvail:WORD
+EXTRN	_usThrCarrier:WORD
+EXTRN	_usThrPolarity:WORD
+EXTRN	_usThrMinute:WORD
+EXTRN	_usThrBitlen:WORD
+_BSS      SEGMENT
+COMM NEAR	_DDTable:	BYTE:	 12
+COMM NEAR	_ptmrfn:	BYTE:	 4
+_BSS      ENDS
+_DATA      SEGMENT
+$SG1702	DB	'TIMER0$ ',  00H
+_DATA      ENDS
+_TEXT      SEGMENT
+	ASSUME	CS: _TEXT
+; Line 1
+; Line 39
+; Line 32
+; Line 649
+; Line 37
+; Line 52
+; Line 1865
+; Line 59
+; Line 61
+; Line 43
+; Line 85
+; Line 102
+; Line 4923
+; Line 86
+; Line 87
+; Line 121
+; Line 42
+; Line 43
+; Line 44
+; Line 4
+; Line 45
+; Line 46
+; Line 47
+; Line 72
+	PUBLIC	_getticcnt
+_getticcnt	PROC NEAR
+	enter	2,0
+;	port = -2
+; Line 73
+	mov	WORD PTR [bp-2],513	;port
+; Line 75
+	mov	BYTE PTR _initflag,0
+; Line 76
+$FC1694:
+	cmp	BYTE PTR _initflag,0
+	je	$FC1694
+; Line 78
+	jmp	SHORT $L20000
+$FC1697:
+; Line 79
+; Line 80
+	inc	WORD PTR _ticcount
+; Line 81
+	push	WORD PTR [bp-2]	;port
+	call	_getbit
+	pop	bx
+; Line 82
+$L20000:
+	cmp	BYTE PTR _initflag,1
+	je	$FC1697
+; Line 85
+	leave	
+	ret	
+
+_getticcnt	ENDP
+; Line 88
+	PUBLIC	_attachTimer
+_attachTimer	PROC NEAR
+; Line 89
+	mov	WORD PTR _bIsHRTimerAvail,0
+; Line 92
+	sub	ax,ax
+	mov	WORD PTR _DDTable+8,ax
+	mov	WORD PTR _DDTable+6,ax
+; Line 93
+	mov	WORD PTR _ptmrfn+2,ax
+	mov	WORD PTR _ptmrfn,ax
+; Line 94
+	push	OFFSET DGROUP:$SG1702
+	push	OFFSET DGROUP:_DDTable
+	call	FAR PTR DEVHELP_ATTACHDD
+	or	ax,ax
+	jne	$EX1700
+; Line 97
+	mov	ax,WORD PTR _DDTable+8
+	or	ax,WORD PTR _DDTable+6
+	je	$EX1700
+; Line 100
+	mov	ax,WORD PTR _DDTable+6
+	mov	dx,WORD PTR _DDTable+8
+	mov	WORD PTR _ptmrfn,ax
+	mov	WORD PTR _ptmrfn+2,dx
+; Line 101
+	mov	WORD PTR _bIsHRTimerAvail,1
+; Line 103
+$EX1700:
+	ret	
+
+_attachTimer	ENDP
+; Line 106
+	PUBLIC	_registerTimer
+_registerTimer	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	tickLen = 6
+;	newTimerMode = 4
+; Line 107
+	mov	ax,WORD PTR [bp+4]	;newTimerMode
+	sub	ax,1
+	jb	$L20001
+	sub	ax,1
+	jbe	$SC1711
+	dec	ax
+	je	$SC1714
+	jmp	SHORT $L20001
+; Line 108
+; Line 109
+$SC1711:
+; Line 112
+	les	bx,DWORD PTR _pInfoSeg
+	mov	ax,WORD PTR es:[bx+32]
+	mov	WORD PTR [bp+6],ax	;tickLen
+; Line 115
+	mov	ax,OFFSET _timerHandler
+	push	ax
+	call	FAR PTR DEVHELP_SETTIMER
+	or	ax,ax
+	je	$I1712
+; Line 116
+$L20001:
+	sub	ax,ax
+	leave	
+	ret	
+; Line 118
+$I1712:
+	mov	WORD PTR _usThrCarrier,100
+; Line 120
+	mov	ax,45
+	mov	WORD PTR _usThrPolarity,ax
+	mov	WORD PTR _usThrMinute,ax
+; Line 121
+	mov	WORD PTR _usThrBitlen,4
+; Line 124
+	mov	ax,WORD PTR _ptmrfn+2
+	or	ax,WORD PTR _ptmrfn
+	je	$SB1708
+	cmp	WORD PTR _usTimerMode,3
+	jne	$SB1708
+; Line 125
+	push	0
+	push	0
+	push	SEG _iTimerHandler
+	push	OFFSET _iTimerHandler
+	push	1
+	call	DWORD PTR _ptmrfn
+	mov	sp,bp
+; Line 126
+	jmp	SHORT $SB1708
+; Line 128
+$SC1714:
+; Line 130
+	mov	WORD PTR [bp+6],10	;tickLen
+; Line 133
+	mov	ax,WORD PTR _ptmrfn+2
+	or	ax,WORD PTR _ptmrfn
+	je	$L20001
+; Line 135
+	push	0
+	push	WORD PTR [bp+6]	;tickLen
+	push	SEG _iTimerHandler
+	push	OFFSET _iTimerHandler
+	push	0
+	call	DWORD PTR _ptmrfn
+	mov	sp,bp
+	or	ax,ax
+	jne	$L20001
+; Line 138
+	mov	WORD PTR _usThrCarrier,320
+; Line 140
+	mov	ax,150
+	mov	WORD PTR _usThrPolarity,ax
+	mov	WORD PTR _usThrMinute,ax
+; Line 141
+	mov	WORD PTR _usThrBitlen,12
+; Line 144
+	cmp	WORD PTR _usTimerMode,2
+	je	$I1718
+	cmp	WORD PTR _usTimerMode,1
+	jne	$SB1708
+$I1718:
+; Line 145
+	mov	ax,OFFSET _timerHandler
+	push	ax
+	call	FAR PTR DEVHELP_RESETTIMER
+; Line 148
+$SB1708:
+; Line 152
+	mov	ax,WORD PTR [bp+6]	;tickLen
+	mov	WORD PTR _usTickLen,ax
+; Line 153
+	mov	ax,WORD PTR [bp+4]	;newTimerMode
+	mov	WORD PTR _usTimerMode,ax
+; Line 154
+	mov	ax,1
+; Line 155
+	leave	
+	ret	
+
+_registerTimer	ENDP
+_TEXT	ENDS
+END

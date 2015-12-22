@@ -1,0 +1,8 @@
+.\TRC00F5.TFF: \
+    .\ZEIT.TSF
+    trcust %s
+
+cleanall:
+      @if exist *.tff del *.tff
+
+

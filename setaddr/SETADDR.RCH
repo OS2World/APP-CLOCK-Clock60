@@ -1,0 +1,28 @@
+#if !defined (SETADDR_RCH)
+  #define SETADDR_RCH
+
+
+/* This file contains all of the ID values used in the                     */
+/* resource script file SETADDR.RC                                         */
+#include "Client.h"
+#define ID_WINDOWSETADDR                                   1
+#define ID_PANELCLIENT                                     2
+
+/* String Table #defines */
+#define IDS_APP_NAME                                       1
+#define IDS_APP_EXE_NAME                                   2
+#define IDS_ERR_WINDOW_POS                                 3
+#define IDS_ERR_WINDOW_CREATE_FORMAT                       4
+#define IDS_ERR_PROGRAM_LAUNCH                             5
+#define IDS_ERR_MEMORY_ALLOC                               6
+#define IDS_THREAD_ERR_FORMAT                              7
+#define IDS_WINDOWSETADDR_TITLE                            8
+#define IDS_ERROR_NODRIVER                                11
+#define IDS_ERROR_WRONGDRIVER                             12
+#define IDS_ERROR_NOCARD                                  13
+#define IDS_INFO_NORETURN                                 14
+#define IDS_HELP_INFO                                     15
+#define IDS_HELP_INFO6038                                 16
+ 
+#endif /* SETADDR_RCH */
+

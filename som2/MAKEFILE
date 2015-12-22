@@ -1,0 +1,98 @@
+# Created by IBM WorkFrame/2 MakeMake at 14:25:51 on 05/29/95
+#
+# The actions included in this makefile are:
+#   BIND::Resource Bind
+#   COMPILE::CLC C
+#   COMPILE::Resource Compile
+#   COMPILE::SOM
+#   LINK::CLC Link
+
+.all: \
+  .\wpdcf77.dll \
+
+.SUFFIXES:
+
+.SUFFIXES: .c .idl .rc .res .dlg
+
+.rc.res:
+      @echo " Compile::Resource Compiler "
+      rc.exe -r $(RDB) %s %|fF.RES
+
+.idl.ih:
+      @echo " Compile::SOM Compiler "
+      sc.exe -S 128000 -p -r -maddstar -mnoint -I. %s
+      @sed -e "s/#pragma checkout(suspend)/#pragma info(none)/"   $@ > $*.tmp
+      @sed -e "s/#pragma checkout(resume)/#pragma info(restore)/" $*.tmp > $@
+      @del $*.tmp
+
+.c.obj:
+      @echo " Compile::C++ Compiler "
+      icc.exe /I. /I.. /Ss $(CDB) /Q /Wcnveffparprorearetuse /Gm /Ge- /G5 /Gf /Fo"%|fF.obj" /Ms /C %s
+
+.\wpdcf77.dll: \
+    .\wndproc.obj \
+    .\wpdcf77.obj \
+    .\alarmthd.obj \
+    .\bitmap.obj \
+    .\entryfield.obj \
+    .\clkdata.obj \
+    .\clock.obj \
+    .\dcf77.obj \
+    .\dialogs.obj \
+    .\paint.obj \
+    .\graph.obj \
+    .\sz_wz.obj \
+    .\locale.obj \
+    .\server.obj \
+    .\clkmem.obj \
+    .\play.obj \
+    $(DDB) \
+    $(ODB) \
+    .\udtime.obj \
+    .\clock.res \
+    {$(LIB)}cutil.lib \
+    {$(LIB)}clock.def \
+    MAKEFILE
+      @echo "Link::Linker "
+      icc.exe @<<
+ /B" $(LDB) /dbgpack /pmtype:pm /nologo /m    /noi /nod /exep /packc /packd /al:16"
+ /Fewpdcf77.dll
+ somtk.lib
+ os2386.lib
+ mmpm2.lib
+ libconv.lib
+ cppom30.lib
+ cutil.lib
+ clock.def
+ .\wndproc.obj
+ .\wpdcf77.obj
+ .\alarmthd.obj
+ .\bitmap.obj
+ .\entryfield.obj
+ .\clkdata.obj
+ .\clock.obj
+ .\dcf77.obj
+ .\dialogs.obj
+ .\paint.obj
+ .\graph.obj
+ .\sz_wz.obj
+ .\locale.obj
+ .\server.obj
+ .\clkmem.obj
+ .\udtime.obj
+ .\play.obj
+ $(DDB)
+ $(ODB)
+<<
+      @echo "Bind::Resource Bind "
+      rc.exe -p -x .\clock.res wpdcf77.dll
+
+
+!include MAKEFILE.Dep
+
+cleanall:
+      @if exist *.obj del *.obj
+      @if exist *.res del *.res
+      @if exist *.dll del *.dll
+
+

@@ -1,0 +1,119 @@
+<WARPIN VERSION="0.9.9">
+  <HEAD>
+    <REXX NAME="QueryConfigType">
+      rc=rxFuncAdd('SysLoadFuncs','REXXUTIL','SysLoadFuncs')
+      rc=SysLoadFuncs()
+      configType=WirexxShowMessage('Configuration Program Type','Use Configuration Program instead of WPS class extension?',4)
+      IF configType = 6 THEN
+        return 'EXE'
+      return 'WPS'
+    </REXX>
+    <REXX NAME="CheckLanguage">
+      rc = '001'
+
+      call RxFuncAdd 'SysLoadFuncs', 'REXXUTIL', 'SysLoadFuncs'
+      call SysLoadFuncs
+
+      irc = SysIni('USER','PM_National','iCountry')
+      pos = VERIFY(irc,'0123456789','N')
+      IF pos = 0 THEN
+        return rc
+
+      cc = SUBSTR(irc,1,pos-1)
+
+      SELECT
+        WHEN cc = '33' THEN
+          rc = '033'
+        WHEN cc = '39' THEN
+          rc = '039'
+        WHEN cc = '46' THEN
+          rc = '046'
+        WHEN cc = '49' THEN
+          rc = '049'
+      END
+      return rc
+    </REXX>
+    <PCK INDEX=1
+         PACKAGEID="nb software\AMouse\AMouse base\2\1\0"
+         TARGET="?:\AMouse"
+         SELECT NODESELECT
+         TITLE="AMouse - Advanced Wheel Mouse Driver"
+         EXECUTE="REGISTERCLASS | mouset.exe"
+         CONFIGSYS="DEVICE=$(1)\AMOUSE.SYS | UNIQUE(\MOUSE.SYS) ADDBEFORE(\MOUSE.SYS)"
+         CONFIGSYS="LIBPATH=$(1) | ADDRIGHT"
+         >This package contains the AMouse base package.
+    </PCK>
+    <PCK INDEX=2
+         PACKAGEID="nb software\AMouse\AMouse English Language Support\2\1\0"
+         TARGET="?:\AMouse"
+         SELECT NODESELECT
+         TITLE="AMouse - Advanced Wheel Mouse Driver; English Language Support"
+         >This package contains the English language support for AMouse
+    </PCK>
+    <PCK INDEX=3
+         PACKAGEID="nb software\AMouse\AMouse French Language Support\2\1\0"
+         TARGET="?:\AMouse"
+         SELECT
+         EXTERNAL="AMou033.wpi"
+         TITLE="AMouse - Advanced Wheel Mouse Driver; French Language Support"
+         >This package contains the French language support for AMouse
+    </PCK>
+    <PCK INDEX=4
+         PACKAGEID="nb software\AMouse\AMouse Italian Language Support\2\1\0"
+         TARGET="?:\AMouse"
+         SELECT
+         EXTERNAL="AMou039.wpi"
+         TITLE="AMouse - Advanced Wheel Mouse Driver; Italian Language Support"
+         >This package contains the Italian language support for AMouse
+    </PCK>
+    <PCK INDEX=5
+         PACKAGEID="nb software\AMouse\AMouse Swedish Language Support\2\1\0"
+         TARGET="?:\AMouse"
+         SELECT
+         EXTERNAL="AMou046.wpi"
+         TITLE="AMouse - Advanced Wheel Mouse Driver; Swedish Language Support"
+         >This package contains the Swedish language support for AMouse
+    </PCK>
+    <PCK INDEX=6
+         PACKAGEID="nb software\AMouse\AMouse German Language Support\2\1\0"
+         TARGET="?:\AMouse"
+         SELECT
+         EXTERNAL="AMou049.wpi"
+         TITLE="AMouse - Advanced Wheel Mouse Driver; German Language Support"
+         >This package contains the German language support for AMouse
+    </PCK>
+  </HEAD>
+  <!-- Here come the different pages. They are linked by
+       the <NEXTBUTTON> tags, which must have a target.
+       Each page must have a TYPE= attribute, which tells
+       WarpIn what will be visible on that page. -->
+  <BODY>
+    <!-- page 1: introductory page -->
+    <PAGE INDEX=1 TYPE=README>
+      <NEXTBUTTON TARGET=2>~Next</NEXTBUTTON>
+      <TEXT>
+        READ.ME
+      </TEXT>
+      <README EXTRACTFROMPCK="1" FORMAT=HTML>readme.=("CheckLanguage")</README>
+    </PAGE>
+    <!-- The TYPE=CONTAINER will list the packages which can be installed. -->
+    <PAGE INDEX=2 TYPE=CONTAINER>
+      <NEXTBUTTON TARGET=3>~Next</NEXTBUTTON>
+      <TEXT>
+      On this page, you may deselect the package if it is already installed or change the package's target path. </TEXT>
+    </PAGE>
+    <PAGE INDEX=3 TYPE=CONFIGURE>
+      <NEXTBUTTON TARGET=4>~Next</NEXTBUTTON>
+      <TEXT>Configuration page</TEXT>
+    </PAGE>
+    <!-- Display another TEXT page to inform the user
+            that installation will begin. We use the TARGET=0
+            with the NEXTBUTTON tag which starts installation. -->
+    <PAGE INDEX=4 TYPE=TEXT>
+      <NEXTBUTTON TARGET=0>I~nstall</NEXTBUTTON>
+      <TEXT>
+      Press "Install" to begin installing this archive.</TEXT>
+    </PAGE>
+  </BODY>
+</WARPIN>
+

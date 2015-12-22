@@ -1,0 +1,20 @@
+
+all: \
+    .\TimeClnt.exe
+
+.\ShareMem.obj: \
+    ..\ShareMem.cpp \
+    {.;..;..\..;$(INCLUDE);}sharemem.hpp \
+    {.;..;..\..;$(INCLUDE);}dcfioctl.h
+
+.\NetBIOS.obj: \
+    ..\NetBIOS.cpp \
+    {.;..;..\..;$(INCLUDE);}NetBIOS.hpp
+
+.\TimeClnt.obj: \
+    .\TimeClnt.cpp \
+    {.;..;..\..;$(INCLUDE);}dcfioctl.h \
+    {.;..;..\..;$(INCLUDE);}sharemem.hpp \
+    {.;..;..\..;$(INCLUDE);}netbios.hpp \
+    {.;..;..\..;$(INCLUDE);}dcf77.hpp \
+    {.;..;..\..;$(INCLUDE);}timeclnt.hpp

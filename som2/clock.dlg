@@ -1,0 +1,639 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+DLGINCLUDE 1 "dlg.h"
+
+DLGTEMPLATE IDD_ABOUTBOX LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Produktinformation", IDD_ABOUTBOX, 0, 0, 200, 130,
+            FS_NOBYTEALIGN | FS_MOUSEALIGN | WS_VISIBLE, FCF_SYSMENU |
+            FCF_TITLEBAR
+    BEGIN
+        CONTROL         "", -1, 38, 36, 130, 50, WC_STATIC, SS_FGNDRECT |
+                        WS_VISIBLE
+        CONTROL         "", -1, 35, 39, 130, 50, WC_STATIC, SS_FGNDRECT |
+                        WS_VISIBLE
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00E3E396L
+        CONTROL         "", -1, 35, 39, 130, 50, WC_STATIC, SS_FGNDFRAME |
+                        WS_VISIBLE
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00800000L
+                        PRESPARAMS PP_BORDERCOLOR, 0x00800000L
+        ICON            ID_ICON, -1, 90, 100, 20, 16
+        CTEXT           "Erweiterte Systemuhr", -1, 36, 74, 128, 8,
+                        DT_VCENTER | NOT WS_GROUP
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00E3E396L
+        CTEXT           "zum Betrieb von externen", -1, 36, 64, 128, 8,
+                        DT_VCENTER | NOT WS_GROUP
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00E3E396L
+        CTEXT           "DCF-77 Uhrmodulen", -1, 36, 54, 128, 8, DT_VCENTER |
+                        NOT WS_GROUP
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00E3E396L
+        CTEXT           "Version 6.0", -1, 36, 42, 128, 8, DT_VCENTER
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00646464L
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00E3E396L
+        CTEXT           "Copyright (C) noller & breining software, 1995...2004",
+                        -1, 3, 29, 194, 8, DT_VCENTER | NOT WS_GROUP
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00808080L
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        DEFPUSHBUTTON   "Ok", DID_OK, 80, 10, 40, 13
+    END
+END
+
+DLGTEMPLATE IDD_DEBUG LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Debug", IDD_DEBUG, 12, 37, 266, 166, WS_VISIBLE, FCF_SYSMENU |
+            FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "SOM_TraceLevel", -1, 5, 105, 83, 57
+        AUTORADIOBUTTON "0", DID_TL_0, 27, 141, 39, 10, WS_GROUP |
+                        WS_TABSTOP
+        AUTORADIOBUTTON "1", DID_TL_1, 27, 126, 39, 10
+        AUTORADIOBUTTON "2", DID_TL_2, 27, 111, 39, 10
+        GROUPBOX        "SOM_WarnLevel", -1, 92, 105, 83, 57
+        AUTORADIOBUTTON "0", DID_WL_0, 114, 141, 39, 10, WS_GROUP |
+                        WS_TABSTOP
+        AUTORADIOBUTTON "1", DID_WL_1, 114, 126, 39, 10
+        AUTORADIOBUTTON "2", DID_WL_2, 114, 111, 39, 10
+        GROUPBOX        "SOM_AssertLevel", -1, 179, 105, 83, 57
+        AUTORADIOBUTTON "0", DID_AL_0, 201, 141, 39, 10, WS_GROUP |
+                        WS_TABSTOP
+        AUTORADIOBUTTON "1", DID_AL_1, 201, 126, 39, 10
+        AUTORADIOBUTTON "2", DID_AL_2, 201, 111, 39, 10
+        ENTRYFIELD      "FFFFFFFF", DID_DM, 68, 7, 44, 8, ES_MARGIN |
+                        WS_GROUP
+        LTEXT           "Debug-Maske", -1, 5, 7, 60, 8
+        MLE             "", DID_DT, 5, 22, 257, 77, MLS_READONLY |
+                        MLS_VSCROLL | MLS_IGNORETAB | NOT WS_TABSTOP
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+    END
+END
+
+DLGTEMPLATE IDD_IOADDR LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "I/O-Adresse", IDD_IOADDR, 10, 10, 150, 62, WS_VISIBLE,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        LTEXT           "I/O-Adresse eingeben:", -1, 10, 43, 100, 8
+        ENTRYFIELD      "", DID_IOADDR, 12, 28, 32, 8, ES_MARGIN
+        LTEXT           "H", -1, 52, 28, 10, 8
+        DEFPUSHBUTTON   "OK", DID_OK, 10, 5, 40, 14
+        PUSHBUTTON      "Abbruch", DID_CANCEL, 55, 5, 40, 14
+        PUSHBUTTON      "Hilfe", DID_HELP, 100, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+DLGTEMPLATE IDD_SETTING2 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_SETTING2, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Farbe", -1, 10, 64, 170, 76
+        AUTOCHECKBOX    "~Zifferblatt", DID_COL_FACE, 15, 123, 70, 10
+        AUTOCHECKBOX    "Stu~ndenmarkierung", DID_COL_TICK, 90, 123, 80, 10,
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "~Hintergrund", DID_COL_BACKGND, 15, 113, 70, 10,
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "~Datumsfeld", DID_COL_DATE, 90, 113, 80, 10, NOT
+                        WS_TABSTOP
+        AUTOCHECKBOX    "St~undenzeiger", DID_COL_HHAND, 15, 103, 70, 10,
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "~Minutenzeiger", DID_COL_MHAND, 90, 103, 80, 10,
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "Fa~rbe Datum", DID_COL_DATETXT, 15, 93, 70, 10, NOT
+                        WS_TABSTOP
+        AUTOCHECKBOX    "Far~be Uhrzeit", DID_COL_TIMETXT, 90, 93, 80, 10,
+                        NOT WS_TABSTOP
+        PUSHBUTTON      "~Farbe Ñndern...", DID_CHG_COLOR, 45, 68, 110, 14,
+                        WS_GROUP
+        GROUPBOX        "Schriftart", -1, 10, 24, 170, 37
+        AUTORADIOBUTTON "D~atum", DID_FONT_DATE, 20, 44, 60, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~Uhrzeit", DID_FONT_TIME, 90, 44, 60, 10
+        PUSHBUTTON      "Schriftart ~Ñndern...", DID_CHG_FONT, 45, 28, 110,
+                        14, WS_GROUP
+        AUTOCHECKBOX    "~Transparentfarbe fÅr Bitmaps", DID_COL_TRANSPARENT,
+                        15, 83, 155, 10
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_DCF77_STATUS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "DCF77 Status", IDD_DCF77_STATUS, 0, 0, 210, 135, FS_MOUSEALIGN |
+            WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR | FCF_MINBUTTON
+    BEGIN
+        GROUPBOX        "Status / Information", -1, 10, 5, 190, 85
+        LTEXT           "PolaritÑt:", DID_TXT_POLARITY, 20, 72, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "", DID_INFO_POLARITY, 87, 72, 65, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "Treiberversion:", DID_TXT_VERSION, 20, 65, 65, 8,
+                        NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "", DID_INFO_VERSION, 87, 65, 65, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "TrÑger", DID_TXT_CARRIER, 38, 53, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_CARRIER, 25, 55, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "Ersatzantenne", DID_TXT_ANT, 38, 46, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_ANT, 25, 48, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "Stundensprung folgt", DID_TXT_LPH, 38, 39, 65, 8,
+                        NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_LPH, 25, 41, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "Zeit gÅltig", DID_TXT_VALID, 38, 32, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_VALID, 25, 34, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        GROUPBOX        "", -1, 10, 91, 190, 43, NOT WS_GROUP
+        LTEXT           "Schaltsekunde folgt", DID_TXT_LPS, 123, 53, 65, 8,
+                        NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_LPS, 110, 55, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "Zeitzonenbit 1", DID_TXT_TZ1, 123, 46, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_TZ1, 110, 48, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "Zeitzonenbit 2", DID_TXT_TZ2, 123, 39, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_TZ2, 110, 41, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "Auto-Scan lÑuft", DID_TXT_SCAN, 123, 32, 65, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL         "", DID_INFO_SCAN, 110, 34, 8, 6, "MarkerClass",
+                        WS_VISIBLE
+        LTEXT           "richtig erkannt:", DID_TXT_RECOG1, 20, 21, 50, 8,
+                        NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "0", DID_INFO_RECOG, 70, 21, 20, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "min", DID_TXT_RECOG2, 90, 21, 20, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "verworfen:", DID_TXT_WRONG1, 20, 14, 50, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "0", DID_INFO_WRONG, 70, 14, 20, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "min", DID_TXT_WRONG2, 90, 14, 20, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "Uhr gesetzt:", DID_TXT_SET1, 20, 7, 51, 8, NOT
+                        WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "0", DID_INFO_SET, 70, 7, 20, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "mal", DID_TXT_SET2, 90, 7, 20, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CTEXT           "", DID_INFO_TIME, 15, 112, 180, 14, DT_VCENTER |
+                        NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "18.Helvetica"
+        CTEXT           "", DID_INFO_DATE, 15, 100, 180, 12, DT_VCENTER |
+                        NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "14.Helvetica"
+        LTEXT           "", DID_INFO_POSITION, 15, 92, 180, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helvetica"
+        PUSHBUTTON      "Hilfe", DID_HELP, 135, 10, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | WS_GROUP | NOT WS_TABSTOP
+    END
+END
+
+DLGTEMPLATE IDD_SERVER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_SERVER, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "öbertragungsintervall", -1, 10, 75, 170, 55
+        SLIDER          DID_SERVERINTERVAL, 20, 80, 105, 35, SLS_BUTTONSLEFT |
+                        WS_GROUP
+                        CTLDATA 12, 0, 5, 0, 0, 0
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+        ENTRYFIELD      "", DID_TXT_INTERVAL, 131, 93, 20, 8, NOT
+                        ES_AUTOSCROLL | ES_READONLY | NOT WS_TABSTOP
+        LTEXT           "min", -1, 152, 93, 18, 8
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000080L
+        GROUPBOX        "Verhalten bei öbertragungsfehlern", -1, 10, 25, 170,
+                        45
+        AUTOCHECKBOX    "Serverzeit Åbertragen", DID_SERVERSENDTIME, 20, 39,
+                        150, 10
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_SETTING1 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_SETTING1, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Informationen", -1, 10, 95, 170, 45, NOT WS_GROUP
+        AUTORADIOBUTTON "Nu~r Uhrzeit", DID_SHW_TIMEONLY, 20, 121, 100, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "N~ur Datum", DID_SHW_DATEONLY, 20, 109, 100, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "~Datum und Uhrzeit", DID_SHW_DATETIME, 20, 97, 100,
+                        10, WS_TABSTOP
+        GROUPBOX        "Modus", -1, 10, 43, 170, 49
+        AUTORADIOBUTTON "~Analog", DID_SHW_ANALOG, 20, 60, 50, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "D~igital", DID_SHW_DIGITAL, 20, 72, 50, 10,
+                        WS_TABSTOP
+        AUTOCHECKBOX    "Se~kundenzeiger", DID_SHW_SECHAND, 90, 75, 80, 10
+        AUTOCHECKBOX    "Stu~nden", DID_SHW_HOURTICKS, 90, 65, 80, 10
+        AUTOCHECKBOX    "~Minuten", DID_SHW_MINTICKS, 90, 55, 80, 10
+        AUTOCHECKBOX    "~Bayrisch", DID_SHW_BAVARIAN, 90, 45, 80, 10
+        AUTOCHECKBOX    "~Titelleiste anzeigen", DID_SHW_TITLEBAR, 20, 31,
+                        100, 10, WS_GROUP
+        AUTOCHECKBOX    "I~con-Position sichern", DID_SAVE_ICONPOS, 20, 21,
+                        167, 10, WS_GROUP
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_SETTING3 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_SETTING3, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Bitmaps", -1, 10, 25, 170, 115
+                        PRESPARAMS PP_FONTNAMESIZE, "10.Helv"
+        LTEXT           "Stundenzeiger", -1, 15, 118, 160, 8, NOT WS_GROUP
+        LTEXT           "Minutenzeiger", -1, 15, 92, 160, 8, NOT WS_GROUP
+        LTEXT           "Ziffernblatt", -1, 15, 66, 160, 8, NOT WS_GROUP
+        ENTRYFIELD      "", DID_SET3_HOUR, 17, 106, 111, 8, ES_MARGIN
+        PUSHBUTTON      "Suchen...", DID_SET3_QHOUR, 130, 103, 45, 14, NOT
+                        WS_TABSTOP
+        ENTRYFIELD      "", DID_SET3_MINUTE, 17, 80, 111, 8, ES_MARGIN
+        PUSHBUTTON      "Suchen...", DID_SET3_QMINUTE, 130, 77, 45, 14, NOT
+                        WS_TABSTOP
+        ENTRYFIELD      "", DID_SET3_FACE, 17, 54, 111, 8, ES_MARGIN
+        PUSHBUTTON      "Suchen...", DID_SET3_QFACE, 130, 51, 45, 14
+        LTEXT           "Dateiname eingeben, suchen oder per Drag&Drop auf d"
+                        "en Eingabefeldern fallenlassen", -1, 19, 30, 153,
+                        18, DT_WORDBREAK
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00800000L
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_TMOFFS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_TMOFFS, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Systemweit", -1, 10, 80, 170, 60
+        AUTOCHECKBOX    "UTC / Greenwich", DID_ISUTC, 15, 120, 107, 10
+        LTEXT           "Zeitoffset:", -1, 15, 110, 50, 8
+        SLIDER          DID_GOFFSET, 15, 91, 158, 20, SLS_LEFT |
+                        SLS_SNAPTOINCREMENT | SLS_BUTTONSLEFT | WS_GROUP
+                        CTLDATA 12, 0, 6, 0, 0, 0
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+        GROUPBOX        "Uhrspezifisch", -1, 10, 25, 170, 54
+        LTEXT           "Zeitoffset:", -1, 15, 62, 50, 8
+        SLIDER          DID_LOFFSET, 15, 43, 160, 20, SLS_LEFT |
+                        SLS_SNAPTOINCREMENT | SLS_BUTTONSLEFT | WS_GROUP
+                        CTLDATA 12, 0, 25, 0, 0, 0
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+        LTEXT           "Zeitzone:", -1, 15, 30, 42, 8, NOT WS_GROUP
+        ENTRYFIELD      "", DID_TZTXT, 60, 30, 111, 8, ES_MARGIN
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_AUDIO LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_AUDIO, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Sound-Datei fÅr Stundengong", -1, 10, 82, 170, 36
+        LTEXT           "Pfad und Dateiname:", 2102, 15, 100, 100, 8, NOT
+                        WS_GROUP
+        ENTRYFIELD      "", DID_GONG_PROG, 17, 88, 96, 8, ES_MARGIN
+        PUSHBUTTON      "AuswÑhlen...", DID_GONG_SRCH, 115, 85, 60, 14, NOT
+                        WS_TABSTOP
+        GROUPBOX        "Sound-Modus", -1, 10, 46, 170, 31
+        AUTORADIOBUTTON "1 mal pro Stunde", DID_GONG_MD1, 20, 58, 131, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Anzahl entsprechend der Uhrzeit", DID_GONG_MDN, 20,
+                        49, 130, 10
+        LTEXT           "", DID_GONG_TEXT, 10, 28, 170, 14, DT_WORDBREAK
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_COMPORT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "COM-Port", IDD_COMPORT, 36, 16, 150, 62, WS_VISIBLE,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        LTEXT           "Portnummer eingeben:", -1, 10, 43, 100, 8
+        ENTRYFIELD      "", DID_IOADDR, 34, 28, 16, 8, ES_MARGIN
+        LTEXT           "COM", -1, 10, 28, 22, 8
+        DEFPUSHBUTTON   "OK", DID_OK, 10, 5, 40, 14
+        PUSHBUTTON      "Abbruch", DID_CANCEL, 55, 5, 40, 14
+        PUSHBUTTON      "Hilfe", DID_HELP, 100, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+DLGTEMPLATE IDD_DATETIME LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_DATETIME, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Uhrzeit", -1, 10, 85, 170, 55, NOT WS_GROUP
+        SPINBUTTON      DID_SETHOUR, 20, 100, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETMINUTE, 60, 100, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETSEC, 100, 100, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        LTEXT           "Stunden", -1, 20, 116, 40, 8, NOT WS_GROUP
+        LTEXT           "Minuten", -1, 60, 116, 40, 8, NOT WS_GROUP
+        LTEXT           "Sekunden", -1, 100, 116, 40, 8, NOT WS_GROUP
+        GROUPBOX        "Datum", -1, 10, 25, 170, 55, NOT WS_GROUP
+        SPINBUTTON      DID_SETDAY, 20, 40, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETMONTH, 60, 40, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETYEAR, 100, 40, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        LTEXT           "Tag", -1, 20, 56, 40, 8, NOT WS_GROUP
+        LTEXT           "Monat", -1, 60, 56, 40, 8, NOT WS_GROUP
+        LTEXT           "Jahr", -1, 100, 56, 40, 8, NOT WS_GROUP
+        PUSHBUTTON      "Hilfe", DID_HELP, 10, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | WS_GROUP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_ALARM LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_ALARM, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Alarm", -1, 10, 104, 170, 36
+        AUTORADIOBUTTON "~Aktivieren", DID_ALRM_ON, 13, 125, 60, 10,
+                        WS_GROUP | WS_TABSTOP
+        AUTORADIOBUTTON "~Erinnerung", DID_ALRM_REMINDER, 13, 115, 60, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "~Inaktivieren", DID_ALRM_OFF, 13, 105, 60, 10
+        AUTOCHECKBOX    "Ak~ustisches Signal", DID_ALRM_SOUND, 80, 125, 90,
+                        10, NOT WS_TABSTOP
+        AUTOCHECKBOX    "~Nachrichtenfenster", DID_ALRM_POPUP, 80, 115, 90,
+                        10, NOT WS_TABSTOP
+        AUTOCHECKBOX    "~Programm starten", DID_ALRM_LAUNCH, 80, 105, 90,
+                        10, NOT WS_TABSTOP
+        GROUPBOX        "", DID_TXT_GROUP1, 10, 63, 170, 38
+        SPINBUTTON      DID_SETREMINDER, 50, 69, 50, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | SPBS_FASTSPIN
+        SPINBUTTON      DID_SETHOUR, 20, 69, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETMINUTE, 60, 69, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT
+        SPINBUTTON      DID_SETSEC, 100, 69, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        LTEXT           "Stunden", DID_TXT_HOURS, 20, 83, 40, 8
+        LTEXT           "Minuten", -1, 60, 83, 40, 8
+        LTEXT           "Sekunden", DID_TXT_SECONDS, 100, 83, 40, 8
+        GROUPBOX        "", DID_TXT_GROUP2, 10, 22, 170, 38
+        AUTOCHECKBOX    "einmal", DID_ALRM_SINGLE, 131, 23, 40, 10, WS_GROUP
+        SPINBUTTON      DID_SETDAY, 20, 28, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETMONTH, 60, 28, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        SPINBUTTON      DID_SETYEAR, 100, 28, 30, 12, SPBS_READONLY |
+                        SPBS_MASTER | SPBS_JUSTRIGHT | WS_GROUP
+        LTEXT           "Tag", DID_TXT_DAY, 20, 43, 30, 8
+        LTEXT           "Monat", DID_TXT_MONTH, 60, 43, 30, 8
+        LTEXT           "Jahr", DID_TXT_YEAR, 100, 43, 30, 8
+        AUTOCHECKBOX    "", DID_ALRM_MON, 21, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        WS_GROUP
+        AUTOCHECKBOX    "", DID_ALRM_TUE, 43, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "", DID_ALRM_WED, 65, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "", DID_ALRM_THU, 87, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "", DID_ALRM_FRI, 109, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "", DID_ALRM_SAT, 131, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        AUTOCHECKBOX    "", DID_ALRM_SUN, 153, 33, 10, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        LTEXT           "Mo", DID_TXT_MON, 20, 43, 15, 8, NOT WS_GROUP
+        LTEXT           "Di", DID_TXT_TUE, 42, 43, 15, 8, NOT WS_GROUP
+        LTEXT           "Mi", DID_TXT_WED, 64, 43, 15, 8, NOT WS_GROUP
+        LTEXT           "Do", DID_TXT_THU, 86, 43, 15, 8, NOT WS_GROUP
+        LTEXT           "Fr", DID_TXT_FRI, 108, 43, 15, 8, NOT WS_GROUP
+        LTEXT           "Sa", DID_TXT_SAT, 130, 43, 15, 8, NOT WS_GROUP
+        LTEXT           "So", DID_TXT_SUN, 152, 43, 15, 8, NOT WS_GROUP
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00C80000L
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_ALARM2 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_ALARM2, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Alarmtext", -1, 10, 60, 170, 80
+        MLE             "", DID_ALARMTEXT, 15, 65, 160, 65, MLS_WORDWRAP |
+                        MLS_HSCROLL | MLS_VSCROLL
+        GROUPBOX        "Wave-Datei fÅr Alarm", -1, 10, 22, 170, 35
+        LTEXT           "Pfad und Dateiname:", -1, 15, 40, 107, 8, NOT
+                        WS_GROUP
+        PUSHBUTTON      "AuswÑhlen...", DID_WAVE_SRCH, 118, 27, 60, 14
+        ENTRYFIELD      "", DID_WAVE_PROG, 17, 30, 99, 8, ES_MARGIN | NOT
+                        WS_TABSTOP
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_ALARM3 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_ALARM3, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        LTEXT           "Erforderlich", -1, 10, 106, 90, 8
+        LTEXT           "Pfad und Dateiname:", -1, 20, 97, 107, 8, NOT
+                        WS_GROUP
+        ENTRYFIELD      "", DID_ALRM_PROG, 22, 87, 96, 8, ES_MARGIN
+        PUSHBUTTON      "AuswÑhlen...", DID_ALRM_SRCH, 120, 84, 60, 14,
+                        WS_GROUP
+        LTEXT           "Wahlfrei", -1, 10, 70, 90, 8
+        LTEXT           "Parameter:", -1, 20, 62, 74, 8, NOT WS_GROUP
+        ENTRYFIELD      "", DID_ALRM_PARM, 22, 52, 156, 8, ES_MARGIN
+        LTEXT           "Arbeitsverzeichnis:", -1, 20, 39, 84, 8
+        ENTRYFIELD      "", DID_ALRM_DIR, 22, 29, 156, 8, ES_MARGIN
+        LTEXT           "Programm starten", -1, 10, 122, 90, 8
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 120, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "~Standard", DID_STANDARD, 70, 5, 45, 14, NOT
+                        WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_DCF77_1 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_DCF77_1, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Schnittstelle", -1, 10, 20, 170, 120
+        AUTORADIOBUTTON "Serielle 1", DID_PORT_SER1, 20, 120, 130, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Serielle 2", DID_PORT_SER2, 20, 109, 130, 10
+        AUTORADIOBUTTON "Serielle 3", DID_PORT_SER3, 20, 98, 130, 10
+        AUTORADIOBUTTON "Serielle 4", DID_PORT_SER4, 20, 87, 130, 10
+        AUTORADIOBUTTON "Spieleadapter (Standard)", DID_PORT_GAME, 20, 76,
+                        130, 10
+        AUTORADIOBUTTON "Seriell", DID_PORT_SERX, 20, 55, 75, 10
+        AUTORADIOBUTTON "Spieleadapter", DID_PORT_GAMEX, 20, 44, 75, 10
+        AUTORADIOBUTTON "hopf 603x", DID_PORT_HOPF6036, 20, 33, 75, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "USB", DID_PORT_USB, 20, 22, 75, 10,
+                        WS_TABSTOP
+        LTEXT           "", DID_PORTNUM, 110, 55, 60, 8
+        GROUPBOX        "", -1, 120, 43, 30, 14
+        RTEXT           "888", DID_PORTENTRY, 122, 44, 15, 8, NOT WS_GROUP
+        LTEXT           "H", DID_PORTTXT, 139, 44, 9, 8, NOT WS_GROUP
+        LTEXT           "", DID_PORT_DEVDESC, 90, 21, 80, 22, DT_WORDBREAK
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14,
+                        WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 70, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | BS_NOTEBOOKBUTTON | NOT WS_TABSTOP
+    END
+END
+
+DLGTEMPLATE IDD_DCF77_2 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_DCF77_2, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Intervalle:", -1, 10, 52, 170, 88
+        LTEXT           "Updateintervall:", -1, 15, 125, 150, 8, NOT
+                        WS_GROUP
+        SLIDER          DID_UPDINTERVAL, 13, 104, 116, 22, SLS_LEFT |
+                        SLS_BUTTONSLEFT
+                        CTLDATA 12, 0, 4, 0, 0, 0
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+        LTEXT           "Schwellwert ImpulslÑnge:", -1, 15, 91, 150, 8, NOT
+                        WS_GROUP
+        SLIDER          DID_THRESHOLD, 13, 70, 116, 22, SLS_LEFT |
+                        SLS_BUTTONSLEFT
+                        CTLDATA 12, 0, 5, 0, 0, 0
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+        ENTRYFIELD      "", DID_TXT_UPDINTERVAL, 131, 104, 20, 8, NOT
+                        ES_AUTOSCROLL | ES_READONLY | NOT WS_TABSTOP
+        LTEXT           "ms", -1, 152, 70, 18, 8
+        LTEXT           "min", -1, 152, 104, 18, 8
+        ENTRYFIELD      "", DID_TXT_THRESHOLD, 131, 70, 20, 8, NOT
+                        ES_AUTOSCROLL | ES_READONLY | NOT WS_TABSTOP
+        GROUPBOX        "WiederholprÅfung", -1, 10, 25, 170, 25
+        SPINBUTTON      DID_CHECKINTERVAL, 20, 30, 40, 12, SPBS_NUMERICONLY |
+                        SPBS_MASTER | SPBS_FASTSPIN
+        LTEXT           "Intervalle", -1, 65, 30, 105, 8, NOT WS_GROUP
+        AUTOCHECKBOX    "~Hochauflîsender Zeitgeber", DID_HR_TIMER, 15, 55,
+                        160, 10
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 70, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_DCF77_3 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_DCF77_3, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Stromversorgung", -1, 10, 80, 170, 60
+        AUTOCHECKBOX    "Aktiv", DID_POWER_ON, 20, 118, 90, 10
+        LTEXT           "Leitung 1", -1, 40, 100, 45, 8, NOT WS_GROUP
+        LTEXT           "Leitung 2", -1, 40, 85, 45, 8, NOT WS_GROUP
+        PUSHBUTTON      "+", DID_POWER_1, 20, 100, 13, 10, BS_NOPOINTERFOCUS
+        PUSHBUTTON      "+", DID_POWER_2, 20, 85, 13, 10, BS_NOPOINTERFOCUS |
+                        NOT WS_TABSTOP
+        GROUPBOX        "Signaleingang", -1, 10, 25, 170, 50
+        AUTORADIOBUTTON "Steuerleitung:", DID_SIGNAL_CTL, 15, 50, 70, 10,
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Seriell", DID_SIGNAL_SER, 15, 31, 39, 10,
+                        WS_TABSTOP
+        CONTROL         "", DID_SIGNAL_POS, 89, 17, 60, 43, WC_COMBOBOX,
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP |
+                        WS_VISIBLE
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 70, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+
+DLGTEMPLATE IDD_TIMEZONE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_TIMEZONE, 0, 0, 190, 150, NOT FS_DLGBORDER | WS_VISIBLE
+            PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        GROUPBOX        "Zeitzone", -1, 10, 25, 170, 120
+        CONTROL         "", DID_TIMEZONE, 20, 51, 150, 35, WC_COMBOBOX,
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP |
+                        WS_VISIBLE
+        LTEXT           "Sommerzeitumschaltung:", -1, 20, 62, 150, 8
+        LTEXT           "Winterzeitumschaltung:", -1, 20, 40, 150, 8
+        LTEXT           "", DID_TXT_TZSUMMER, 20, 52, 150, 8
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00C80000L
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFC8L
+        LTEXT           "", DID_TXT_TZWINTER, 20, 30, 150, 8
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00C80000L
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFC8L
+        LTEXT           "Pfad und Name der Zeitzonendatei:", -1, 20, 126,
+                        150, 8, NOT WS_GROUP
+        ENTRYFIELD      "", DID_TZ_FILE, 20, 115, 150, 8, ES_READONLY
+        PUSHBUTTON      "AuswÑhlen...", DID_TZ_SELECT, 110, 99, 60, 14,
+                        WS_GROUP
+        LTEXT           "Zeitzone:", -1, 20, 89, 150, 8
+        DEFPUSHBUTTON   "~Widerrufen", DID_CANCEL, 10, 5, 55, 14, WS_GROUP | BS_NOTEBOOKBUTTON
+        PUSHBUTTON      "Hilfe", DID_HELP, 70, 5, 40, 14, BS_HELP |
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP | BS_NOTEBOOKBUTTON
+    END
+END
+

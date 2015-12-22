@@ -1,0 +1,118 @@
+MODNAME=ZEIT.SYS
+MAJOR=245
+MAXDATALEN=32
+
+TYPELIST       NAME = STRAT,ID=0x01,
+               NAME = IOCTL,ID=0x02,
+               NAME = TIMER,ID=0x04,
+               NAME = INIT,ID=0x08,
+               NAME = IRQ,ID=0x10
+
+GROUPLIST      NAME = THRESH,ID=1,
+               NAME = DESCR,ID=2,
+               NAME = CALC,ID=3
+
+TRACE          MINOR = 1,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "new bitlength received",
+               FMT   = "  device index = 0x%W; length = 0x%W"
+
+TRACE          MINOR = 2,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "minute leap detected; data:",
+               FMT   = "%U"
+
+TRACE          MINOR = 3,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "incorrect bitcount; reset"
+
+TRACE          MINOR = 4,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "change polarity",
+               FMT   = "  polarity = 0x%B"
+
+TRACE          MINOR = 5,
+               TP    = @STATIC,
+               TYPE  = (TIMER),
+               GROUP = THRESH,
+               DESC  = "new threshold calculated",
+               FMT   = "  new threshold value in 10ms-ticks = 0x%W"
+
+TRACE          MINOR = 6,
+               TP    = @STATIC,
+               TYPE  = (TIMER),
+               GROUP = THRESH,
+               DESC  = "new threshold calculated (50...250ms in 10ms steps)",
+               FMT   = "%U"
+
+TRACE          MINOR = 7,
+               TP    = @STATIC,
+               TYPE  = (TIMER),
+               GROUP = THRESH,
+               DESC  = "length of bit exceeds maximum"
+
+TRACE          MINOR = 8,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "slope 0 -> 1 detected",
+               FMT   = "  seconds = 0x%B"
+
+TRACE          MINOR = 9,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "slope 1 -> 0 detected"
+
+TRACE          MINOR = 10,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "new time calculated",
+               FMT   = "  flStatus = 0x%W"
+
+TRACE          MINOR = 11,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "start time calculation"
+
+TRACE          MINOR = 12,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "evaluate data"
+
+TRACE          MINOR = 13,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "transmission error detected: data"
+
+TRACE          MINOR = 14,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "add time offset"
+
+TRACE          MINOR = 15,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "time calculation ok"
+
+TRACE          MINOR = 16,
+               TP    = @STATIC,
+               TYPE  = (IRQ),
+               GROUP = CALC,
+               DESC  = "transmission error detected: parity"
+
+

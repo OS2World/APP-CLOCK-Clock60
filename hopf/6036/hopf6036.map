@@ -1,0 +1,82 @@
+
+ HOPF6036
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000000D1H _DATA                  DATA 16-bit
+ 0001:000000D4 000000000H CONST                  CONST 16-bit
+ 0001:000000D4 00000000AH _BSS                   BSS 16-bit
+ 0001:000000E0 000000000H _INIDATA               INIDATA 16-bit
+ 0002:00000000 000000000H CODE                   CODE 16-bit
+ 0002:00000000 000000B30H _TEXT                  CODE 16-bit
+
+ Origin   Group
+ 0002:0   STATICGROUP
+ 0001:0   DGROUP
+
+  Address         Publics by Name
+
+ 0001:0000001A       DEVHLP_PTR
+ 0000:00000000  Imp  DOS16WRITE           (DOSCALLS.138)
+ 0000:00000000  Imp  DOSWRITE             (DOSCALLS.138)
+ 0001:000000E0       DSEGEND
+ 0001:00000020       INIARGOFS
+ 0001:0000001E       INIARGSEG
+ 0002:000009B6       INITIALIZE
+ 0002:00000046       TIMER_HANDLER
+ 0002:00000604       _atoi
+ 0002:0000072E       _bcd2bin
+ 0002:00000709       _bin2bcd
+ 0002:000009F8       _CINI
+ 0002:000000D2       _getTime
+ 0002:00000684       _hextoint
+ 0002:0000005F       _INBYTE
+ 0002:000000D0       _INT_3
+ 0002:00000278       _IOCTL_FCTN
+ 0002:000007F9       _lastDay
+ 0002:00000667       _lower
+ 0001:00000032       _offset
+ 0002:00000053       _OUTBYTE
+ 0001:00000034       _portaddr
+ 0002:00000784       _printchartoscreen
+ 0002:0000074D       _printtoscreen
+ 0002:00000847       _setClock
+ 0002:000000A7       _TESTSEG
+ 0002:000005C2       _TIMER_FCTN
+ 0001:00000036       _usIntervall
+ 0001:00000030       _utcflag
+ 0000:00009876  Abs  __ACRTUSED
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  DOSWRITE             (DOSCALLS.138)
+ 0000:00000000  Imp  DOS16WRITE           (DOSCALLS.138)
+ 0000:00009876  Abs  __ACRTUSED
+ 0001:0000001A       DEVHLP_PTR
+ 0001:0000001E       INIARGSEG
+ 0001:00000020       INIARGOFS
+ 0001:00000030       _utcflag
+ 0001:00000032       _offset
+ 0001:00000034       _portaddr
+ 0001:00000036       _usIntervall
+ 0001:000000E0       DSEGEND
+ 0002:00000046       TIMER_HANDLER
+ 0002:00000053       _OUTBYTE
+ 0002:0000005F       _INBYTE
+ 0002:000000A7       _TESTSEG
+ 0002:000000D0       _INT_3
+ 0002:000000D2       _getTime
+ 0002:00000278       _IOCTL_FCTN
+ 0002:000005C2       _TIMER_FCTN
+ 0002:00000604       _atoi
+ 0002:00000667       _lower
+ 0002:00000684       _hextoint
+ 0002:00000709       _bin2bcd
+ 0002:0000072E       _bcd2bin
+ 0002:0000074D       _printtoscreen
+ 0002:00000784       _printchartoscreen
+ 0002:000007F9       _lastDay
+ 0002:00000847       _setClock
+ 0002:000009B6       INITIALIZE
+ 0002:000009F8       _CINI
+
+Program entry point at 0002:00000000

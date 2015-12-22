@@ -1,0 +1,283 @@
+
+ ZEIT
+
+ Start         Length     Name                   Class
+ 0001:00000000 000000670H _DATA                  DATA 16-bit
+ 0001:00000670 00000000AH _BSS                   BSS 16-bit
+ 0001:0000067A 000000088H C_COMMON               BSS 16-bit
+ 0001:00000702 000000040H CONST                  CONST 16-bit
+ 0001:00000742 000000119H _INIDATA               INIDATA 16-bit
+ 0002:00000000 0000013C8H _TEXT                  CODE 16-bit
+ 0002:000013C8 000000812H _INITEXT               CODE 16-bit
+
+ Origin   Group
+ 0002:0   CGROUP
+ 0001:0   DGROUP
+
+  Address         Publics by Name
+
+ 0002:000013C8       csegend
+ 0002:000000E7       DEVHELP_ATTACHDD
+ 0002:000000D3       DEVHELP_RESETTIMER
+ 0002:000000B7       DEVHELP_SETTIMER
+ 0001:0000001E       DEVICEHELP
+ 0000:00000000  Imp  DOS16CLOSE           (DOSCALLS.59)
+ 0000:00000000  Imp  DOS16OPEN            (DOSCALLS.70)
+ 0000:00000000  Imp  DOS16READ            (DOSCALLS.137)
+ 0000:00000000  Imp  DOS16WRITE           (DOSCALLS.138)
+ 0001:00000742       dsegend
+ 0001:00000024       INIARGOFS
+ 0001:00000022       INIARGSEG
+ 0002:000013C8       INITIALIZE
+ 0002:00000258       INIT_CPL
+ 0002:0000021E       IOCTL
+ 0001:000001A8       SInfoSeg
+ 0002:00000000       STRATEGY
+ 0002:00000FD8       TRACEIT
+ 0001:000001AA       _arstrucBit
+ 0001:000003AA       _arstrucCom
+ 0001:000004C2       _arstrucGame
+ 0001:0000057A       _arstrucParse
+ 0001:00000292       _arstrucSer
+ 0002:00001154       _atoi
+ 0002:00001047       _attachTimer
+ 0001:00000188       _badmin
+ 0002:0000126A       _bcd2bin
+ 0002:00001249       _bin2bcd
+ 0001:000006E8       _bIsHRTimerAvail
+ 0002:000002FE       _bittochar
+ 0002:00000F11       _calcThreshold
+ 0002:00001A98       _cini
+ 0001:000006AA       _DATA
+ 0001:0000067A       _DataDCFOrg
+ 0001:00000180       _dayold
+ 0001:000006EE       _DDTable
+ 0002:00001712       _endOfString
+ 0002:0000172D       _endOfToken
+ 0002:00000380       _fillDataDCF
+ 0002:00001797       _firstToken
+ 0001:0000064A       _flArgParsed
+ 0001:0000018C       _flStatus
+ 0002:00000FC8       _f_cini
+ 0002:00000093       _F_MEMCPY
+ 0002:00000075       _F_STRCPY
+ 0002:0000005C       _F_STRLEN
+ 0002:0000091D       _getbit
+ 0002:00000932       _getbit_auto
+ 0002:00000347       _getbSignal
+ 0002:00000863       _getcom
+ 0002:0000153D       _getInt
+ 0002:000015B8       _getIValue
+ 0002:0000101C       _getticcnt
+ 0002:000009B0       _getTime
+ 0002:00001802       _getToken
+ 0002:0000143B       _getUInt
+ 0001:00000186       _goodmin
+ 0002:000011CA       _hextoint
+ 0001:0000017E       _hourold
+ 0002:00000053       _INBYTE
+ 0002:00000284       _initdata
+ 0001:00000196       _initflag
+ 0002:00000ECF       _insertThrValue
+ 0002:00000454       _IOCTL
+ 0002:000000B0       _ITIMERHANDLER
+ 0001:000006EA       _iTrace
+ 0002:00001282       _lastDay
+ 0002:000011AF       _lower
+ 0002:000001DB       _LVLCOMINS
+ 0002:0000018D       _LVLINSERT
+ 0002:00000106       _LVLISREADY
+ 0002:00000114       _LVLWAIT
+ 0001:0000017C       _minold
+ 0001:00000182       _monold
+ 0002:000017B4       _nextToken
+ 0002:00000047       _OUTBYTE
+ 0002:000019EB       _parse
+ 0002:00001837       _parseToken
+ 0001:000001A6       _pInfoSeg
+ 0002:0000165D       _printToScreen
+ 0002:00001692       _printToScreenCR
+ 0002:000016C4       _printUShortToScreen
+ 0001:000006FA       _ptmrfn
+ 0002:00001088       _REGISTERTIMER
+ 0002:000002E4       _ruecksetzen
+ 0002:000012CC       _setClock
+ 0001:00000142       _sOffset
+ 0002:00000EC9       _start
+ 0002:000002A5       _strcpy
+ 0001:00000036       _szConfigFile
+ 0001:00000855       _szCopyright
+ 0001:00000845       _szErrFileNotFound1
+ 0001:00000849       _szErrFileNotFound2
+ 0001:0000084D       _szErrOutOfRange
+ 0001:00000841       _szErrRead
+ 0001:0000083D       _szErrTooManyArgs
+ 0001:00000851       _szErrWrongParameter
+ 0002:0000025F       _TESTSEG
+ 0001:0000018E       _ticcount
+ 0002:00000CA6       _TIMERHANDLER
+ 0002:00001420       _toupper
+ 0002:00001006       _TRACE
+ 0001:00000192       _traeger
+ 0001:000006E6       _trimm
+ 0001:0000013E       _ucAutoMode
+ 0001:0000013B       _ucBitPos
+ 0001:00000190       _uccSavety
+ 0001:0000013C       _ucPol
+ 0001:0000013A       _ucPortTyp
+ 0001:0000013D       _ucPower
+ 0001:00000140       _ucSavety
+ 0001:000006A6       _ucThrMaxIndex
+ 0001:00000198       _ucThrMaxValue
+ 0001:0000068A       _ucThrValues
+ 0001:0000013F       _ucTimeZone
+ 0001:0000018A       _uscClockSet
+ 0001:00000194       _uscIntervall
+ 0001:00000144       _usIntervall
+ 0001:00000859       _usIsQuiet
+ 0001:00000146       _usPortAddr
+ 0001:00000688       _usThrBitlen
+ 0001:000006A4       _usThrCarrier
+ 0001:000006A0       _usThreshold
+ 0001:000006A2       _usThrMinute
+ 0001:000006A8       _usThrPolarity
+ 0001:00000700       _USTICKLEN
+ 0001:00000028       _USTIMERMODE
+ 0001:000006FE       _usTTicks
+ 0001:00000184       _yearold
+ 0000:00009876  Abs  __ACRTUSED
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  DOS16WRITE           (DOSCALLS.138)
+ 0000:00000000  Imp  DOS16READ            (DOSCALLS.137)
+ 0000:00000000  Imp  DOS16OPEN            (DOSCALLS.70)
+ 0000:00000000  Imp  DOS16CLOSE           (DOSCALLS.59)
+ 0000:00009876  Abs  __ACRTUSED
+ 0001:0000001E       DEVICEHELP
+ 0001:00000022       INIARGSEG
+ 0001:00000024       INIARGOFS
+ 0001:00000028       _USTIMERMODE
+ 0001:00000036       _szConfigFile
+ 0001:0000013A       _ucPortTyp
+ 0001:0000013B       _ucBitPos
+ 0001:0000013C       _ucPol
+ 0001:0000013D       _ucPower
+ 0001:0000013E       _ucAutoMode
+ 0001:0000013F       _ucTimeZone
+ 0001:00000140       _ucSavety
+ 0001:00000142       _sOffset
+ 0001:00000144       _usIntervall
+ 0001:00000146       _usPortAddr
+ 0001:0000017C       _minold
+ 0001:0000017E       _hourold
+ 0001:00000180       _dayold
+ 0001:00000182       _monold
+ 0001:00000184       _yearold
+ 0001:00000186       _goodmin
+ 0001:00000188       _badmin
+ 0001:0000018A       _uscClockSet
+ 0001:0000018C       _flStatus
+ 0001:0000018E       _ticcount
+ 0001:00000190       _uccSavety
+ 0001:00000192       _traeger
+ 0001:00000194       _uscIntervall
+ 0001:00000196       _initflag
+ 0001:00000198       _ucThrMaxValue
+ 0001:000001A6       _pInfoSeg
+ 0001:000001A8       SInfoSeg
+ 0001:000001AA       _arstrucBit
+ 0001:00000292       _arstrucSer
+ 0001:000003AA       _arstrucCom
+ 0001:000004C2       _arstrucGame
+ 0001:0000057A       _arstrucParse
+ 0001:0000064A       _flArgParsed
+ 0001:0000067A       _DataDCFOrg
+ 0001:00000688       _usThrBitlen
+ 0001:0000068A       _ucThrValues
+ 0001:000006A0       _usThreshold
+ 0001:000006A2       _usThrMinute
+ 0001:000006A4       _usThrCarrier
+ 0001:000006A6       _ucThrMaxIndex
+ 0001:000006A8       _usThrPolarity
+ 0001:000006AA       _DATA
+ 0001:000006E6       _trimm
+ 0001:000006E8       _bIsHRTimerAvail
+ 0001:000006EA       _iTrace
+ 0001:000006EE       _DDTable
+ 0001:000006FA       _ptmrfn
+ 0001:000006FE       _usTTicks
+ 0001:00000700       _USTICKLEN
+ 0001:00000742       dsegend
+ 0001:0000083D       _szErrTooManyArgs
+ 0001:00000841       _szErrRead
+ 0001:00000845       _szErrFileNotFound1
+ 0001:00000849       _szErrFileNotFound2
+ 0001:0000084D       _szErrOutOfRange
+ 0001:00000851       _szErrWrongParameter
+ 0001:00000855       _szCopyright
+ 0001:00000859       _usIsQuiet
+ 0002:00000000       STRATEGY
+ 0002:00000047       _OUTBYTE
+ 0002:00000053       _INBYTE
+ 0002:0000005C       _F_STRLEN
+ 0002:00000075       _F_STRCPY
+ 0002:00000093       _F_MEMCPY
+ 0002:000000B0       _ITIMERHANDLER
+ 0002:000000B7       DEVHELP_SETTIMER
+ 0002:000000D3       DEVHELP_RESETTIMER
+ 0002:000000E7       DEVHELP_ATTACHDD
+ 0002:00000106       _LVLISREADY
+ 0002:00000114       _LVLWAIT
+ 0002:0000018D       _LVLINSERT
+ 0002:000001DB       _LVLCOMINS
+ 0002:0000021E       IOCTL
+ 0002:00000258       INIT_CPL
+ 0002:0000025F       _TESTSEG
+ 0002:00000284       _initdata
+ 0002:000002A5       _strcpy
+ 0002:000002E4       _ruecksetzen
+ 0002:000002FE       _bittochar
+ 0002:00000347       _getbSignal
+ 0002:00000380       _fillDataDCF
+ 0002:00000454       _IOCTL
+ 0002:00000863       _getcom
+ 0002:0000091D       _getbit
+ 0002:00000932       _getbit_auto
+ 0002:000009B0       _getTime
+ 0002:00000CA6       _TIMERHANDLER
+ 0002:00000EC9       _start
+ 0002:00000ECF       _insertThrValue
+ 0002:00000F11       _calcThreshold
+ 0002:00000FC8       _f_cini
+ 0002:00000FD8       TRACEIT
+ 0002:00001006       _TRACE
+ 0002:0000101C       _getticcnt
+ 0002:00001047       _attachTimer
+ 0002:00001088       _REGISTERTIMER
+ 0002:00001154       _atoi
+ 0002:000011AF       _lower
+ 0002:000011CA       _hextoint
+ 0002:00001249       _bin2bcd
+ 0002:0000126A       _bcd2bin
+ 0002:00001282       _lastDay
+ 0002:000012CC       _setClock
+ 0002:000013C8       INITIALIZE
+ 0002:000013C8       csegend
+ 0002:00001420       _toupper
+ 0002:0000143B       _getUInt
+ 0002:0000153D       _getInt
+ 0002:000015B8       _getIValue
+ 0002:0000165D       _printToScreen
+ 0002:00001692       _printToScreenCR
+ 0002:000016C4       _printUShortToScreen
+ 0002:00001712       _endOfString
+ 0002:0000172D       _endOfToken
+ 0002:00001797       _firstToken
+ 0002:000017B4       _nextToken
+ 0002:00001802       _getToken
+ 0002:00001837       _parseToken
+ 0002:000019EB       _parse
+ 0002:00001A98       _cini
+
+Program entry point at 0002:00000000

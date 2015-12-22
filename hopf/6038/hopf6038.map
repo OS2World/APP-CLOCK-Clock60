@@ -1,0 +1,167 @@
+
+ HOPF6038
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000000C0H _DATA                  DATA 16-bit
+ 0001:000000C0 000000000H CONST                  CONST 16-bit
+ 0001:000000C0 00000021EH _BSS                   BSS 16-bit
+ 0001:000002E0 000000048H c_common               BSS 16-bit
+ 0001:00000330 000000000H _INIDATA               INIDATA 16-bit
+ 0002:00000000 000000000H CODE                   CODE 16-bit
+ 0002:00000000 0000017A6H _TEXT                  CODE 16-bit
+
+ Origin   Group
+ 0002:0   STATICGROUP
+ 0001:0   DGROUP
+
+  Address         Publics by Name
+
+ 0001:0000001A       devhlp_ptr
+ 0002:00000000       dev_strategy
+ 0000:00000000  Imp  DOS16CHGFILEPTR      (DOSCALLS.58)
+ 0000:00000000  Imp  DOS16CLOSE           (DOSCALLS.59)
+ 0000:00000000  Imp  DOS16OPEN            (DOSCALLS.70)
+ 0000:00000000  Imp  DOS16READ            (DOSCALLS.137)
+ 0000:00000000  Imp  DOS16WRITE           (DOSCALLS.138)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.138)
+ 0001:00000330       dsegend
+ 0001:00000020       IniArgOfs
+ 0001:0000001E       IniArgSeg
+ 0002:00000A7A       initialize
+ 0002:0000006A       IOCTL
+ 0002:00000046       timer_handler
+ 0002:000004D5       _AddOffset
+ 0002:00000431       _AfterSwitch
+ 0002:000013F4       _atoi
+ 0002:0000151E       _bcd2bin
+ 0002:000014F9       _bin2bcd
+ 0002:00000494       _CalcOffset
+ 0001:000002E0       _chTimeZone
+ 0002:00000ABC       _cini
+ 0002:0000129B       _CloseTZFile
+ 0002:000001B7       _CorrectTLOC
+ 0001:0000030A       _dt
+ 0001:000002F4       _dt_weekday
+ 0002:00001393       _FindEntry
+ 0002:00000F41       _GetLine
+ 0002:000002A0       _getLong
+ 0002:000012C6       _GetNextLineOfType
+ 0002:0000035A       _getTime
+ 0002:0000133F       _GetTZString
+ 0002:00000149       _GetWeekday
+ 0002:00000326       _goodSat
+ 0002:00001474       _hextoint
+ 0002:0000005F       _inbyte
+ 0001:0000002E       _intervall
+ 0001:00000030       _intervallcnt
+ 0002:00000102       _INT_3
+ 0002:00000559       _ioctl_fctn
+ 0002:00000D74       _isblank
+ 0002:000013E2       _IsValidHandle
+ 0002:000015E9       _lastDay
+ 0002:00001457       _lower
+ 0002:000009DA       _minuteTimer
+ 0002:00001306       _MoveToTZNo
+ 0001:0000002A       _offset
+ 0002:0000124E       _OpenTZFile
+ 0002:00000053       _outbyte
+ 0002:0000108D       _ParseLine
+ 0001:0000002C       _portaddr
+ 0002:00001574       _printchartoscreen
+ 0002:0000153D       _printtoscreen
+ 0002:00001043       _QueryType
+ 0002:00000D92       _RemoveSpace
+ 0002:00000DC9       _RemoveString
+ 0002:0000127F       _RewindTZFile
+ 0002:00001637       _setClock
+ 0002:00000250       _setLong
+ 0002:000002EC       _setMode
+ 0002:000000E9       _ShiftL
+ 0002:000000D0       _ShiftR
+ 0002:00000104       _strncmp
+ 0002:00000E03       _strtoi
+ 0002:00000EC2       _strtoiv
+ 0002:00000E92       _strtosi
+ 0002:000000A7       _TestSeg
+ 0002:00000A0B       _timer_fctn
+ 0001:00000314       _tloc_fall
+ 0001:000002F6       _tloc_spring
+ 0001:00000028       _utcflag
+ 0000:00009876  Abs  __acrtused
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.138)
+ 0000:00000000  Imp  DOS16WRITE           (DOSCALLS.138)
+ 0000:00000000  Imp  DOS16READ            (DOSCALLS.137)
+ 0000:00000000  Imp  DOS16OPEN            (DOSCALLS.70)
+ 0000:00000000  Imp  DOS16CHGFILEPTR      (DOSCALLS.58)
+ 0000:00000000  Imp  DOS16CLOSE           (DOSCALLS.59)
+ 0000:00009876  Abs  __acrtused
+ 0001:0000001A       devhlp_ptr
+ 0001:0000001E       IniArgSeg
+ 0001:00000020       IniArgOfs
+ 0001:00000028       _utcflag
+ 0001:0000002A       _offset
+ 0001:0000002C       _portaddr
+ 0001:0000002E       _intervall
+ 0001:00000030       _intervallcnt
+ 0001:000002E0       _chTimeZone
+ 0001:000002F4       _dt_weekday
+ 0001:000002F6       _tloc_spring
+ 0001:0000030A       _dt
+ 0001:00000314       _tloc_fall
+ 0001:00000330       dsegend
+ 0002:00000000       dev_strategy
+ 0002:00000046       timer_handler
+ 0002:00000053       _outbyte
+ 0002:0000005F       _inbyte
+ 0002:0000006A       IOCTL
+ 0002:000000A7       _TestSeg
+ 0002:000000D0       _ShiftR
+ 0002:000000E9       _ShiftL
+ 0002:00000102       _INT_3
+ 0002:00000104       _strncmp
+ 0002:00000149       _GetWeekday
+ 0002:000001B7       _CorrectTLOC
+ 0002:00000250       _setLong
+ 0002:000002A0       _getLong
+ 0002:000002EC       _setMode
+ 0002:00000326       _goodSat
+ 0002:0000035A       _getTime
+ 0002:00000431       _AfterSwitch
+ 0002:00000494       _CalcOffset
+ 0002:000004D5       _AddOffset
+ 0002:00000559       _ioctl_fctn
+ 0002:000009DA       _minuteTimer
+ 0002:00000A0B       _timer_fctn
+ 0002:00000A7A       initialize
+ 0002:00000ABC       _cini
+ 0002:00000D74       _isblank
+ 0002:00000D92       _RemoveSpace
+ 0002:00000DC9       _RemoveString
+ 0002:00000E03       _strtoi
+ 0002:00000E92       _strtosi
+ 0002:00000EC2       _strtoiv
+ 0002:00000F41       _GetLine
+ 0002:00001043       _QueryType
+ 0002:0000108D       _ParseLine
+ 0002:0000124E       _OpenTZFile
+ 0002:0000127F       _RewindTZFile
+ 0002:0000129B       _CloseTZFile
+ 0002:000012C6       _GetNextLineOfType
+ 0002:00001306       _MoveToTZNo
+ 0002:0000133F       _GetTZString
+ 0002:00001393       _FindEntry
+ 0002:000013E2       _IsValidHandle
+ 0002:000013F4       _atoi
+ 0002:00001457       _lower
+ 0002:00001474       _hextoint
+ 0002:000014F9       _bin2bcd
+ 0002:0000151E       _bcd2bin
+ 0002:0000153D       _printtoscreen
+ 0002:00001574       _printchartoscreen
+ 0002:000015E9       _lastDay
+ 0002:00001637       _setClock
+
+Program entry point at 0002:00000000

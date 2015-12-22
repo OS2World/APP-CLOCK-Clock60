@@ -1,0 +1,151 @@
+/***************************************************************************\
+ *
+ * PROGRAMMNAME: WPDCF77
+ * -------------
+ *
+ * VERSION: 6.0
+ * --------
+ *
+ * MODULNAME: CLOCK.RC
+ * ----------
+ *
+ * BESCHREIBUNG:
+ * -------------
+ *   Resource-Datei fÅr DCF77-Uhr
+ *
+ *  Ver.    Date      Comment
+ *  ----    --------  -------
+ *  1.00    10-23-94  First release
+ *  2.00    06-16-95  SOM1/SOM2-Lîsung
+ *  3.00    12-09-95  Time C/S
+ *  3.10    12-11-95  Time C/S Bugfix
+ *  4.00    03-15-96  UnterstÅtzung fÅr hopf
+ *  4.10    07-08-96  UnterstÅtzung fÅr hopf 6036
+ *  4.30    17-05-97  UnterstÅtzung HR-Timer
+ *  4.40    01-31-00  Multimedia-UnterstÅtzung, Bugfixing
+ *  5.10    02-10-01  Fehlerkorrektur Positionsspeicherung Iconview
+ *  5.20    06-09-01  Fehlerkorrektur Audiodaten
+ *  5.30    01-16-02  Implementierung der Erinnerungsfunktion
+ *  5.40    11-22-03  Fehlerkorrektur Erinnerungsfunktion
+ *  6.00    02-15-04  USB UnterstÅtzung
+ *
+ *  Copyright (C) noller & breining software 1995...2004
+ *
+\******************************************************************************/
+#include <os2.h>
+#include "clock.h"
+#include "res.h"
+
+ICON    ID_ICON  "clock.ico"
+
+MENU IDM_OPENVIEW LOADONCALL MOVEABLE DISCARDABLE
+    {
+    MENUITEM "~Analog",             IDM_OPENANALOG,     MIS_TEXT
+    MENUITEM "~Digital",            IDM_OPENDIGITAL,    MIS_TEXT
+    }
+
+MENU IDM_OPENSTAT LOADONCALL MOVEABLE DISCARDABLE
+    {
+    MENUITEM "~Status",             IDM_OPENSTATUS,     MIS_TEXT
+    }
+
+MENU IDM_OPENGRPH LOADONCALL MOVEABLE DISCARDABLE
+    {
+    MENUITEM "~EmpfangsqualitÑt",   IDM_OPENGRAPH,      MIS_TEXT
+    }
+
+MENU IDM_OPENANT LOADONCALL MOVEABLE DISCARDABLE
+    {
+    MENUITEM "A~ntenne einrichten", IDM_OPENANTENNA,    MIS_TEXT
+    }
+
+MENU IDM_MAINMENU LOADONCALL MOVEABLE DISCARDABLE
+    {
+    MENUITEM "Produktinformation",  IDM_ABOUT,          MIS_TEXT
+    #ifdef DEBUG
+    MENUITEM "DEBUG (WPDCF77)",     IDM_OPENDEBUG,      MIS_TEXT
+    #endif
+    }
+
+MENU IDM_REMINDER LOADONCALL MOVEABLE DISCARDABLE
+    {
+    MENUITEM "E~rinnerung",         IDM_REMIND,         MIS_TEXT
+    }
+
+STRINGTABLE     PRELOAD
+    {
+    IDS_APPNAME                 "Systemuhr"
+    IDS_TIMEOK_DCF              "DCF77-Zeit: "
+    IDS_DATEOK_DCF              "DCF77-Datum: "
+    IDS_TIMEOK_GPS              "GPS-Zeit: "
+    IDS_DATEOK_GPS              "GPS-Datum: "
+    IDS_TIMENOCARRIER           "kein TrÑger"
+    IDS_DATENOCARRIER           "Hardware ÅberprÅfen"
+    IDS_TIMEFAIL                "SekundenzÑhler: "
+    IDS_DATEFAIL                "empfangene Zeit ungÅltig"
+    IDS_DRIVERFAIL              "Hardware nicht gefunden"
+    IDS_SERVERVERSION           "Falsche TIME C/S-Serverversion"
+    IDS_STATUSVIEW              "Status"
+    IDS_PAGENAME_ALARM          "Alar~m / Erinnerung"
+    IDS_PAGENAME_DATETIME       "Datum/~Uhrzeit"
+    IDS_PAGENAME_VIEW           "~Anzeige"
+    IDS_PAGENAME_DCF            "~DCF77 Einstellungen"
+    IDS_PAGENAME_GPS            "~GPS Einstellungen"
+    IDS_PAGENAME_OFFSET         "~Zeitoffset"
+    IDS_PAGENAME_INTERVAL       "LA~N::Time Server"
+    IDS_PAGENAME_TIMEZONE       "Zeitz~one"
+    IDS_PAGENAME_AUDIO          "Stundengong"
+    IDS_ALRM_DATE               "Datum"
+    IDS_ALRM_DAILY              "Wochentag"
+    IDS_ALRM_SEARCH_PROG        "Alarmprogramm auswÑhlen"
+    IDS_ALRM_SEARCH_SOUNDFILE   "Sounddatei auswÑhlen"
+    IDS_ABOUT                   "Produktinformation"
+    IDS_POSITIVE                "positiv"
+    IDS_NEGATIVE                "negativ"
+    IDS_PORT_INDEX              "Nummer:"
+    IDS_PORT_NUMBER             "Port:"
+    IDS_PORT_USB                "USB device ID"
+    IDS_GRAPHCLASS              "Clock:Grafik"
+    IDS_GRAPHVIEW               "EmpfangsqualitÑt"
+    IDS_GRAPHVIEWANT            "Antenne einrichten"
+    IDS_XAXES                   "Zeit in "
+    IDS_YAXESQ                  "GÅte"
+    IDS_YAXESA                  "Amplitude"
+    IDS_DCFDELTA                "DCF77-Absenkung: "
+    IDS_GPSPOSITION             "Geographische Breite: %1¯%2'; LÑnge: %3¯%4'"
+    IDS_GPSINVPOSITION          "-- ungÅltige GPS-Koordinaten --"
+    IDS_WEEKDAY_SUN             "So"
+    IDS_WEEKDAY_MON             "Mo"
+    IDS_WEEKDAY_TUE             "Di"
+    IDS_WEEKDAY_WED             "Mi"
+    IDS_WEEKDAY_THU             "Do"
+    IDS_WEEKDAY_FRI             "Fr"
+    IDS_WEEKDAY_SAT             "Sa"
+    IDS_SEARCH_TZTAB            "Zeitzonendatei îffnen"
+    IDS_SWITCHDATETIME          "%1. %2  %3 UTC%4 min"
+    IDS_INVALIDDATE             "-- ungÅltiges Datum --"
+    IDS_BITMAP_SEARCH_FILE      "Bitmapdatei auswÑhlen"
+    IDS_GONG_TEXT               "Gong ist bereits bei anderer Uhr aktiviert"
+    IDS_ALRM_TIME               "Uhrzeit"
+    IDS_ALRM_REMIND             "Erinnerung nach"
+
+    }
+
+MESSAGETABLE
+    {
+    IDMSG_ERRORSTARTALARM       "Alarm kann nicht gestartet werden!"
+    IDMSG_ALARMTITLE            "--- Alarm ---"
+    IDMSG_ALARMEXPIRED          "Heute ist der %d, es ist jetzt %t Uhr"
+    IDMSG_NODIGIT               "Das Eingabefeld enthÑlt keine gÅltige Zahl!"
+    IDMSG_ERRHWHOPF             "Problem mit DCF77-Hardware: keine Abfrage mîglich!"
+    IDMSG_ERRLOCFILE            "Fehler beim ôffnen der Zeitzonen-Datei!"
+    IDMSG_ERRLOCENTRY           "Zeitzone in Zeitzonen-Datei nicht gefunden!"
+    IDMSG_ERRBMPFILE            "Datei(en) mit ungÅltigem Format:\n"
+    IDMSG_ERRFILENOTFOUND       "Fehler beim ôffnen der Datei(en):\n"
+    IDMSG_ERRALARMTHREAD        "Alarmthread konnte nicht gestartet werden"
+    }
+
+
+rcinclude clock.dlg
+
+

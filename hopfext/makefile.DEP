@@ -1,0 +1,25 @@
+
+.\Inout.obj: \
+    .\Inout.cpp \
+    {.;..;$(INCLUDE);}Inout.hpp \
+    {.;..;$(INCLUDE);}mgdef.h
+
+.\InitClass.obj: \
+    .\InitClass.cpp \
+    {.;..;$(INCLUDE);}InitClass.hpp \
+    {.;..;$(INCLUDE);}mgdef.h
+
+.\HopfMain.obj: \
+    .\HopfMain.cpp \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}sharemem.hpp \
+    {.;..;$(INCLUDE);}InitClass.hpp \
+    {.;..;$(INCLUDE);}Inout.hpp \
+    {.;..;$(INCLUDE);}mgdef.h \
+    {.;..;$(INCLUDE);}AusgabeTxt.h
+
+.\ShareMem.obj: \
+    .\ShareMem.cpp \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}sharemem.hpp
+

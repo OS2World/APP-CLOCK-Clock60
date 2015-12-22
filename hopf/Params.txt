@@ -1,0 +1,24 @@
+DEVICE = d:\path\hopf6036.sys <PARAMS>
+
+Parameter:
+
+-p        Portadresse in HEX          Beispiel -p:0280
+-i        Intervalle in Minuten       Beispiel -i:10
+-u        Umschaltung auf UTC         Beispiel -u
+-o        Offset zu Localtime 
+               oder UTC in Stunden    Beispiel -o:-4
+
+
+
+DEVICE = d:\path\hopf6038.sys <PARAMS>
+
+Parameter:
+
+-p        Portadresse in HEX          Beispiel -p:0280
+-i        Intervalle in Minuten       Beispiel -i:10
+-o        Offset zu UTC in Stunden    Beispiel -o:-4
+-f        Filename fÅr TZTAB          Beispiel -f:D:\DCF_77\TZTAB
+-z        Eintragname in TZTAB        Beispiel -z:MEZ-1MESZ
+
+
+

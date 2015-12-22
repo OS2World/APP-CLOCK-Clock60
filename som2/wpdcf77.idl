@@ -1,0 +1,368 @@
+//
+//
+//   Module Name: wpDCF77
+//
+//   OS/2 Workplace Shell clock w/ DCF77 support
+//
+
+#ifndef wpdcf77_idl
+#define wpdcf77_idl
+
+#include "WPClock.idl"
+//#include "WPClrPal.idl"
+#include "WPrtType.idl"
+#include <somcls.idl>
+
+typedef somToken INSTANCEDATA;
+typedef somToken ALARMINSTDATA1;
+typedef somToken ALARMINSTDATA2;
+typedef somToken TIMEINSTDATA;
+typedef somToken ALARMTIME;
+typedef somToken MATRIXLF;
+typedef somToken COLORS;
+typedef somToken TIMER_RESOURCES;
+
+interface M_WPDCF77;
+
+interface WPDCF77 : WPClock
+//# Comment for parent WPClock:
+
+//---Symbol parentComment is undefined---
+
+//
+// CLASS: WPClock
+//
+// CLASS HIERARCHY:
+//
+//     SOMObject
+//       ÀÄÄ WPObject
+//             ÀÄÄ WPAbstract
+//                   ÀÄÄ WPClock
+//                         ÀÄÄ WPDCF77
+//
+{
+  ULONG wpAddClockAlarm2Page(in HWND hwndNotebook);
+  ULONG wpAddClockAlarm3Page(in HWND hwndNotebook);
+  ULONG wpAddClockView3Page(in HWND hwndNotebook);
+  ULONG wpAddDCFSettingPage1(in HWND hwndNotebook);
+  ULONG wpAddDCFSettingPage2(in HWND hwndNotebook);
+  ULONG wpAddDCFSettingPage3(in HWND hwndNotebook);
+  ULONG wpAddTmOffsSettingPage(in HWND hwndNotebook);
+  ULONG wpAddTZSettingPage(in HWND hwndNotebook);
+  ULONG wpAddServerIntervalPage(in HWND hwndNotebook);
+  ULONG wpAddAudioSetupPage(in HWND hwndNotebook);
+  BOOL wpAdd1sTimer(in HWND hwndReceiver);
+  BOOL wpRemove1sTimer(in HWND hwndReceiver);
+  void wpRefreshClockView();
+  void wpCloseADView();
+
+//# Max. string lengths; includes termination character '\0'
+const long CCHMAXPGNAME   = 32;             // max. string length for page name and other string resources
+const long CCHMAXALARMMSG = 128;            // max. string length for the alarm text
+const long CCHMAXTZONE    = 25;             // max. string length for time zone
+const long CCHMAXDATETIME = 12;             // max. string length for time and date string
+const long CCHMAXPARM     = 256;            // max. string length for parameter string of alarm program
+
+//# Flags for ulMinMaxStat
+const long MINMAX_NORMAL    = 0;            // Min/Max: Normal state
+const long MINMAX_CHANGED   = 1;            // Min/Max: Received WM_MINMAXFRAME
+const long MINMAX_WAIT4SIZE = 2;            // Min/Max: Wait for WM_SIZE"
+
+#ifdef __SOMIDL__
+  implementation
+  {
+    releaseorder: wpAddClockAlarmPage,wpAddClockAlarm2Page,wpAddClockAlarm3Page,
+                  wpAddClockDateTimePage,wpAddClockView1Page,wpAddClockView2Page,
+                  wpAddClockView3Page,wpAddDCFSettingPage1,wpAddDCFSettingPage2,
+                  wpAddDCFSettingPage3,wpAdd1sTimer,wpRemove1sTimer,wpCloseADView,
+                  wpAddTmOffsSettingPage,wpAddTZSettingPage,wpAddServerIntervalPage,
+                  wpRefreshClockView,wpAddAudioSetupPage;
+
+    //# Class Modifiers
+    externalstem = wpDCF77;
+    externalprefix = wpDCF77_;
+    majorversion = 1;
+    minorversion = 1;
+    local;
+    filestem = wpdcf77;
+    metaclass = M_WPDCF77;
+    callstyle = oidl;
+
+    passthru C_ih_after =  ""
+"typedef struct _ALARMTIME                            /* Structure for alarm time */"
+"    {"
+"    DATETIME dtAlarm;"
+"    USHORT   usReminderTime;"
+"    BOOL     bIsAlarmActive;"
+"    USHORT   usMode;"
+"    } ALARMTIME, *PALARMTIME;"
+""
+"/* Flags for ALARMTIME.usMode */"
+"#define AM_ACTIVE           0x0001          // Alarm is active   \ 3 states: on, off, reminder"
+"#define AM_REMINDER         0x0002          // reminder function /"
+"#define AM_AUDIO            0x0004          // alarm using audio"
+"#define AM_MSGBOX           0x0008          // alarm using message box"
+"#define AM_LAUNCH           0x0010          // start program"
+"#define AM_SINGLE           0x0020          // single alarm"
+"#define AM_MON              0x0100          // alarm on Monday"
+"#define AM_TUE              0x0200          // alarm on Tuesday"
+"#define AM_WED              0x0400          // alarm on Wednesday"
+"#define AM_THU              0x0800          // alarm on Thursday"
+"#define AM_FRI              0x1000          // alarm on Friday"
+"#define AM_SAT              0x2000          // alarm on Saturday"
+"#define AM_SUN              0x4000          // alarm on Sunday"
+""
+"typedef struct _COLORS                               /* Structure for RBG-color with shadows */"
+"    {"
+"    ULONG   ulShade;"
+"    ULONG   ulLight;"
+"    ULONG   ulSurface;"
+"    } COLORS, *PCOLORS;"
+""
+"typedef struct _TIMER_RESOURCES"
+"    {"
+"    HEV     hSemTimer;"
+"    TID     tidAlarmThread;"
+"    ULONG   ulPostReason;"
+"    ULONG   ulTimerValue;"
+"    ULONG   ulDays;"
+"    HTIMER  hTimer;"
+"    } TIMER_RESOURCES, *PTIMER_RESOURCES;"
+""
+"/* Values of TIMER_RESOURCES.ulPostReason */"
+"#define TR_TMR_EXPIRED      0"
+"#define TR_VALUECHANGED     1"
+"#define TR_ALARMSTOPPED     2"
+""
+" typedef struct _INSTANCEDATA                     /* local object data */"
+"     {"
+"     BYTE            bPort;                       //>> DCF77DlgProc1"
+"     USHORT          usIOAddr;"
+"     DCF77_DATA      OldDataDCF1;"
+"     USHORT          usSetInterval;               //>> DCF77DlgProc2"
+"     USHORT          usThreshold;"
+"     BYTE            bcRepeat;"
+"     DCF77_DATA      OldDataDCF2;"
+"     USHORT          usTicklen;"
+"     USHORT          usTimerMode;"
+"     BYTE            bSupply;                     //>> DCF77DlgProc3"
+"     BYTE            bSignal;"
+"     DCF77_DATA      OldDataDCF3;"
+"     USEITEM         StatUseItem;                 //>> StatusDlgProc"
+"     VIEWITEM        StatViewItem;"
+"     DCF77_STATUS    OldStatDCF;"
+"     DCF77_DATETIME  OldDtDCF;"
+"     DCF77_COORD     OldCoordGPS;"
+"     USEITEM         AboutUseItem;                //>> AboutDlgProc"
+"     VIEWITEM        AboutViewItem;"
+"     BYTE            flUTC;                       //>> TmOffsDlgProc"
+"     SHORT           sGOffset;"
+"     SHORT           sLOffset;"
+"     DCF77_OFFSET    OldOffsDCF;"
+"     ULONG           ulOldPresence;               //>> ClkTicksDlgProc"
+"     BOOL            bWasInitButtonsP;"
+"     BOOL            bWasInitButtonsC;            //>> ClkColorsDlgProc"
+"     LONG            clrBackgnd;"
+"     LONG            clrFace;"
+"     LONG            clrTick;"
+"     LONG            clrDateOnAnalog;"
+"     LONG            clrHHand;"
+"     LONG            clrMHand;"
+"     LONG            clrTransparent;"
+"     LONG            clrDateText;"
+"     LONG            clrTimeText;"
+"     FATTRS          fAttrD;"
+"     FATTRS          fAttrT;"
+"     CHAR            szFontFamilyD[FACESIZE];"
+"     CHAR            szFontFamilyT[FACESIZE];"
+"     CHAR            szPathMHandBmp[CCHMAXPATH];  //>> ClkBmpsDlgProc"
+"     CHAR            szPathHHandBmp[CCHMAXPATH];"
+"     CHAR            szPathFaceBmp[CCHMAXPATH];"
+"     POINTL          ptlMHandHotspot;"
+"     POINTL          ptlHHandHotspot;"
+"     HBITMAP         hBmpMHand;"
+"     HBITMAP         hBmpHHand;"
+"     HBITMAP         hBmpFace;"
+"     ULONG           ulSrvrInterval;              //>> SrvrIntervalDlgProc"
+"     ULONG           ulOldSrvrInterval;"
+"     BOOL            bSendSrvrTime;"
+"     BOOL            bOldSendSrvrTime;"
+"     USEITEM         MenuUseItem;                 //>> MenuFrameWndProc"
+"     VIEWITEM        MenuViewItem;"
+"     HWND            hwndMenuFrame;"
+"     CHAR            szLocFile[CCHMAXPATH];       //>> TimezoneDlgProc"
+"     CHAR            szLocName[CCHMAXTZONE];"
+"     SHORT           sTZIndex;"
+"     HFILE           hLocFile;"
+"     BOOL            bNoControl;"
+"     CHAR            szOldLocFile[CCHMAXPATH];"
+"     CHAR            szOldLocName[CCHMAXTZONE];"
+"     CHAR            szClsGongFile[CCHMAXPATH];   //>> ClkAudioDlgProc"
+"     BOOL            bClsIs1PerHour;"
+"     } INSTANCEDATA, *PINSTANCEDATA;"
+""
+" typedef struct _TIMEINSTDATA                     /* local data of TimeDlgProc */"
+"     {"
+"     DATETIME        strucDateTime;               //>> TimeDlgProc"
+"     } TIMEINSTDATA, *PTIMEINSTDATA;"
+""
+" typedef struct _ALARMINSTDATA1                   /* local data of AlarmDlgProc */"
+"     {"
+"     DATETIME        strucDateTime;               //>> AlarmDlgProc"
+"     USHORT          usReminderTime;"
+"     USHORT          usMode;"
+"     } ALARMINSTDATA1, *PALARMINSTDATA1;"
+""
+" typedef struct _ALARMINSTDATA2                   /* local data of Alarm2DlgProc */"
+"     {"
+"     CHAR            szOldAlarmSoundFile[CCHMAXPATH];    //>> Alarm2DlgProc"
+"     } ALARMINSTDATA2, *PALARMINSTDATA2;"
+"";
+    passthru C_h_after =  ""
+"";
+
+    //# Internal Instance Variables
+    TIMER_RESOURCES timerResources;             // data for alarm
+    INSTANCEDATA   *pIData;                     // instance data for dialogs
+    ALARMINSTDATA1 *pIDataAlarm1;               // instance data for AlarmDialog 1
+    ALARMINSTDATA2 *pIDataAlarm2;               // instance data for AlarmDialog 2
+    TIMEINSTDATA   *pIDataTime;                 // instance data for TimeDialog
+
+    DATETIME        dt;                         // contains current time
+
+    ULONG           ulOpenView;                 // current View
+    BOOL            bBufferDirty;               // Repaint necessary
+
+    ULONG           ulTimeChangeCheck;           //>> ClkTimer
+
+    HWND            hwndFrame;                   //>> ClkWndProc
+    HWND            hwndTitleBar;
+    HWND            hwndSysMenu;
+    HWND            hwndMinMax;
+    HWND            hwndClient;
+    HDC             hdc;
+    HPS             hps;
+    HDC             hdcBuffer;
+    HPS             hpsBuffer;
+
+    HWND            hwndFrameGraph;              //>> GraphWndProc
+    HWND            hwndClientGraph;
+    HPS             hpsGraph;
+    HDC             hdcGraph;
+    ULONG           ulMinuteCntr;                // only 1 refresh/minute
+    ULONG           ulMinMaxStat;                // uses Min/Max-behavior
+
+    CHAR            szFontFamilyDate[FACESIZE];
+    CHAR            szFontFamilyTime[FACESIZE];
+
+    USHORT          flRcvrStatus;                // DCF77-State
+    USHORT          flRcvrStatusMask;            // mask for status fields
+
+    MATRIXLF        vmatlfDateTrans;             // date in analog clock: position
+    MATRIXLF        vmatlfDateScale;             //                       transformation
+
+    COLORS          sclrBG;                      // colors: background
+    COLORS          sclrFace;                    //         face
+    COLORS          sclrRing;                    //         ring
+    COLORS          sclrHHand;                   //         hour hand
+    COLORS          sclrMHand;                   //         minute hand
+    COLORS          sclrMajorTicks;              //         MajorTicks
+    COLORS          sclrMinorTicks;              //         MinorTicks
+    COLORS          sclrDate;                    //         date
+    ULONG           ulclrTransparent;            //         color to define transparence in bitmaps
+    ULONG           ulclrDateText;               //         date: font
+    ULONG           ulclrTimeText;               //         time: font
+
+    FATTRS          fAttrDate;
+    FATTRS          fAttrTime;
+
+    //# persistent instance data
+    ULONG           ulPresence;
+    LONG            clrBackgnd;
+    LONG            clrFace;
+    LONG            clrTick;
+    LONG            clrHHand;
+    LONG            clrMHand;
+    LONG            clrDateOnAnalog;
+    LONG            clrTransparent;
+    LONG            clrDateText;
+    LONG            clrTimeText;
+    LONG            lcxClock;
+    LONG            lcyClock;
+    LONG            lxPos;
+    LONG            lyPos;
+    LONG            lxIconPos;
+    LONG            lyIconPos;
+    LONG            lcxGraph;
+    LONG            lcyGraph;
+    LONG            lxGraphPos;
+    LONG            lyGraphPos;
+    LONG            lLOffset;
+    CHAR            szAlarmMsg[CCHMAXALARMMSG];
+    CHAR            szAlarmSoundFile[CCHMAXPATH];
+    CHAR            szAlarmProg[CCHMAXPATH];
+    CHAR            szAlarmParm[CCHMAXPARM];
+    CHAR            szAlarmDir[CCHMAXPATHCOMP];
+    CHAR            szTimezone[CCHMAXTZONE];
+    CHAR            szPathMHandBmp[CCHMAXPATH];
+    CHAR            szPathHHandBmp[CCHMAXPATH];
+    CHAR            szPathFaceBmp[CCHMAXPATH];
+    ALARMTIME       dtAlarm;
+    FATTRS          fAttrD;
+    FATTRS          fAttrT;
+    CHAR            szFontFamilyD[FACESIZE];
+    CHAR            szFontFamilyT[FACESIZE];
+
+    //# Method Modifiers
+    wpAddClockAlarmPage: override;
+    wpAddClockDateTimePage: override;
+    wpAddClockView1Page: override;
+    wpAddClockView2Page: override;
+    wpAddSettingsPages: override;
+    wpInitData: override;
+    wpUnInitData: override;
+    wpModifyPopupMenu: override;
+    wpFilterPopupMenu: override;
+    wpMenuItemSelected: override;
+    wpOpen: override;
+    wpRestoreState: override;
+    wpSaveState: override;
+    wpQueryDefaultView: override;
+
+    //# Data Modifiers
+  };
+#endif /* __SOMIDL__ */
+};
+
+interface M_WPDCF77
+//# Comment for parent WPClock:
+{
+  HMODULE clsQueryModuleHandle();
+  void    clsSaveSetData(in ULONG flType);
+
+
+#ifdef __SOMIDL__
+  implementation
+  {
+    releaseorder: clsQueryModuleHandle,clsSaveSetData;
+
+    //# Class Modifiers
+    //externalstem = wpDCF77;
+    //externalprefix = wpDCF77_;
+    functionprefix = wpDCF77M_;
+    majorversion = 1;
+    minorversion = 1;
+    local;
+    filestem = wpdcf77;
+    callstyle = oidl;
+
+    //# Method Modifiers
+    wpclsInitData: override;
+    wpclsQueryIconData: override;
+    wpclsQueryTitle: override;
+    wpclsQueryDefaultHelp: override;
+  };
+#endif /* __SOMIDL__ */
+};
+
+#endif  /* wpdcf77_idl */

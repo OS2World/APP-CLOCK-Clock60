@@ -1,0 +1,4 @@
+# Driver for Hopf Clock 6036 Card #
+Hopf 6036-Karte
+DEVICE = *\HOPF6036.SYS ; 4
+

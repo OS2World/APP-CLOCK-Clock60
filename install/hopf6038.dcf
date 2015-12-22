@@ -1,0 +1,4 @@
+# Driver for Hopf Clock 6038 Card #
+Hopf 6038-Karte
+DEVICE = *\HOPF6038.SYS -f:*\TZTAB -z:MEZ-1MESZ ; 6
+

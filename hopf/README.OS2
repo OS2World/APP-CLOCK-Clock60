@@ -1,0 +1,235 @@
+
+        Ger„tetreiber fr HOPF Zeitempf„nger
+        ====================================
+
+*** BITTE LESEN SIE ZUERST DIE FOLGENDE ANLEITUNG SORGFLTIG DURCH ***
+
+Die gelieferten Ger„tetreiber  dienen dazu, einen mit OS/2 betriebenen
+Computer oder LAN Server auf eine  Normalzeit zu synchronisieren. Dazu
+liest er die Information aus der Zeitempf„ngerkarte 6036 oder 6038 aus
+und setzt bei  richtig empfangener Zeit  die Systemuhr auf diese Zeit.
+Der Ger„tetreiber untersttzt alle bekannten Versionen von OS/2.
+
+Fr die  Bedienung wird  eine neue  Systemuhr mitgeliefert.  Sie zeigt
+neben der Uhrzeit und dem aktuellen Empfangszustand auch an, ob gerade
+Sommer- oder Winterzeit vorliegt.  In  ihren Einstellungsseiten k”nnen
+auch alle  Treiberparameter  bequem von  der Oberfl„che  aus ver„ndert
+werden.  Fr die Systemuhr ist die  Workplace-Shell der OS/2 Versionen
+WARP 3.0 oder WARP 4.0 erforderlich.
+
+Auáerdem  untersttzt  dieser  Treiber  die  LAN::TIME-Anwendung.  Die
+Programme zur Zeitverteilung sind in einer Server-Version enthalten.
+
+
+Die Parameter des DCF77 - Treibers Hopf6036.SYS Ver. 5.00
+---------------------------------------------------------
+
+Normalerweise werden alle Parameter aus der neuen Systemuhr eingestellt.
+Sollte  dies einmal  nicht m”glich  sein, kann  der Treiber  auch in der
+CONFIG.SYS parametrisiert werden.  Einstellungen in der Systemuhr „ndern
+diese Werte aber stets ab.
+
+Bei diesem Treiber sind folgende Parameter m”glich:
+
+  Parameter
+         Beschreibung
+----------------------------------------------------------------------
+
+        -I:xx
+           Hier kann die Intervallzeit bergeben werden. In dem
+           angegebenen Intervall wird die Echtzeituhr mit der
+           empfangenen Uhrzeit berschrieben.
+           xx steht fr die Intervallzeit in Minuten. Also wird
+           bei -I:60 einmal pro Stunde die Hardwareuhr neu gesetzt.
+
+        -O:x
+           Manche L„nder, die mit einem sehr guten Empf„nger noch das
+           aus Frankfurt ausgesendete Signal empfangen, haben eine
+           andere Normalzeit als Deutschland (MEZ). Dies kann durch
+           die Angabe eines Stundenoffsets bercksichtigt werden.
+           Ein Beispiel ist "-O:-1" fr einen Offset von minus 1 Std.
+           (Londoner Zeit) oder "-O:2" fr einen Offset von plus
+           2 Std (Moskauer Zeit).
+
+        -U
+           Mit diesem Parameter kann die Sommer/Winterzeitumschaltung,
+           sowie ein fester Offset von -1 eingestellt werden. Der
+           Rechner ist damit fest auf die Greenwich Zeit (UTC)
+           eingestellt. Der Offset-Parameter kann zus„tzlich angegeben
+           werden, um eine jahreszeitunabh„ngige Ortszeit zu erhalten.
+
+        -P:xxx
+           Mit diesem Parameter kann die Basis-Portadresse der Karte
+           angegeben werden.
+
+
+Die Parametrisierung des Ger„tetreibers erfolgt ber direkte Angabe in
+der Datei "CONFIG.SYS". Er sollte z.B. wie folgt aussehen:
+
+        REM --- DCF 77 Treiber ---
+        DEVICE = C:\DCF_77\hopf6036.sys -P:280
+
+
+
+
+Die Parameter des GPS - Treibers Hopf6038.SYS Ver. 5.00
+-------------------------------------------------------
+
+Normalerweise werden alle Parameter aus der neuen Systemuhr eingestellt.
+Sollte  dies einmal  nicht m”glich  sein, kann  der Treiber  auch in der
+CONFIG.SYS parametrisiert werden.  Einstellungen in der Systemuhr „ndern
+diese Werte aber stets ab.
+
+Bei diesem Treiber sind folgende Parameter m”glich:
+
+  Parameter
+         Beschreibung
+----------------------------------------------------------------------
+
+        -I:xx
+           Hier kann die Intervallzeit bergeben werden. In dem
+           angegebenen Intervall wird die Echtzeituhr mit der
+           empfangenen Uhrzeit berschrieben.
+           xx steht fr die Intervallzeit in Minuten. Also wird
+           bei -I:60 einmal pro Stunde die Hardwareuhr neu gesetzt.
+
+        -O:x
+           Das GPS-Signal kann weltweit empfangen werden. Da es
+           auf UTC (Universalzeit) basiert, muá fr L„nder in denen
+           eine andere Zeit gilt, eine Zeitdifferenz angegeben
+           werden. So wird zum Beispiel fr einen Offset von plus
+           2 Std (Moskauer Zeit) "-O:2" angegeben werden.
+
+        -Z:xxxx
+           Das GPS-Signal beihaltet, im Gegensatz zu DCF, keine
+           Information bezglich Sommer-/Winterzeit. Daher muá
+           bei L„ndern mit Sommer-Winterzeitumschaltung der Zeitpunkt
+           dieser Umschaltung angegeben werden. Dazu wird eine Datei
+           "TZTAB" mitgeliefert, die diese Daten fr wichtige L„nder
+           enth„lt. Mit dem xxxx wird ausgew„hlt welche Zeitzonen-
+           information aus dieser Datei genutzt werden soll. So wird
+           zum Beispiel fr die in Deutschland gltige Mitteleurop„ische
+           Sommerzeit folgendes angegeben: "-Z:MEZ-1MESZ".
+
+        -F:<filename>
+           Dieser Parameter gibt den Dateinamen fr die Zeitzonen-
+           Datei an. So wird beispielsweise angegeben:
+           "-F:C:\DCF_77\TZTAB"
+
+        -P:xxx
+           Mit diesem Parameter kann die Basis-Portadresse der Karte
+           angegeben werden.
+
+
+Die Parametrisierung des Ger„tetreibers erfolgt ber direkte Angabe in
+der Datei "CONFIG.SYS". Er sollte z.B. wie folgt aussehen:
+
+        REM --- DCF 77 Treiber ---
+        DEVICE = C:\DCF_77\hopf6036.sys -F:C:\DCF_77\tztab -Z:MEZ-1MESZ
+
+
+
+
+Adresseinstellung von hopf Einsteckkarten
+-----------------------------------------
+
+Zur Adresskonfiguration der Platine wird das Programm SETADDR.EXE
+mitgeliefert. Bei der Karte 6036 besteht die Wahlm”glichkeit fr
+den 6030-Modus. Diese Auswahl ist bei 6038-Karten deaktiviert.
+
+
+        Neue Systemuhr
+        ==============
+
+Mit im Lieferumfang enthalten ist eine  neue  Systemuhr, die neben den
+von der  Standard-Systemuhr bekannten  Eigenschaften einige Neuerungen
+bietet. Neben  erweiterten  Einstellm”glichkeiten bei  der Anzeige ist
+auch ein verbessertes Alarm-Modul  enthalten. Es kann in vielen F„llen
+den "Wecker" ersetzen. Auáerdem kann man  durch Kopieren mehrere Uhren
+erzeugen, die jede auf eine individuelle  Zeitzone einstellbar ist, so
+daá man sich z.B. eine Uhr mit New Yorker Zeit erstellen kann.
+
+Sobald der DCF-Treiber  erkannt ist, werden die  M”glichkeiten der Uhr
+noch erweitert.  Es werden  zus„tzliche Einstellseiten  aktiviert, mit
+denen eine vollst„ndige Parametrierung des Treibers m”glich ist. Diese
+Einstellungen  werden in  der WPS  gespeichert und  berschreiben beim
+Starten des Rechners stets die Parameter aus dem Steuerfile.
+
+Mittels "™ffnen/Status" kann der  innere Zustand des  Treibers st„ndig
+berwacht  werden.  Man  kann hier  bereits eine  Zeitsynchronisierung
+feststellen, wenn zum ersten Mal eine  fehlerfreie Zeit empfangen wur-
+de. Die  Systemuhr wird erst dann gesetzt, wenn die eingestellte  Zahl
+von fehlerfreien Minuten festgestellt wurde.
+
+Sind  damit  maágebliche  Einstellungen  ver„ndert worden, sollten die
+neuen Parameter in der DCF-Datei mit einem Editor nachgetragen werden,
+damit der  Treiber in  Zukunft bereits beim Bootvorgang und nicht erst
+nach Aufbau der WPS gestartet wird.
+
+Die Systemuhr beinhaltet  ebenfalls eine Funktion,  die das Ausrichten
+der  DCF-Antenne  fr die  6036-Empf„ngerkarte  erleichtert.  Da diese
+Funktion sehr prozessorintensiv ist, kann dabei der Eindruck entstehen
+daá die  Oberfl„che blockiert  ist. Sie sollten  daher vor  dem Aufruf
+alle anderen Anwendungen  beenden und auf  einem Server diese Funktion
+nicht im normalen Betrieb aufrufen.
+
+
+        LAN::TIME
+        =========
+
+Dieses Paket dient zur Synchronisierung mehrerer Rechner in einem LAN.
+Die Funktion der Zeitsynchronisierung  ist zwar bei vielen LAN-Paketen
+enthalten.  Allerdings  beschr„nkt  sich die  Funktion meist  auf eine
+Synchronisierung des Requesters auf den Server beim Login eines Users.
+Dabei stellen Rechner, die st„ndig ohne Login laufen, wie zum Beispiel
+Datenbank- oder File-Server, die  in abgeschirmten  R„umen stehen, ein
+Problem dar.  Auáerdem ist  am  Client die  Qualit„t des Zeitempfanges
+nicht ersichtlich, so daá ein Ausfall der Uhr lange Zeit nicht bemerkt
+wird.
+
+LAN::TIME bietet hier Abhilfe. Das Serverprogramm kann auf jedem OS/2-
+Rechner im Netz installiert werden.  Es l„uft unabh„ngig davon, ob ein
+Benutzer  auf  dieser  Maschine eingeloggt ist oder nicht; der Rechner
+muá nur eingeschaltet sein. Der Zustand der Uhr im Server wird an alle
+Clients  bertragen.  Damit l„át sich leicht der  Empfangszustand  des
+Treibers auf dem LAN::TIME-Server von  jedem Rechner mit installiertem
+Client berwachen.
+
+Voraussetzung  fr den Betrieb von LAN::TIME ist ein NetBIOS basiertes
+Netzwerk.  Beispiele  sind  LAN-Server,  Peer-Netze oder TCP/IP-Netze,
+deren Kommunikation ber NetBIOS erfolgt.
+
+Der  Client  (TIMECLNT.EXE) und  der  Server (TIMESERV.EXE)  sind eine
+Erweiterung  des  Pakets  und  separat  zu erwerben.  Beide  Programme
+arbeiten ohne Parameter und werden vom Installationsprogramm direkt in
+die CONFIG.SYS eingebunden mit
+
+      RUN=d:\path\TIMECLNT.EXE
+
+
+        FEHLER
+        ======
+
+Dieser Treiber sollte eigentlich fehlerfrei sein.  Allerdings kann er,
+wie jedes andere Softwareprodukt auch, mit Fehler behaftet sein.
+
+Sollten  Sie ein  solches  Problem  feststellen, so schicken uns bitte
+eine  Beschreibung des Fehlers mit den Daten Ihres Systems (CPU, Spei-
+cher,  OS/2-Version  und  Aufrufparameter   des  Treibers,  am  besten
+Ausschnitt aus CONFIG.SYS) an:
+
+
+hopf elektronik GmbH
+Postfach 1847
+58469 Ldenscheid
+
+oder
+
+noller und breining software
+Tannenstraáe 18
+71554 Weissach im Tal
+Telefon: 07191/960345
+e-mail: klaus.breining@t-online.de
+
+
+

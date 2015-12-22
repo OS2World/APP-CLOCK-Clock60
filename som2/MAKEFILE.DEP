@@ -1,0 +1,173 @@
+.\clock.res: \
+    .\clock.rc \
+    {$(INCLUDE)}clock.dlg \
+    {$(INCLUDE)}clock.ico \
+    {$(INCLUDE)}res.h \
+    {$(INCLUDE)}clock.h \
+    MAKEFILE
+
+.\WPDCF77.ih: \
+    .\WPDCF77.IDL \
+    MAKEFILE
+
+.\udtime.obj: \
+    .\udtime.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    MAKEFILE
+
+.\bitmap.obj: \
+    .\bitmap.c \
+    MAKEFILE
+
+.\entryfield.obj: \
+    .\entryfield.c \
+    .\entryfield.h \
+    MAKEFILE
+
+.\clkmem.obj: \
+    .\clkmem.c \
+    MAKEFILE
+
+.\paint.obj: \
+    .\paint.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    MAKEFILE
+
+.\dialogs.obj: \
+    .\dialogs.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    {.;..;$(INCLUDE);}clockpan.h \
+    MAKEFILE
+
+.\dcf77.obj: \
+    .\dcf77.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    {.;..;$(INCLUDE);}clockpan.h \
+    MAKEFILE
+
+.\clock.obj: \
+    .\clock.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    {.;..;$(INCLUDE);}clockpan.h \
+    MAKEFILE
+
+.\clkdata.obj: \
+    .\clkdata.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}clock.h \
+    MAKEFILE
+
+.\alarmthd.obj: \
+    .\alarmthd.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    MAKEFILE
+
+.\wpdcf77.obj: \
+    .\wpdcf77.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    {.;..;$(INCLUDE);}clockpan.h \
+    MAKEFILE
+
+.\wndproc.obj: \
+    .\wndproc.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}play.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    MAKEFILE
+
+.\graph.obj: \
+    .\graph.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}WPDCF.h \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    MAKEFILE
+
+.\play.obj: \
+    .\play.c \
+    {.;..;$(INCLUDE);}play.h \
+    MAKEFILE
+
+.\server.obj: \
+    .\server.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}WPDCF.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    {.;..;$(INCLUDE);}clockpan.h \
+    MAKEFILE
+
+.\sz_wz.obj: \
+    .\sz_wz.c \
+    {.;..;$(INCLUDE);}tloc.h \
+    MAKEFILE
+
+.\locale.obj: \
+    .\locale.c \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}cutil.h \
+    {.;..;$(INCLUDE);}clock.h \
+    {.;..;$(INCLUDE);}clockpan.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}WPDCF.h \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}clkdata.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    {.;..;$(INCLUDE);}tloc.h \
+    MAKEFILE
+
+.\PRINTF.obj: \
+    .\PRINTF.C \
+    MAKEFILE
+
+.\DEBUG.obj: \
+    .\DEBUG.C \
+    {.;..;$(INCLUDE);}dcfioctl.h \
+    {.;..;$(INCLUDE);}WPDCF77.ih \
+    {.;..;$(INCLUDE);}res.h \
+    {.;..;$(INCLUDE);}dlg.h \
+    MAKEFILE
+

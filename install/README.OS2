@@ -1,0 +1,486 @@
+       ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+       ºGer„tetreiber fr DCF 77/GPS Zeitempf„ngerº
+       ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
+
+*** BITTE LESEN SIE ZUERST DIE FOLGENDE ANLEITUNG SORGFLTIG DURCH ***
+
+Diese  Software  dient dazu, DCF77- bzw. GPS-Empf„nger  auszulesen und
+bei richtig empfangener Zeit die Systemuhr zu setzen.
+
+Fr die  Bedienung wird  eine neue  Systemuhr mitgeliefert.  Sie zeigt
+neben der Uhrzeit und dem aktuellen Empfangszustand auch an, ob gerade
+Sommer- oder Winterzeit vorliegt.  In  ihren Einstellungsseiten k”nnen
+auch alle  Treiberparameter  bequem von  der Oberfl„che  aus ver„ndert
+werden.
+
+Auáerdem enth„lt  jedes Paket den Client  der LAN::TIME-Anwendung. Der
+zugeh”rige Server ist in der Server-Version mit enthalten.
+
+     Installation
+     ============
+- DCFINST.EXE aufrufen
+- Den Menpunkt "Installieren/Installation" ausw„hlen
+- Im Optionen-Dialog "OK" drcken. Der angegebene Pfad sollte
+  eigentlich korrekt sein!
+- Im DCFINST-Dialog "OK" drcken. Der DLL- und HLP-Pfad steht
+  normalerweise korrekt auf den Systempfaden und sollte nicht
+  ver„ndert werden.
+  Der Installer versucht direkt die WPS-Klasse zu registrieren, daher
+  muá hier ein bereits zum Boot-Zeitpunkt existierender Pfad ausge-
+  w„hlt werden!
+  Der Pfad fr die DCF-Files kann beliebig ge„ndert werden
+- Im n„chsten Dialog das korrekte DCF-Modul ausw„hlen. Wird ein
+  falsches Modul ausgew„hlt, wird es vom Treiber beim Booten nicht
+  erkannt. Es wird jedoch sp„ter durch die WPS-Klasse korrekt
+  initialisiert, wenn dort die Parameter von Hand eingetragen wurden.
+  Jeder Eintrag in der Liste entspricht einer "*.DCF"-Datei, es k”nnen
+  eigene angelegt werden. Die Syntax wird weiter unten erkl„rt.
+- Nach dem Drcken von "OK" wird die Installation fertiggestellt.
+  Danach muá der Rechner neu gebootet werden.
+
+     Neu in Version 5.40
+     ===================
+
+- Erinnerungsfunktion (fr Teeliebhaber, die beim Programmieren den
+  Tee vergessen!)
+
+
+     Die Parameter des DCF77 - Treibers ZEIT.SYS Ver. 5.40
+     =====================================================
+
+Bei diesem Treiber sind folgende Parameter m”glich:
+
+  Parameter
+           Beschreibung
+----------------------------------------------------------------------
+        -G[x]
+           Der DCF77-Empf„nger ist an der Game-Schnittstelle
+           angeschlossen. Wird "x" weggelassen, versucht der Treiber
+           automatisch das richtige Eingangspin zur Auswertung zu
+           finden. Bei Angabe von "x" gilt folgende Zuordnung der
+           Pins am 15-pol. Stecker.
+           ÚÄÄÄÄÂÄÄÄÂÄÄÄÂÄÄÄÂÄÄÄ¿
+           ³ x  ³ 1 ³ 2 ³ 3 ³ 4 ³
+           ÃÄÄÄÄÅÄÄÄÅÄÄÄÅÄÄÄÅÄÄÄ´
+           ³Pin ³ 2 ³ 7 ³ 10³ 14³
+           ÀÄÄÄÄÁÄÄÄÁÄÄÄÁÄÄÄÁÄÄÄÙ
+        -Sx
+           Der DCF77-Empf„nger ist an einen COM-Port angeschlossen.
+           Das Empf„ngersignal wird dabei ber eine Statusleitung
+           (z.B. CTS oder RI) gemeldet. Die Zahl x gibt die Nummer
+           des COM-Ports an, also 1 fr COM1, 2 fr COM2 etc.
+           Dieser Parameter untersttzt nur Standard-Ports
+           (x maximal 3 bei PCs, 4 bei PS/2).
+           Der Treiber erkennt das richtige Eingangspin automatisch.
+           Es kann aber auch ber den B-Parameter vorgegeben werden.
+           Dieser Mode wird z.B. bei Uhren verwendet, die parallel
+           zur Maus angeschlossen werden k”nnen.
+           Wird ein Nicht-Standard-Port verwendet und dessen
+           IO-Adresse per /P-Parameter angegeben, wird x ignoriert.
+
+        -Cx
+           Der DCF77-Empf„nger ist an einen COM-Port angeschlossen.
+           Das Empf„ngersignal wird dabei ber die Datenleitung
+           (RD) gemeldet. Die Zahl x gibt die Nummer des COM-Ports
+           an, also 1 fr COM1, 2 fr COM2 etc.
+
+        -Ixx
+           Hier kann die Intervallzeit bergeben werden. In dem
+           angegebenen Intervall wird die Echtzeituhr mit der
+           empfangenen Uhrzeit berschrieben.
+           xx steht fr die Intervallzeit in Minuten. Also wird
+           bei -I60 einmal pro Stunde die Hardwareuhr neu gesetzt.
+
+        -By
+           Es ist m”glich jeden Pin an einem ausgesuchten Port als
+           Eingabe zu definieren. y ist eine Zahl zwischen 1 und 8,
+           die das Bit vom eingelesenen Port angibt, das zur Aus-
+           wertung als DCF77-Signalquelle bentzt wird.
+           Dieser Parameter sollte als letzter Parameter aufgefhrt
+           werden. Die automatische Erkennung der Bitposition
+           wird ausgeschaltet.
+
+        -Wx
+           Manche serielle DCF77-Uhren mssen eingeschaltet sein, um
+           eine gltige Zeit zu empfangen. Mit diesem Parameter kann
+           der Einschaltmechanismus z.B. der Conrad Uhr aktiviert
+           werden. x ist eine Zahl zwischen 0 und 3, die die letzten
+           beiden Bits des Modemsteuerwortes definieren. Ist eine
+           Maus an dem gew„hlten seriellen Port angeschlossen, kann
+           ein falscher Parameter zu einem 'Ausschalten' der Maus
+           fhren.
+
+        -Ox
+           Manche L„nder, die mit einem sehr guten Empf„nger noch das
+           aus Frankfurt ausgesendete Signal empfangen, haben eine
+           andere Normalzeit als Deutschland (MEZ). Dies kann durch
+           die Angabe eines Stundenoffsets bercksichtigt werden.
+           Ein Beispiel ist "-O-1" fr einen Offset von minus 1 Std.
+           (Londoner Zeit) oder "-O2" fr einen Offset von plus
+           2 Std (Moskauer Zeit).
+
+        -U
+           Mit diesem Parameter kann die Sommer/Winterzeitumschaltung,
+           sowie ein fester Offset von -1 eingestellt werden. Der
+           Rechner ist damit fest auf die Greenwich Zeit (UTC)
+           eingestellt. Der Offset-Parameter kann zu„tzlich angegeben
+           werden, um eine jahreszeitunabh„ngige Ortszeit zu erhalten.
+
+        -Px
+           Mit diesem Parameter kann die Portadresse einer Nicht-
+           Standard-Schnittstelle angegeben werden. Bei einer
+           seriellen Schnittstelle wird die Portadresse immer nach
+           dem Parameter "-S" oder "-C" angegeben und stellt die
+           Basisadresse des Seriell-Bausteins dar.
+           Bei anderen Schnittstellen wird die Adresse nach dem
+           Parameter "-G" angegeben und ist genau die Adresse des
+           I/O-Ports, an dem der Empf„nger angeschlossen ist.
+           Soll z.B. die Adresse des COM3 angegeben werden, so sollte
+           '-S -P3E8' angegeben werden. Ein Anschluá an LPT2 wrde mit
+           '-G -P279' (Status-Eingang) konfiguriert.
+
+        -Tx(,y)
+           Mit diesem Parameter kann der Treiber an unbliche Impuls-
+           l„ngen angepaát werden. Manche Empf„nger verl„ngern die
+           Impulse von der Originall„nge auf l„ngere oder krzere
+           Zeiten. Der Parameter x gibt die Grenze zwischen
+           den Impulsl„ngen in ms an. Dabei gilt die Regel,
+           daá der kurze Impuls kleiner als x ms sein muá,
+           der lange aber gr”áer als x ms. Der Default-Wert
+           betr„gt 160ms.
+
+           Sollte ein Empfang mit Werten, die durch 32ms teilbar sind
+           nicht m”glich sein, so k”nnen auch Zwischenwerte angegeben werden.
+           Da solche Werte jedoch CPU-Zeit kosten, sollte man sie nur
+           dann einsetzen, wenn dies unbedingt n”tig ist.
+
+           Die Eingabe dieses Parameters ist nur notwendig, wenn kein
+           hochaufl”sender Timer vorhanden ist, oder dieser nicht einsetzbar
+           sein sollte. Wird vom Treiber ein solcher erkannt, wird sofort auf
+           diesen umgeschaltet. Da in diesem Fall der Wert von T automatisch
+           ermittelt wird, ist diese Angabe wirkungslos.
+
+        -Rx
+           Die šberprfung der empfangenen Zeit erfolgt ber mitge-
+           sendete Parit„ts-Bits. Da diese Art der Sicherung bei
+           Bschelfehlern (mehrere Fehler direkt hintereinander) oft
+           versagt, muá die Zeit mehrfach bereinstimmend empfangen
+           werden, bevor die Rechneruhr aktualisiert wird.
+           Der Parameter gibt an, wie oft die Zeit nacheinander
+           richtig empfangen werden muá. Der Default-Wert (3) ist
+           hier nach unserer Erfahrung schon sehr sicher. Man kann
+           ihn aber in sensiblen Umgebungen (Server-Systeme) auch
+           h”her setzen (maximal auf 9).
+
+        -Q
+           Durch Angabe dieses Parameters wird die Copyright-Meldung
+           des Treibers beim Systemstart unterdrckt. Lediglich die
+           Fehlermeldungen werden weiterhin ausgegeben.
+
+Die Parametrisierung des Ger„tetreibers erfolgt ber eine  Steuerdatei
+Der Eintrag in der Datei "CONFIG.SYS" sollte wie folgt aussehen:
+
+        REM --- DCF 77 Treiber ---
+        DEVICE = C:\DCF_77\zeit.sys C:\DCF_77\ELRADBT4.DCF
+
+In der  angegebenen Datei werden nun die Parameter in der ersten Zeile
+angegeben.  Die zweite Zeile  kann ein  textuelle Beschreibung fr das
+Installationsprogramm  enthalten.  Im  Installationsverzeichnis finden
+Sie einige Beispiele dieser Dateien fr von uns getestete Hardware.
+
+Wir hoffen, daá mit diesen Parametern  nun nahezu alle handelsblichen
+externen DCF-77-Module benutzbar sind.
+
+Ist  mit  diesem Treiber  und einem  handelsblichen  Empf„nger  keine
+Auswertung  m”glich,  so bitten wir Sie, uns und  dem Hersteller  ber
+dieses Problem zu berichten.
+
+Der Treiber belegt im aktiven Zustand etwa 6 kByte Speicherplatz.
+
+
+     Die Parameter des hopf Clock Controller-Treibers HOPF.EXE
+     =========================================================
+
+Bei diesem Treiber sind folgende Parameter m”glich:
+
+  Parameter
+         Beschreibung
+----------------------------------------------------------------------
+        -S[x]
+           Der Empf„nger ist an der seriellen Schnittstelle COMx
+           angeschlossen.
+
+
+     Die Parameter des DCF77 - Treibers Hopf6036.SYS Ver. 5.40
+     =========================================================
+
+Normalerweise werden alle Parameter aus der neuen Systemuhr eingestellt.
+Sollte  dies einmal  nicht m”glich  sein, kann  der Treiber  auch in der
+CONFIG.SYS parametrisiert werden.  Einstellungen in der Systemuhr „ndern
+diese Werte aber stets ab.
+
+Bei diesem Treiber sind folgende Parameter m”glich:
+
+  Parameter
+         Beschreibung
+----------------------------------------------------------------------
+
+        -I:xx
+           Hier kann die Intervallzeit bergeben werden. In dem
+           angegebenen Intervall wird die Echtzeituhr mit der
+           empfangenen Uhrzeit berschrieben.
+           xx steht fr die Intervallzeit in Minuten. Also wird
+           bei -I:60 einmal pro Stunde die Hardwareuhr neu gesetzt.
+
+        -O:x
+           Manche L„nder, die mit einem sehr guten Empf„nger noch das
+           aus Frankfurt ausgesendete Signal empfangen, haben eine
+           andere Normalzeit als Deutschland (MEZ). Dies kann durch
+           die Angabe eines Stundenoffsets bercksichtigt werden.
+           Ein Beispiel ist "-O:-1" fr einen Offset von minus 1 Std.
+           (Londoner Zeit) oder "-O:2" fr einen Offset von plus
+           2 Std (Moskauer Zeit).
+
+        -U
+           Mit diesem Parameter kann die Sommer/Winterzeitumschaltung,
+           sowie ein fester Offset von -1 eingestellt werden. Der
+           Rechner ist damit fest auf die Greenwich Zeit (UTC)
+           eingestellt. Der Offset-Parameter kann zus„tzlich angegeben
+           werden, um eine jahreszeitunabh„ngige Ortszeit zu erhalten.
+
+        -P:xxx
+           Mit diesem Parameter kann die Basis-Portadresse der Karte
+           angegeben werden.
+
+
+Die Parametrisierung des Ger„tetreibers erfolgt ber direkte Angabe in
+der Datei "CONFIG.SYS". Er sollte z.B. wie folgt aussehen:
+
+        REM --- DCF 77 Treiber ---
+        DEVICE = C:\DCF_77\hopf6036.sys -P:280
+
+
+     Die Parameter des GPS - Treibers Hopf6038.SYS Ver. 5.40
+     =======================================================
+
+Normalerweise werden alle Parameter aus der neuen Systemuhr eingestellt.
+Sollte  dies einmal  nicht m”glich  sein, kann  der Treiber  auch in der
+CONFIG.SYS parametrisiert werden.  Einstellungen in der Systemuhr „ndern
+diese Werte aber stets ab.
+
+Bei diesem Treiber sind folgende Parameter m”glich:
+
+  Parameter
+         Beschreibung
+----------------------------------------------------------------------
+
+        -I:xx
+           Hier kann die Intervallzeit bergeben werden. In dem
+           angegebenen Intervall wird die Echtzeituhr mit der
+           empfangenen Uhrzeit berschrieben.
+           xx steht fr die Intervallzeit in Minuten. Also wird
+           bei -I:60 einmal pro Stunde die Hardwareuhr neu gesetzt.
+
+        -O:x
+           Das GPS-Signal kann weltweit empfangen werden. Da es
+           auf UTC (Universalzeit) basiert, muá fr L„nder in denen
+           eine andere Zeit gilt, eine Zeitdifferenz angegeben
+           werden. So wird zum Beispiel fr einen Offset von plus
+           2 Std (Moskauer Zeit) "-O:2" angegeben werden.
+
+        -Z:xxxx
+           Das GPS-Signal beihaltet, im Gegensatz zu DCF, keine
+           Information bezglich Sommer-/Winterzeit. Daher muá
+           bei L„ndern mit Sommer-Winterzeitumschaltung der Zeitpunkt
+           dieser Umschaltung angegeben werden. Dazu wird eine Datei
+           "TZTAB" mitgeliefert, die diese Daten fr wichtige L„nder
+           enth„lt. Mit dem xxxx wird ausgew„hlt welche Zeitzonen-
+           information aus dieser Datei genutzt werden soll. So wird
+           zum Beispiel fr die in Deutschland gltige Mitteleurop„ische
+           Sommerzeit folgendes angegeben: "-Z:MEZ-1MESZ".
+
+        -F:<filename>
+           Dieser Parameter gibt den Dateinamen fr die Zeitzonen-
+           Datei an. So wird beispielsweise angegeben:
+           "-F:C:\DCF_77\TZTAB"
+
+        -P:xxx
+           Mit diesem Parameter kann die Basis-Portadresse der Karte
+           angegeben werden.
+
+
+Die Parametrisierung des Ger„tetreibers erfolgt ber direkte Angabe in
+der Datei "CONFIG.SYS". Er sollte z.B. wie folgt aussehen:
+
+        REM --- DCF 77 Treiber ---
+        DEVICE = C:\DCF_77\hopf6036.sys -F:C:\DCF_77\tztab -Z:MEZ-1MESZ
+
+
+     Adresseinstellung von hopf Einsteckkarten
+     =========================================
+
+Zur Adresskonfiguration der Platine wird das Programm SETADDR.EXE
+mitgeliefert. Bei der Karte 6036 besteht die Wahlm”glichkeit fr
+den 6030-Modus. Diese Auswahl ist bei 6038-Karten deaktiviert.
+
+
+     Neue Systemuhr
+     ==============
+
+Mit im Lieferumfang enthalten ist eine  neue  Systemuhr, die neben den
+von der  Standard-Systemuhr bekannten  Eigenschaften einige Neuerungen
+bietet. Neben  erweiterten  Einstellm”glichkeiten bei  der Anzeige ist
+auch ein verbessertes Alarm-Modul  enthalten. Es kann in vielen F„llen
+den "Wecker" ersetzen. Auáerdem kann man  durch Kopieren mehrere Uhren
+erzeugen, die jede auf eine individuelle  Zeitzone einstellbar ist, so
+daá man sich z.B. eine Uhr mit New Yorker Zeit erstellen kann.
+
+Sobald der DCF-Treiber  erkannt ist, werden die  M”glichkeiten der Uhr
+noch erweitert.  Es werden  zus„tzliche Einstellseiten  aktiviert, mit
+denen eine vollst„ndige Parametrierung des Treibers m”glich ist. Diese
+Einstellungen  werden in  der WPS  gespeichert und  berschreiben beim
+Starten des Rechners stets die Parameter aus dem Steuerfile.
+
+Mittels "™ffnen/Status" kann der  innere Zustand des  Treibers st„ndig
+berwacht  werden.  Man  kann hier  bereits eine  Zeitsynchronisierung
+feststellen, wenn zum ersten Mal eine  fehlerfreie Zeit empfangen wur-
+de. Die  Systemuhr wird erst dann gesetzt, wenn die eingestellte  Zahl
+von fehlerfreien Minuten festgestellt wurde.
+
+Sind  damit  maágebliche  Einstellungen  ver„ndert worden, sollten die
+neuen Parameter in der DCF-Datei mit einem Editor nachgetragen werden,
+damit der  Treiber in  Zukunft bereits beim Bootvorgang und nicht erst
+nach Aufbau der WPS gestartet wird.
+
+Die Systemuhr beinhaltet  ebenfalls eine Funktion,  die das Ausrichten
+der  DCF-Antenne  fr die  6036-Empf„ngerkarte  erleichtert.  Da diese
+Funktion sehr prozessorintensiv ist, kann dabei der Eindruck entstehen
+daá die  Oberfl„che blockiert  ist. Sie sollten  daher vor  dem Aufruf
+alle anderen Anwendungen  beenden und auf  einem Server diese Funktion
+nicht im normalen Betrieb aufrufen.
+
+
+
+
+     Liste der getesteten DCF77 - Module
+     ===================================
+
+Es gibt  eine  Vielzahl  von DCF77 - Modulen, die vom Treiber ZEIT.SYS
+untersttzt werden.  Diese Liste  wird laufend aktualisiert. Falls Ihr
+Modul hier noch nicht aufgefhrt ist,  w„re es fr uns sehr hilfreich,
+wenn  Sie  uns  in einer  e-mail  ber  CompuServe an 100101,3201 oder
+FIDO-Netmail an Michael Geppert  2:246/1406.3  die  Treiber-Parameter,
+den Typ sowie den  Hersteller des DCF77 Moduls mitteilen wrden.
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³  Hersteller    ³ Typ          ³ Schnittstelle/Pin ³Parameter       ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³  Gude GmbH     ³ Expert Mouse ³ Com 1             ³-C1 -I10 -W1    ³
+³  Gude GmbH     ³ Expert Mouse ³ Com 2             ³-C2 -I10 -W1    ³
+³  Bauanleitung  ³ ELRAD 2/93   ³ Game/2 (Button 4) ³-G1 -I10        ³
+³  Bauanleitung  ³ ELRAD 2/93   ³ Game/7 (Button 5) ³-G2 -I10        ³
+³  Tobit         ³ RealTime alt ³ Com 1             ³-S1 -I10 -W3    ³
+³  Tobit         ³ RealTime alt ³ Com 2             ³-S2 -I10 -W3    ³
+³  Tobit         ³ RealTime neu ³ Com 1             ³-S1 -I10 -W3 -T4³
+³  Tobit         ³ RealTime neu ³ Com 2             ³-S2 -I10 -W3 -T4³
+³  nb            ³ Tischuhr     ³ Com 1             ³-S1 -I10 -W3 -T4³
+³  nb            ³ Tischuhr     ³ Com 2             ³-S2 -I10 -W3 -T4³
+³  SURE          ³ RealTime     ³ Com 1             ³-C1 -I10 -W2    ³
+³  SURE          ³ RealTime     ³ Com 2             ³-C2 -I10 -W2    ³
+³  SURE          ³ RealTime     ³ Game              ³-G  -I10 -T3,5  ³
+³  Herbert Will  ³ ComClock     ³ Com 1             ³-S1 -I10 -W3 -B7³
+³  Herbert Will  ³ ComClock     ³ Com 2             ³-S2 -I10 -W3 -B7³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+Auáerdem  hat die  alte TOBIT-Uhr  (schwarzes  Geh„use) einen  kleinen
+Design-Fehler  der sich im  Betrieb unter OS/2  negativ auswirkt. Nach
+dem Anschluá des Moduls wird vom Maustreiber eine dahinter angesteckte
+Microsoft-kompatible  Maus nicht immer  erkannt. Dieses  Problem liegt
+eindeutig am Modul, da das Problem  auch dann auftritt, wenn lediglich
+das TOBIT-Modul  aufgesteckt wird,  ohne daá unser Treiber installiert
+wurde. Der Grund ist vermutlich ein zu groá gew„hlter Siebkondensator.
+
+Wir haben eine reine Software-L”sung fr dieses Problem gefunden. Dazu
+liegt nach der Installation in dem gew„hlten DCF-Verzeichnis ein neuer
+MOUSE.SYS als Ersatz fr den Original-Treiber.
+
+Der folgende Fix gilt nur fr Microsoft-M„use auf Standard-COM-Ports !
+
+Prfen Sie, ob in der CONFIG.SYS hinter  DEVICE=...\MOUSE.SYS noch der
+Parameter SERIAL=COMx  angegeben ist. Sollte  er fehlen und Sie sicher
+im Besitz  einer seriellen  Microsoft-kompatiblen  Maus sein, so fgen
+Sie diesen bitte je nach verwendeter COM-Schnittstelle an.
+
+Nennen Sie den im Verzeichnis \OS2\BOOT (bei WARP) oder \OS2 (bei 2.x)
+liegenden Treiber MOUSE.SYS um und ersetzen ihn durch den beiliegenden
+Treiber.
+
+
+
+     LAN::TIME
+     =========
+
+Dieses Paket dient zur Synchronisierung mehrerer Rechner in einem LAN.
+Die Funktion der Zeitsynchronisierung  ist zwar bei vielen LAN-Paketen
+enthalten.  Allerdings  beschr„nkt  sich die  Funktion meist  auf eine
+Synchronisierung des Requesters auf den Server beim Login eines Users.
+Dabei stellen Rechner, die st„ndig ohne Login laufen, wie zum Beispiel
+Datenbank- oder File-Server, die  in abgeschirmten  R„umen stehen, ein
+Problem dar.  Auáerdem ist  am  Client die  Qualit„t des Zeitempfanges
+nicht ersichtlich, so daá ein Ausfall der Uhr lange Zeit nicht bemerkt
+wird.
+
+LAN::TIME bietet hier Abhilfe. Das Serverprogramm kann auf jedem OS/2-
+Rechner im Netz installiert werden.  Es l„uft unabh„ngig davon, ob ein
+Benutzer  auf  dieser  Maschine eingeloggt ist oder nicht; der Rechner
+muá nur eingeschaltet sein. Der Zustand der Uhr im Server wird an alle
+Clients  bertragen.  Damit l„át sich leicht der  Empfangszustand  des
+Treibers auf dem LAN::TIME-Server von  jedem Rechner mit installiertem
+Client berwachen.
+
+Voraussetzung  fr den Betrieb von LAN::TIME ist ein NetBIOS basiertes
+Netzwerk.  Beispiele  sind  LAN-Server,  Peer-Netze oder TCP/IP-Netze,
+deren Kommunikation ber NetBIOS erfolgt.
+
+Der  Client  (TIMECLNT.EXE) ist immer  Bestandteil des Treiber-Pakets,
+der  Server (TIMESERV.EXE) ist eine Erweiterung des Pakets und separat
+zu erwerben.  Beide  Programme  arbeiten ohne Parameter und werden von
+Installationsprogramm direkt in die CONFIG.SYS eingebunden mit
+
+      RUN=d:\path\TIMECLNT.EXE
+
+
+     Grunds„tzliches
+     ===============
+
+In  der  ShareWare-Version des  Treibers fr  externe  Module wird das
+System  beim  Booten  angehalten.  Fr eine  Fortsetzung muá  erst die
+'Enter'-Taste gedrckt werden.  Bei allen anderen Systemteilen gibt es
+keinen  Unterschied zwischen Shareware- und Vollversion.  Sie erhalten
+die Vollversion des Treibers bei:
+                ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                ³ noller & breining software  Ã¿
+                ³ Lauffener Str. 4            ³³
+                ³ 71522 Backnang              ³³
+                ³                             ³³
+                ³ Tel.:  07191/960345         ³³
+                ³ email: info@nbsoftware.de   ³³
+                ÀÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ³
+                 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+     FEHLER
+     ======
+
+Dieses  Programmpaket  sollte  eigentlich fehlerfrei sein.  Allerdings
+lassen sich Softwarefehler nie vollst„ndig vermeiden.
+
+Sollten  Sie ein  Problem feststellen,  so schicken uns bitte eine Be-
+schreibung des  Fehlers mit den  Daten Ihres  Systems (CPU,  Speicher,
+DCF77 - Modul,  OS/2-Version  und  Aufrufparameter  des  Treibers,  am
+besten Ausschnitt aus CONFIG.SYS) an:
+
+e-mail: klaus.breining@nbsoftware.de
+
+oder an die oben genannten Adressen.
+

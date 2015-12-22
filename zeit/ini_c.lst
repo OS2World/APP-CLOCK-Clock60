@@ -1,0 +1,1829 @@
+;	Static Name Aliases
+;
+;	$S1817_bCIsPrinted	EQU	bCIsPrinted
+	TITLE   ini_c.c
+	.286p
+	.287
+INCLUDELIB	SLIBCE
+_TEXT	SEGMENT  WORD PUBLIC 'CODE'
+_TEXT	ENDS
+_DATA	SEGMENT  WORD PUBLIC 'DATA'
+_DATA	ENDS
+CONST	SEGMENT  WORD PUBLIC 'CONST'
+CONST	ENDS
+_BSS	SEGMENT  WORD PUBLIC 'BSS'
+_BSS	ENDS
+_INITEXT	SEGMENT  WORD PUBLIC 'CODE'
+_INITEXT	ENDS
+DGROUP	GROUP	CONST, _BSS, _DATA
+	ASSUME DS: DGROUP, SS: DGROUP
+PUBLIC  _arstrucBit
+PUBLIC  _arstrucSer
+PUBLIC  _arstrucCom
+PUBLIC  _arstrucGame
+PUBLIC  _arstrucParse
+PUBLIC  _flArgParsed
+EXTRN	_fillDataDCF:NEAR
+EXTRN	DOS16WRITE:FAR
+EXTRN	_getticcnt:NEAR
+EXTRN	DOS16OPEN:FAR
+EXTRN	_f_strcpy:FAR
+EXTRN	_f_strlen:FAR
+EXTRN	_start:NEAR
+EXTRN	DOS16CLOSE:FAR
+EXTRN	DOS16READ:FAR
+EXTRN	_DataDCFOrg:BYTE
+EXTRN	_szConfigFile:BYTE
+EXTRN	_ucPortTyp:BYTE
+EXTRN	_ucBitPos:BYTE
+EXTRN	_ucPol:BYTE
+EXTRN	_ucPower:BYTE
+EXTRN	_ucAutoMode:BYTE
+EXTRN	_ucTimeZone:BYTE
+EXTRN	_ucSavety:BYTE
+EXTRN	_sOffset:WORD
+EXTRN	_usIntervall:WORD
+EXTRN	_usPortAddr:WORD
+EXTRN	_usThreshold:WORD
+EXTRN	_usTickLen:WORD
+EXTRN	_usTTicks:WORD
+EXTRN	_usThrBitlen:WORD
+_BSS      SEGMENT
+COMM NEAR	_trimm:	BYTE:	 2
+_BSS      ENDS
+EXTRN	_usIsQuiet:WORD
+EXTRN	_szErrTooManyArgs:DWORD
+EXTRN	_szErrRead:DWORD
+EXTRN	_szErrFileNotFound1:DWORD
+EXTRN	_szErrFileNotFound2:DWORD
+EXTRN	_szErrOutOfRange:DWORD
+EXTRN	_szErrWrongParameter:DWORD
+EXTRN	_szCopyright:DWORD
+_DATA      SEGMENT
+_arstrucBit	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	01H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	02H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	04H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	08H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	010H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	020H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	040H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	080H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+_arstrucSer	DD	_usPortAddr
+	DW	00H
+	DW	00H
+	DD	_ucPortTyp
+	DW	02H
+	DW	00H
+	DD	_ucPol
+	DW	0ffH
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	03f8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	02H
+	DW	00H
+	DD	_ucPol
+	DW	0ffH
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	02f8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	02H
+	DW	00H
+	DD	_ucPol
+	DW	0ffH
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	03e8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	02H
+	DW	00H
+	DD	_ucPol
+	DW	0ffH
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	02e8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	02H
+	DW	00H
+	DD	_ucPol
+	DW	0ffH
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+_arstrucCom	DD	_usPortAddr
+	DW	00H
+	DW	00H
+	DD	_ucPortTyp
+	DW	04H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	03f8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	04H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	01H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	02f8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	04H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	01H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	03e8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	04H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	01H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	02e8H
+	DW	00H
+	DD	_ucPortTyp
+	DW	04H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	01H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+_arstrucGame	DD	_usPortAddr
+	DW	0201H
+	DW	00H
+	DD	_ucPortTyp
+	DW	00H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	00H
+	DW	00H
+	DD	_ucAutoMode
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	0201H
+	DW	00H
+	DD	_ucPortTyp
+	DW	00H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	010H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	_usPortAddr
+	DW	0201H
+	DW	00H
+	DD	_ucPortTyp
+	DW	00H
+	DW	00H
+	DD	_ucPol
+	DW	00H
+	DW	00H
+	DD	_ucBitPos
+	DW	020H
+	DW	00H
+	DD	_ucAutoMode
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	00H
+	DW	00H
+	DD	00H
+	DW	02H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+	DD	00H
+	DW	01H
+	DW	00H
+_arstrucParse	DB	047H
+ 	DB	1 DUP(0)
+
+	DW	01H
+	DW	02H
+	DW	01H
+	DW	02H
+	DW	00H
+	DD	DGROUP:_arstrucGame
+	DB	053H
+ 	DB	1 DUP(0)
+
+	DW	02H
+	DW	02H
+	DW	01H
+	DW	04H
+	DW	00H
+	DD	DGROUP:_arstrucSer
+	DB	043H
+ 	DB	1 DUP(0)
+
+	DW	04H
+	DW	02H
+	DW	01H
+	DW	04H
+	DW	00H
+	DD	DGROUP:_arstrucCom
+	DB	049H
+ 	DB	1 DUP(0)
+
+	DW	08H
+	DW	00H
+	DW	00H
+	DW	0ffffH
+	DW	03cH
+	DD	_usIntervall
+	DB	042H
+ 	DB	1 DUP(0)
+
+	DW	010H
+	DW	02H
+	DW	01H
+	DW	08H
+	DW	00H
+	DD	DGROUP:_arstrucBit
+	DB	057H
+ 	DB	1 DUP(0)
+
+	DW	020H
+	DW	00H
+	DW	00H
+	DW	03H
+	DW	03H
+	DD	_ucPower
+	DB	04fH
+ 	DB	1 DUP(0)
+
+	DW	040H
+	DW	01H
+	DW	0fff4H
+	DW	0cH
+	DW	00H
+	DD	_sOffset
+	DB	055H
+ 	DB	1 DUP(0)
+
+	DW	080H
+	DW	03H
+	DW	00H
+	DW	00H
+	DW	01H
+	DD	_ucTimeZone
+	DB	050H
+ 	DB	1 DUP(0)
+
+	DW	0100H
+	DW	080H
+	DW	00H
+	DW	0ffffH
+	DW	00H
+	DD	_usPortAddr
+	DB	054H
+ 	DB	1 DUP(0)
+
+	DW	0200H
+	DW	080H
+	DW	032H
+	DW	0faH
+	DW	0a0H
+	DD	DGROUP:_trimm
+	DB	052H
+ 	DB	1 DUP(0)
+
+	DW	0400H
+	DW	080H
+	DW	00H
+	DW	09H
+	DW	00H
+	DD	_ucSavety
+	DB	051H
+ 	DB	1 DUP(0)
+
+	DW	0800H
+	DW	03H
+	DW	00H
+	DW	00H
+	DW	01H
+	DD	_usIsQuiet
+	DB	00H
+ 	DB	1 DUP(0)
+
+	DW	00H
+	DW	00H
+	DW	00H
+	DW	00H
+	DW	00H
+	DD	00H
+_flArgParsed	DW	00H
+$S1817_bCIsPrinted	DW	00H
+_DATA      ENDS
+_INITEXT      SEGMENT
+	ASSUME	CS: _INITEXT
+; Line 1
+; Line 51
+; Line 32
+; Line 649
+; Line 37
+; Line 52
+; Line 1865
+; Line 59
+; Line 61
+; Line 43
+; Line 85
+; Line 102
+; Line 4923
+; Line 86
+; Line 87
+; Line 121
+; Line 54
+; Line 55
+; Line 4
+; Line 56
+; Line 57
+; Line 255
+	PUBLIC	_toupper
+_toupper	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	a = 4
+; Line 256
+	cmp	BYTE PTR [bp+4],97	;a
+	jl	$I1750
+	cmp	BYTE PTR [bp+4],122	;a
+	jg	$I1750
+; Line 257
+	mov	al,BYTE PTR [bp+4]	;a
+	sub	al,32
+	leave	
+	ret	
+; Line 259
+$I1750:
+	mov	al,BYTE PTR [bp+4]	;a
+; Line 260
+	leave	
+	ret	
+
+_toupper	ENDP
+; Line 263
+	PUBLIC	_getUInt
+_getUInt	PROC NEAR
+	enter	6,0
+	push	si
+;	usRc = -6
+;	c = -4
+;	bIsHex = -2
+;	ppszString = 8
+;	pValue = 4
+; Line 266
+	sub	ax,ax
+	mov	WORD PTR [bp-6],ax	;usRc
+	mov	WORD PTR [bp-2],ax	;bIsHex
+; Line 268
+	les	bx,DWORD PTR [bp+8]	;ppszString
+	les	bx,DWORD PTR es:[bx]
+	mov	al,BYTE PTR es:[bx]
+	mov	BYTE PTR [bp-4],al	;c
+; Line 269
+	or	al,al
+	je	$I1758
+	cmp	al,32
+	je	$I1758
+	cmp	al,9
+	je	$I1758
+	cmp	al,13
+	jne	$I1757
+$I1758:
+; Line 270
+	sub	ax,ax
+	pop	si
+	leave	
+	ret	
+; Line 273
+$I1757:
+	cmp	BYTE PTR [bp-4],48	;c
+	jne	$L20013
+	les	bx,DWORD PTR [bp+8]	;ppszString
+	les	si,DWORD PTR es:[bx]
+	cmp	BYTE PTR es:[si+1],120
+	je	$L20012
+; Line 274
+; Line 275
+$L20013:
+	jmp	$L20010
+$L20012:
+	mov	WORD PTR [bp-2],1	;bIsHex
+; Line 277
+	mov	es,WORD PTR [bp+10]
+	add	WORD PTR es:[bx],2
+	jmp	$L20011
+$I1759:
+	cmp	BYTE PTR [bp-4],9	;c
+	jne	$JCC114
+	jmp	$FB1762
+$JCC114:
+	cmp	BYTE PTR [bp-4],0	;c
+	je	$L20015
+	cmp	BYTE PTR [bp-4],13	;c
+	jne	$L20014
+; Line 281
+; Line 282
+$L20015:
+	jmp	$FB1762
+$L20014:
+	sub	BYTE PTR [bp-4],48	;c
+; Line 283
+	cmp	WORD PTR [bp-2],0	;bIsHex
+	jne	$I1763
+; Line 284
+; Line 285
+	cmp	BYTE PTR [bp-4],9	;c
+	ja	$I1764
+	cmp	WORD PTR [bp-6],6553	;usRc
+	jne	$I1766
+	cmp	BYTE PTR [bp-4],6	;c
+	jb	$I1765
+$I1766:
+	cmp	WORD PTR [bp-6],6553	;usRc
+	jae	$I1764
+$I1765:
+; Line 286
+	imul	ax,WORD PTR [bp-6],10	;usRc
+	jmp	SHORT $L20009
+$I1764:
+; Line 288
+	mov	ax,2
+	pop	si
+	leave	
+	ret	
+$I1763:
+; Line 291
+; Line 292
+	cmp	WORD PTR [bp-6],4095	;usRc
+	ja	$I1764
+; Line 294
+	cmp	BYTE PTR [bp-4],9	;c
+	ja	$I1770
+; Line 295
+	mov	ax,WORD PTR [bp-6]	;usRc
+	shl	ax,4
+$L20009:
+	mov	cl,BYTE PTR [bp-4]	;c
+	sub	ch,ch
+	add	ax,cx
+	jmp	SHORT $L20008
+$I1770:
+	cmp	BYTE PTR [bp-4],17	;c
+	jb	$I1764
+	cmp	BYTE PTR [bp-4],22	;c
+	ja	$I1764
+; Line 297
+	mov	ax,WORD PTR [bp-6]	;usRc
+	shl	ax,4
+	mov	cl,BYTE PTR [bp-4]	;c
+	sub	ch,ch
+	add	ax,cx
+	sub	ax,7
+$L20008:
+	mov	WORD PTR [bp-6],ax	;usRc
+; Line 300
+; Line 301
+	les	bx,DWORD PTR [bp+8]	;ppszString
+	inc	WORD PTR es:[bx]
+$L20011:
+	les	bx,DWORD PTR es:[bx]
+	mov	al,BYTE PTR es:[bx]
+	push	ax
+	call	_toupper
+	pop	bx
+	mov	BYTE PTR [bp-4],al	;c
+; Line 302
+$L20010:
+	cmp	BYTE PTR [bp-4],32	;c
+	je	$JCC265
+	jmp	$I1759
+$JCC265:
+$FB1762:
+; Line 304
+	mov	ax,WORD PTR [bp-6]	;usRc
+	les	bx,DWORD PTR [bp+4]	;pValue
+	mov	WORD PTR es:[bx],ax
+; Line 305
+	mov	ax,1
+; Line 306
+	pop	si
+	leave	
+	ret	
+
+_getUInt	ENDP
+; Line 309
+	PUBLIC	_getInt
+_getInt	PROC NEAR
+	enter	6,0
+;	sRc = -6
+;	sVz = -4
+;	c = -2
+;	ppszString = 8
+;	pValue = 4
+; Line 310
+	mov	WORD PTR [bp-6],0	;sRc
+; Line 311
+	mov	WORD PTR [bp-4],1	;sVz
+; Line 314
+	les	bx,DWORD PTR [bp+8]	;ppszString
+	les	bx,DWORD PTR es:[bx]
+	mov	al,BYTE PTR es:[bx]
+	mov	BYTE PTR [bp-2],al	;c
+; Line 315
+	sub	ah,ah
+	cmp	ax,45
+	je	$SC1785
+	ja	$SB1781
+	or	al,al
+	je	$SC1784
+	sub	al,9
+	je	$SC1784
+	sub	al,4
+	je	$SC1784
+	sub	al,19
+	je	$SC1784
+	sub	al,11
+	je	$L20016
+	jmp	SHORT $SB1781
+; Line 316
+; Line 317
+$SC1784:
+; Line 321
+	sub	ax,ax
+	leave	
+	ret	
+; Line 323
+$SC1785:
+; Line 324
+	mov	WORD PTR [bp-4],-1	;sVz
+; Line 325
+$L20016:
+	les	bx,DWORD PTR [bp+8]	;ppszString
+	inc	WORD PTR es:[bx]
+	les	bx,DWORD PTR es:[bx]
+	mov	al,BYTE PTR es:[bx]
+	mov	BYTE PTR [bp-2],al	;c
+; Line 326
+$SB1781:
+; Line 333
+	push	WORD PTR [bp+10]
+	push	WORD PTR [bp+8]	;ppszString
+	lea	ax,WORD PTR [bp-6]	;sRc
+	push	ss
+	push	ax
+	call	_getUInt
+	add	sp,8
+	dec	ax
+	je	$I1787
+; Line 334
+	mov	ax,2
+	leave	
+	ret	
+$I1787:
+	mov	ax,WORD PTR [bp-6]	;sRc
+	imul	WORD PTR [bp-4]	;sVz
+	les	bx,DWORD PTR [bp+4]	;pValue
+	mov	WORD PTR es:[bx],ax
+; Line 337
+	mov	ax,1
+; Line 338
+	leave	
+	ret	
+
+_getInt	ENDP
+; Line 341
+	PUBLIC	_getIValue
+_getIValue	PROC NEAR
+	enter	10,0
+	push	si
+;	bRC = -8
+;	i = -10
+;	ix = -6
+;	p = -4
+;	index = 8
+;	pstrucSw = 4
+; Line 343
+	mov	WORD PTR [bp-8],0	;bRC
+; Line 347
+	mov	ax,WORD PTR [bp+4]	;pstrucSw
+	mov	dx,WORD PTR [bp+6]
+	mov	WORD PTR [bp-4],ax	;p
+	mov	WORD PTR [bp-2],dx
+	jmp	SHORT $F1795
+$FC1796:
+	add	WORD PTR [bp-4],8	;p
+$F1795:
+	les	bx,DWORD PTR [bp-4]	;p
+	mov	ax,WORD PTR es:[bx+2]
+	or	ax,WORD PTR es:[bx]
+	jne	$FC1796
+	cmp	WORD PTR es:[bx+4],0
+	je	$FC1796
+; Line 348
+; Line 351
+	mov	WORD PTR [bp-6],0	;ix
+	jmp	SHORT $F1799
+$FC1808:
+; Line 359
+	les	bx,DWORD PTR [bp+4]	;pstrucSw
+	lea	bx,WORD PTR [bx+4]
+	mov	si,ax
+	mov	cl,BYTE PTR es:[bx][si]
+	mov	bx,WORD PTR [bp+4]	;pstrucSw
+	les	bx,DWORD PTR es:[bx]
+	mov	BYTE PTR es:[bx][si],cl
+	inc	WORD PTR [bp-10]	;i
+$F1807:
+	les	bx,DWORD PTR [bp-4]	;p
+	mov	ax,WORD PTR [bp-10]	;i
+	cmp	WORD PTR es:[bx+4],ax
+	ja	$FC1808
+; Line 360
+$I1806:
+	mov	WORD PTR [bp-8],1	;bRC
+; Line 361
+$FB1804:
+; Line 365
+	add	WORD PTR [bp+4],8	;pstrucSw
+; Line 366
+	inc	WORD PTR [bp-6]	;ix
+	add	WORD PTR [bp+4],8	;pstrucSw
+$F1799:
+	les	bx,DWORD PTR [bp+4]	;pstrucSw
+	mov	ax,WORD PTR es:[bx+2]
+	or	ax,WORD PTR es:[bx]
+	je	$FB1801
+; Line 352
+; Line 353
+$FC1803:
+	les	bx,DWORD PTR [bp+4]	;pstrucSw
+	mov	ax,WORD PTR es:[bx+2]
+	or	ax,WORD PTR es:[bx]
+	je	$FB1804
+; Line 354
+; Line 355
+	mov	ax,WORD PTR [bp+8]	;index
+	cmp	WORD PTR [bp-6],ax	;ix
+	jne	$I1805
+; Line 356
+; Line 357
+	mov	ax,WORD PTR _flArgParsed
+	test	WORD PTR es:[bx+6],ax
+	jne	$I1806
+; Line 358
+	mov	WORD PTR [bp-10],0	;i
+	jmp	SHORT $F1807
+; Line 362
+; Line 363
+$I1805:
+	add	WORD PTR [bp+4],8	;pstrucSw
+; Line 364
+	jmp	SHORT $FC1803
+$FB1801:
+; Line 368
+	mov	ax,WORD PTR [bp-8]	;bRC
+; Line 369
+	pop	si
+	leave	
+	ret	
+
+_getIValue	ENDP
+; Line 372
+	PUBLIC	_printToScreen
+_printToScreen	PROC NEAR
+	enter	2,0
+;	size = -2
+;	string = 4
+; Line 375
+	mov	ax,WORD PTR [bp+6]
+	or	ax,WORD PTR [bp+4]	;string
+	je	$I1814
+; Line 376
+; Line 377
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;string
+	call	FAR PTR _f_strlen
+	pop	bx
+	pop	bx
+	mov	WORD PTR [bp-2],ax	;size
+; Line 378
+	or	ax,ax
+	je	$I1814
+; Line 379
+	push	1
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;string
+	push	ax
+	lea	ax,WORD PTR [bp-2]	;size
+	push	ss
+	push	ax
+	call	FAR PTR DOS16WRITE
+; Line 380
+$I1814:
+; Line 383
+	leave	
+	ret	
+
+_printToScreen	ENDP
+; Line 392
+	PUBLIC	_printToScreenCR
+_printToScreenCR	PROC NEAR
+	enter	2,0
+;	size = -2
+;	string = 4
+; Line 396
+	cmp	WORD PTR $S1817_bCIsPrinted,0
+	jne	$I1819
+	cmp	WORD PTR _usIsQuiet,0
+	jne	$I1819
+; Line 397
+; Line 398
+	push	WORD PTR _szCopyright+2
+	push	WORD PTR _szCopyright
+	call	_printToScreen
+	pop	bx
+	pop	bx
+; Line 399
+	mov	WORD PTR $S1817_bCIsPrinted,1
+; Line 400
+; Line 402
+$I1819:
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;string
+	call	_printToScreen
+	pop	bx
+	pop	bx
+; Line 404
+	leave	
+	ret	
+
+_printToScreenCR	ENDP
+; Line 407
+	PUBLIC	_printUShortToScreen
+_printUShortToScreen	PROC NEAR
+	enter	8,0
+	push	si
+;	index = -8
+;	string = -6
+;	data = 4
+; Line 408
+	mov	WORD PTR [bp-8],4	;index
+; Line 411
+$D1824:
+; Line 412
+; Line 413
+	mov	ax,WORD PTR [bp+4]	;data
+	mov	cx,10
+	sub	dx,dx
+	div	cx
+	add	dl,48
+	mov	si,WORD PTR [bp-8]	;index
+	mov	BYTE PTR [bp-6][si],dl
+	dec	WORD PTR [bp-8]	;index
+; Line 414
+	mov	ax,WORD PTR [bp+4]	;data
+	sub	dx,dx
+	div	cx
+	mov	WORD PTR [bp+4],ax	;data
+; Line 415
+	or	ax,ax
+	jne	$D1824
+; Line 417
+	inc	WORD PTR [bp-8]	;index
+; Line 418
+	push	1
+	mov	si,WORD PTR [bp-8]	;index
+	lea	ax,WORD PTR [bp-6][si]
+	push	ss
+	push	ax
+	sub	si,5
+	neg	si
+	push	si
+	lea	ax,WORD PTR [bp-8]	;index
+	push	ss
+	push	ax
+	call	FAR PTR DOS16WRITE
+; Line 420
+	pop	si
+	leave	
+	ret	
+
+_printUShortToScreen	ENDP
+; Line 446
+	PUBLIC	_endOfString
+_endOfString	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	string = 4
+; Line 447
+	les	bx,DWORD PTR [bp+4]	;string
+	cmp	BYTE PTR es:[bx],0
+	je	$L20002
+	cmp	BYTE PTR es:[bx],13
+	jne	$L20000
+$L20002:
+	mov	ax,1
+	leave	
+	ret	
+$L20000:
+	sub	ax,ax
+; Line 448
+	leave	
+	ret	
+
+_endOfString	ENDP
+; Line 451
+	PUBLIC	_endOfToken
+_endOfToken	PROC NEAR
+	enter	4,0
+;	psz = -4
+;	string = 4
+; Line 454
+	les	bx,DWORD PTR [bp+4]	;string
+	cmp	BYTE PTR es:[bx],34
+	jne	$I1832
+; Line 455
+; Line 457
+	lea	ax,WORD PTR [bx+1]
+	mov	WORD PTR [bp-4],ax	;psz
+	mov	WORD PTR [bp-2],es
+	jmp	SHORT $F1833
+; Line 460
+$FC1834:
+	inc	WORD PTR [bp-4]	;psz
+$F1833:
+	push	WORD PTR [bp-2]
+	push	WORD PTR [bp-4]	;psz
+	call	_endOfString
+	pop	bx
+	pop	bx
+	or	ax,ax
+	jne	$FB1840
+; Line 458
+	les	bx,DWORD PTR [bp-4]	;psz
+	cmp	BYTE PTR es:[bx],34
+	jne	$FC1834
+; Line 459
+; Line 461
+	jmp	SHORT $FB1840
+$I1832:
+; Line 462
+; Line 464
+	mov	ax,bx
+	mov	dx,es
+	mov	WORD PTR [bp-4],ax	;psz
+	mov	WORD PTR [bp-2],dx
+	jmp	SHORT $F1838
+; Line 467
+$FC1839:
+	inc	WORD PTR [bp-4]	;psz
+$F1838:
+	push	WORD PTR [bp-2]
+	push	WORD PTR [bp-4]	;psz
+	call	_endOfString
+	pop	bx
+	pop	bx
+	or	ax,ax
+	jne	$FB1840
+; Line 465
+	les	bx,DWORD PTR [bp-4]	;psz
+	cmp	BYTE PTR es:[bx],32
+	je	$FB1840
+	cmp	BYTE PTR es:[bx],9
+	jne	$FC1839
+; Line 466
+$FB1840:
+; Line 469
+	mov	ax,WORD PTR [bp-4]	;psz
+	mov	dx,WORD PTR [bp-2]
+; Line 470
+	leave	
+	ret	
+
+_endOfToken	ENDP
+; Line 473
+	PUBLIC	_firstToken
+_firstToken	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	string = 4
+; Line 474
+$FC1846:
+	les	bx,DWORD PTR [bp+4]	;string
+	cmp	BYTE PTR es:[bx],32
+	je	$FB1848
+	cmp	BYTE PTR es:[bx],9
+	jne	$FB1847
+$FB1848:
+; Line 475
+	inc	WORD PTR [bp+4]	;string
+	jmp	SHORT $FC1846
+$FB1847:
+; Line 477
+	mov	ax,bx
+	mov	dx,es
+; Line 478
+	leave	
+	ret	
+
+_firstToken	ENDP
+; Line 481
+	PUBLIC	_nextToken
+_nextToken	PROC NEAR
+	enter	4,0
+;	psz = -4
+;	string = 4
+; Line 486
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;string
+	call	_endOfToken
+	pop	bx
+	pop	bx
+	mov	es,dx
+	mov	bx,ax
+	mov	WORD PTR [bp-4],bx	;psz
+	mov	WORD PTR [bp-2],es
+	cmp	BYTE PTR es:[bx],34
+	jne	$F1853
+; Line 487
+	lea	ax,WORD PTR [bx+1]
+	mov	WORD PTR [bp-4],ax	;psz
+; Line 490
+	jmp	SHORT $F1853
+; Line 494
+$FC1854:
+	inc	WORD PTR [bp-4]	;psz
+$F1853:
+	push	es
+	push	WORD PTR [bp-4]	;psz
+	call	_endOfString
+	pop	bx
+	pop	bx
+	or	ax,ax
+	jne	$FB1855
+; Line 491
+	les	bx,DWORD PTR [bp-4]	;psz
+	cmp	BYTE PTR es:[bx],32
+	je	$FC1854
+	cmp	BYTE PTR es:[bx],9
+	je	$FC1854
+; Line 492
+$FB1855:
+	mov	ax,WORD PTR [bp-4]	;psz
+	mov	dx,WORD PTR [bp-2]
+; Line 495
+	leave	
+	ret	
+
+_nextToken	ENDP
+; Line 498
+	PUBLIC	_getToken
+_getToken	PROC NEAR
+	enter	8,0
+;	psz = -4
+;	string = 4
+; Line 501
+	les	bx,DWORD PTR [bp+4]	;string
+	cmp	BYTE PTR es:[bx],34
+	jne	$L20003
+	mov	ax,1
+	jmp	SHORT $L20004
+$L20003:
+	sub	ax,ax
+$L20004:
+	add	ax,bx
+	mov	dx,es
+	mov	WORD PTR [bp-4],ax	;psz
+	mov	WORD PTR [bp-2],dx
+; Line 502
+	push	dx
+	push	bx
+	call	_endOfToken
+	pop	bx
+	pop	bx
+	mov	es,dx
+	mov	bx,ax
+	mov	BYTE PTR es:[bx],0
+; Line 504
+	mov	ax,WORD PTR [bp-4]	;psz
+	mov	dx,WORD PTR [bp-2]
+; Line 505
+	leave	
+	ret	
+
+_getToken	ENDP
+; Line 508
+	PUBLIC	_parseToken
+_parseToken	PROC NEAR
+	enter	6,0
+;	pstrucParse = -4
+;	c = -2
+;	value = -6
+;	pszString = 4
+; Line 513
+	les	bx,DWORD PTR [bp+4]	;pszString
+	mov	al,BYTE PTR es:[bx]
+	push	ax
+	call	_toupper
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;c
+	or	al,al
+	jne	$JCC1067
+	jmp	$FB1868
+$JCC1067:
+; Line 514
+; Line 515
+	inc	WORD PTR [bp+4]	;pszString
+; Line 518
+	mov	WORD PTR [bp-4],OFFSET DGROUP:_arstrucParse	;pstrucParse
+	jmp	$F1866
+; Line 523
+; Line 524
+$SC1874:
+; Line 526
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [bp-6],ax	;value
+; Line 527
+	lea	ax,WORD PTR [bp+4]	;pszString
+	push	ss
+	push	ax
+	lea	ax,WORD PTR [bp-6]	;value
+	push	ss
+	push	ax
+	call	_getUInt
+	add	sp,8
+	or	ax,ax
+	je	$SC1879
+	dec	ax
+	je	$SC1881
+	jmp	SHORT $L20020
+; Line 528
+; Line 529
+$SC1879:
+; Line 530
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	cmp	WORD PTR [bx+4],128
+	jne	$SB1876
+; Line 531
+$L20020:
+	push	WORD PTR _szErrWrongParameter+2
+	push	WORD PTR _szErrWrongParameter
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 532
+$SB1876:
+; Line 545
+	mov	ax,WORD PTR [bp-6]	;value
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	jmp	SHORT $L20018
+; Line 534
+$SC1881:
+; Line 535
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bp-6]	;value
+	cmp	WORD PTR [bx+6],ax
+	ja	$I1883
+	cmp	WORD PTR [bx+8],ax
+	jae	$SB1876
+$I1883:
+; Line 536
+; Line 537
+	push	WORD PTR _szErrOutOfRange+2
+	push	WORD PTR _szErrOutOfRange
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 538
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [bp-6],ax	;value
+; Line 539
+; Line 540
+	jmp	SHORT $SB1876
+; Line 548
+$SC1886:
+; Line 549
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [bp-6],ax	;value
+; Line 550
+	lea	ax,WORD PTR [bp+4]	;pszString
+	push	ss
+	push	ax
+	lea	ax,WORD PTR [bp-6]	;value
+	push	ss
+	push	ax
+	call	_getInt
+	add	sp,8
+	dec	ax
+	je	$SC1891
+	dec	ax
+	je	$L20020
+	jmp	SHORT $SB1876
+; Line 551
+; Line 552
+$SC1891:
+; Line 554
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bp-6]	;value
+	cmp	WORD PTR [bx+6],ax
+	jg	$I1883
+	cmp	WORD PTR [bx+8],ax
+	jge	$SB1876
+	jmp	SHORT $I1883
+$SC1895:
+; Line 569
+	les	bx,DWORD PTR [bp+4]	;pszString
+	cmp	BYTE PTR es:[bx],32
+	je	$I1897
+	cmp	BYTE PTR es:[bx],9
+	je	$I1897
+	push	es
+	push	bx
+	call	_endOfString
+	pop	bx
+	pop	bx
+	or	ax,ax
+	je	$I1896
+$I1897:
+; Line 570
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+10]
+$L20018:
+	les	bx,DWORD PTR [bx+12]
+	mov	WORD PTR es:[bx],ax
+; Line 571
+	jmp	$FB1868
+; Line 575
+$SC1899:
+; Line 576
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [bp-6],ax	;value
+; Line 577
+	lea	ax,WORD PTR [bp+4]	;pszString
+	push	ss
+	push	ax
+	lea	ax,WORD PTR [bp-6]	;value
+	push	ss
+	push	ax
+	call	_getUInt
+	add	sp,8
+	dec	ax
+	je	$SC1904
+	dec	ax
+	je	$SC1907
+	jmp	SHORT $SB1901
+; Line 578
+; Line 579
+$SC1904:
+; Line 580
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bp-6]	;value
+	cmp	WORD PTR [bx+6],ax
+	ja	$I1906
+	cmp	WORD PTR [bx+8],ax
+	jae	$SB1901
+$I1906:
+; Line 581
+; Line 582
+	push	WORD PTR _szErrOutOfRange+2
+	push	WORD PTR _szErrOutOfRange
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 583
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [bp-6],ax	;value
+; Line 584
+; Line 585
+$SB1901:
+; Line 591
+	push	WORD PTR [bp-6]	;value
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	push	WORD PTR [bx+14]
+	push	WORD PTR [bx+12]
+	call	_getIValue
+	add	sp,6
+	or	ax,ax
+	jne	$FB1868
+$I1896:
+; Line 572
+	push	WORD PTR _szErrWrongParameter+2
+	push	WORD PTR _szErrWrongParameter
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 573
+	jmp	SHORT $FB1868
+; Line 587
+$SC1907:
+; Line 588
+	push	WORD PTR _szErrWrongParameter+2
+	push	WORD PTR _szErrWrongParameter
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 589
+	jmp	SHORT $SB1901
+$S1870:
+	cmp	ax,128
+	jne	$JCC1406
+	jmp	$SC1874
+$JCC1406:
+	ja	$SB1871
+	or	al,al
+	jne	$JCC1415
+	jmp	$SC1874
+$JCC1415:
+	dec	al
+	jne	$JCC1422
+	jmp	$SC1886
+$JCC1422:
+	dec	al
+	jne	$JCC1429
+	jmp	$SC1899
+$JCC1429:
+	dec	al
+	jne	$JCC1436
+	jmp	$SC1895
+$JCC1436:
+$SB1871:
+; Line 595
+; Line 596
+	add	WORD PTR [bp-4],16	;pstrucParse
+$F1866:
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	cmp	BYTE PTR [bx],0
+	je	$FB1868
+; Line 519
+; Line 520
+	mov	al,BYTE PTR [bp-2]	;c
+	cmp	BYTE PTR [bx],al
+	jne	$SB1871
+; Line 521
+; Line 522
+	mov	ax,WORD PTR [bx+4]
+	jmp	SHORT $S1870
+$FB1868:
+; Line 597
+; Line 600
+	mov	bx,WORD PTR [bp-4]	;pstrucParse
+	mov	ax,WORD PTR [bx+2]
+	or	WORD PTR _flArgParsed,ax
+; Line 601
+	mov	ax,WORD PTR [bp+4]	;pszString
+	mov	dx,WORD PTR [bp+6]
+; Line 602
+	leave	
+	ret	
+
+_parseToken	ENDP
+; Line 605
+	PUBLIC	_parse
+_parse	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	pszString = 4
+; Line 606
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;pszString
+	call	_firstToken
+	jmp	SHORT $L20024
+$L20023:
+; Line 608
+; Line 609
+	les	bx,DWORD PTR [bp+4]	;pszString
+	cmp	BYTE PTR es:[bx],45
+	je	$I1915
+	cmp	BYTE PTR es:[bx],47
+	je	$JCC1510
+	jmp	$EX1910
+$JCC1510:
+$I1915:
+; Line 610
+	inc	WORD PTR [bp+4]	;pszString
+	push	es
+	push	WORD PTR [bp+4]	;pszString
+	call	_parseToken
+	pop	bx
+	pop	bx
+	mov	WORD PTR [bp+4],ax	;pszString
+	mov	WORD PTR [bp+6],dx
+; Line 613
+	push	dx
+	push	ax
+	call	_nextToken
+$L20024:
+	pop	bx
+	pop	bx
+	mov	WORD PTR [bp+4],ax	;pszString
+	mov	WORD PTR [bp+6],dx
+; Line 607
+	push	dx
+	push	ax
+	call	_endOfString
+	pop	bx
+	pop	bx
+	or	ax,ax
+	je	$L20023
+; Line 618
+	mov	cx,10
+	mov	ax,WORD PTR _trimm
+	mov	WORD PTR _usThreshold,ax
+	imul	ax,ax,10
+	sub	dx,dx
+	div	WORD PTR _usTickLen
+	sub	dx,dx
+	div	cx
+	mov	ax,dx
+	shl	ax,2
+	mov	bx,cx
+	cwd	
+	idiv	bx
+	mov	WORD PTR _usTTicks,ax
+; Line 619
+	mov	ax,WORD PTR _usThreshold
+	sub	dx,dx
+	div	WORD PTR _usTickLen
+	mov	WORD PTR _usThrBitlen,ax
+; Line 621
+	test	BYTE PTR _flArgParsed+1,1
+	je	$SB1919
+; Line 622
+	mov	al,BYTE PTR _ucPortTyp
+	sub	ah,ah
+	jmp	SHORT $S1918
+; Line 623
+; Line 624
+$SC1922:
+; Line 625
+	mov	BYTE PTR _ucPortTyp,1
+; Line 626
+	jmp	SHORT $SB1919
+; Line 627
+$SC1923:
+; Line 628
+	mov	BYTE PTR _ucPortTyp,3
+; Line 629
+	jmp	SHORT $SB1919
+; Line 630
+$SC1924:
+; Line 631
+	mov	BYTE PTR _ucPortTyp,5
+; Line 632
+	jmp	SHORT $SB1919
+$S1918:
+	or	ax,ax
+	je	$SC1922
+	dec	ax
+	dec	ax
+	je	$SC1923
+	dec	ax
+	dec	ax
+	je	$SC1924
+$SB1919:
+; Line 635
+	mov	ax,1
+; Line 636
+$EX1910:
+	leave	
+	ret	
+
+_parse	ENDP
+; Line 639
+	PUBLIC	_cini
+_cini	PROC NEAR
+	enter	218,0
+	push	si
+;	pszToken = -216
+;	pszFileName = -212
+;	daten = -208
+;	hFile = -8
+;	rc = -4
+;	usSize = -2
+;	usAction = -6
+;	argline = 4
+; Line 648
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;argline
+	call	_firstToken
+	pop	bx
+	pop	bx
+; Line 650
+	push	WORD PTR [bp+6]
+	push	WORD PTR [bp+4]	;argline
+	call	_nextToken
+	pop	bx
+	pop	bx
+	mov	WORD PTR [bp-216],ax	;pszToken
+	mov	WORD PTR [bp-214],dx
+	push	dx
+	push	ax
+	lea	cx,WORD PTR [bp-208]	;daten
+	push	ss
+	push	cx
+	call	FAR PTR _f_strcpy
+	add	sp,8
+; Line 651
+	push	WORD PTR [bp-214]
+	push	WORD PTR [bp-216]	;pszToken
+	call	_nextToken
+	pop	bx
+	pop	bx
+	mov	WORD PTR [bp-216],ax	;pszToken
+	mov	WORD PTR [bp-214],dx
+; Line 652
+	lea	ax,WORD PTR [bp-208]	;daten
+	push	ss
+	push	ax
+	call	_getToken
+	pop	bx
+	pop	bx
+	mov	WORD PTR [bp-212],ax	;pszFileName
+	mov	WORD PTR [bp-210],dx
+; Line 654
+	les	bx,DWORD PTR [bp-216]	;pszToken
+	cmp	BYTE PTR es:[bx],0
+	je	$I1934
+; Line 655
+; Line 656
+	push	WORD PTR _szErrTooManyArgs+2
+	push	WORD PTR _szErrTooManyArgs
+$L20025:
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 657
+	jmp	$I1939
+; Line 658
+; Line 660
+$I1934:
+	push	dx
+	push	ax
+	push	ds
+	push	OFFSET _szConfigFile
+	call	FAR PTR _f_strcpy
+	add	sp,8
+; Line 667
+	push	WORD PTR [bp-210]
+	push	WORD PTR [bp-212]	;pszFileName
+	lea	ax,WORD PTR [bp-8]	;hFile
+	push	ss
+	push	ax
+	lea	cx,WORD PTR [bp-6]	;usAction
+	push	ss
+	push	cx
+	push	0
+	push	0
+	push	1
+	push	1
+	push	32
+	push	0
+	push	0
+	call	FAR PTR DOS16OPEN
+	mov	WORD PTR [bp-4],ax	;rc
+	or	ax,ax
+	jne	$I1936
+; Line 668
+; Line 670
+	push	WORD PTR [bp-8]	;hFile
+	lea	ax,WORD PTR [bp-208]	;daten
+	push	ss
+	push	ax
+	push	200
+	lea	ax,WORD PTR [bp-2]	;usSize
+	push	ss
+	push	ax
+	call	FAR PTR DOS16READ
+	mov	WORD PTR [bp-4],ax	;rc
+	or	ax,ax
+	je	$I1937
+; Line 671
+; Line 672
+	push	WORD PTR _szErrRead+2
+	push	WORD PTR _szErrRead
+	jmp	SHORT $L20025
+; Line 674
+; Line 675
+$I1937:
+	cmp	WORD PTR [bp-2],200	;usSize
+	jb	$L20005
+	mov	si,199
+	jmp	SHORT $L20006
+$L20005:
+	mov	si,WORD PTR [bp-2]	;usSize
+$L20006:
+	mov	BYTE PTR [bp-208][si],0
+; Line 676
+	push	WORD PTR [bp-8]	;hFile
+	call	FAR PTR DOS16CLOSE
+; Line 677
+; Line 687
+	lea	ax,WORD PTR [bp-208]	;daten
+	push	ss
+	push	ax
+	call	_parse
+	pop	bx
+	pop	bx
+	or	ax,ax
+	jne	$I1939
+; Line 688
+; Line 689
+	push	WORD PTR _szErrWrongParameter+2
+	push	WORD PTR _szErrWrongParameter
+	jmp	$L20025
+$I1936:
+; Line 679
+; Line 680
+	push	WORD PTR _szErrFileNotFound1+2
+	push	WORD PTR _szErrFileNotFound1
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 681
+	push	WORD PTR [bp-210]
+	push	WORD PTR [bp-212]	;pszFileName
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 682
+	push	WORD PTR _szErrFileNotFound2+2
+	push	WORD PTR _szErrFileNotFound2
+	jmp	$L20025
+; Line 684
+; Line 691
+; Line 697
+$I1939:
+; Line 698
+	push	0
+	push	0
+	call	_printToScreenCR
+	pop	bx
+	pop	bx
+; Line 699
+	call	FAR PTR _f_cini
+; Line 701
+	pop	si
+	leave	
+	ret	
+
+_cini	ENDP
+_INITEXT      ENDS
+_TEXT      SEGMENT
+	ASSUME	CS: _TEXT
+; Line 704
+	PUBLIC	_f_cini
+_f_cini	PROC FAR
+; Line 708
+	push	ds
+	push	OFFSET _DataDCFOrg
+	call	_fillDataDCF
+	pop	bx
+	pop	bx
+; Line 710
+	call	_start
+; Line 711
+	call	_getticcnt
+; Line 714
+	ret	
+
+_f_cini	ENDP
+_TEXT	ENDS
+END

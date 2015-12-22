@@ -1,0 +1,4 @@
+# Client for Netbios Time Service #
+LAN::TIME Client installieren
+RUN = *\TIMECLNT.EXE ; 4
+

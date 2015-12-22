@@ -1,0 +1,23 @@
+DLGINCLUDE 1 "Client.h"
+
+DLGTEMPLATE 100 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Dialog Title", 100, 12, 6, 150, 125, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        PUSHBUTTON      "Setzen", DID_BTN_APPLY, 5, 5, 40, 14
+        DEFPUSHBUTTON   "Abbruch", DID_BTN_CANCEL, 55, 5, 40, 14
+        PUSHBUTTON      "Hilfe", DID_BTN_HELP, 105, 5, 40, 14
+        GROUPBOX        "neue Adresse", -1, 5, 27, 140, 70
+        LTEXT           "aktuelle Adresse:", -1, 10, 105, 80, 8
+        LTEXT           "280", DID_ADDRESS, 100, 105, 35, 8
+        AUTORADIOBUTTON "Mode 6030", DID_MODE_6030, 10, 60, 120, 10, 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Mode 6035/6036", DID_MODE_6036, 10, 75, 120, 10, 
+                        WS_TABSTOP
+        CONTROL         "", DID_NEW_ADDR, 50, 37, 50, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_READONLY | SPBS_MASTER | 
+                        SPBS_SERVANT | SPBS_JUSTDEFAULT | WS_GROUP | 
+                        WS_TABSTOP | WS_VISIBLE
+    END
+END

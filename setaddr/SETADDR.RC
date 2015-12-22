@@ -1,0 +1,54 @@
+#include <os2.h>
+#include "SETADDR.RCH"
+
+
+
+
+DLGTEMPLATE ID_PANELCLIENT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  DIALOG "Dialog Title", ID_PANELCLIENT, 12, 6, 150, 125,
+           WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS | FS_BORDER
+
+    BEGIN
+      PUSHBUTTON "Setzen", DID_BTN_APPLY, 5, 5, 40, 14,
+              WS_VISIBLE | WS_TABSTOP
+      DEFPUSHBUTTON "Abbruch", DID_BTN_CANCEL, 55, 5, 40, 14,
+              WS_VISIBLE | WS_TABSTOP
+      PUSHBUTTON "Hilfe", DID_BTN_HELP, 105, 5, 40, 14,
+              WS_VISIBLE | WS_TABSTOP | BS_HELP
+      GROUPBOX "neue Adresse", -1, 5, 27, 140, 70,
+              WS_VISIBLE | WS_GROUP | NOT WS_TABSTOP | DT_QUERYEXTENT
+      LTEXT "aktuelle Adresse:", -1, 10, 105, 80, 8,
+              WS_VISIBLE | WS_GROUP | NOT WS_TABSTOP
+      LTEXT "280", DID_ADDRESS, 100, 105, 35, 8,
+              WS_VISIBLE | WS_GROUP | NOT WS_TABSTOP
+      AUTORADIOBUTTON "Mode 6030", DID_MODE_6030, 10, 60, 120, 10,
+              WS_VISIBLE | WS_TABSTOP
+      AUTORADIOBUTTON "Mode 6035/6036", DID_MODE_6036, 10, 75, 120, 10,
+              WS_VISIBLE | WS_TABSTOP
+      CONTROL "", DID_NEW_ADDR, 50, 37, 50, 12,
+               WC_SPINBUTTON, WS_VISIBLE | WS_GROUP | WS_TABSTOP | SPBS_JUSTDEFAULT | SPBS_READONLY | SPBS_MASTER
+
+    END
+END
+
+
+STRINGTABLE
+BEGIN
+  IDS_APP_NAME,                          "SETADDR"
+  IDS_APP_EXE_NAME,                      "SETADDR.EXE"
+  IDS_ERR_WINDOW_POS,                    "Window positioning failed!"
+  IDS_ERR_WINDOW_CREATE_FORMAT,          "An error occurred while creating a window. Error code: 0x%X."
+  IDS_ERR_PROGRAM_LAUNCH,                "Unable to run program.  Error Code: %ld"
+  IDS_ERR_MEMORY_ALLOC,                  "Unable to allocate memory for structure %s."
+  IDS_WINDOWSETADDR_TITLE,               "Adress-Einstellung"
+  IDS_ERROR_NODRIVER,                    "Treiber nicht geladen. Treiber installieren und neu booten."
+  IDS_ERROR_WRONGDRIVER                  "Falscher Treiber geladen. Treiber fÅr Hopf 6036 oder 6038 installieren und neu booten."
+  IDS_ERROR_NOCARD                       "Keine 603x-Karte gefunden. Adresse falsch eingestellt oder Karte im 6030-Mode."
+  IDS_INFO_NORETURN                      "Achtung: Ein Setzen des 6030-Mode lÑ·t sich nur durch Ausbau der Karte rÅckgÑngig machen. Au·erdem ist die Funktion 'Antenne ausrichten' in diesem Mode nicht verfÅgbar."
+  IDS_HELP_INFO                          "Mit diesem Programm lÑ·t sich die Adresse der HOPF 6036-Karte Ñndern. Sie belegt im 6036-Mode 40h Adressen, im 6030-Mode nur 10h Adressen. "
+                                         "Allerdings lÑ·t sich der 6030-Modus nur durch Ausbauen der Karte und Setzen des Jumpers J2 rÅckgÑngig machen."
+  IDS_HELP_INFO6038                      "Mit diesem Programm lÑ·t sich die Adresse der HOPF 6038-Karte Ñndern. Sie belegt 40h Adressen die in Schritten von 40h zwischen 200h und 1FC0h eingestellt werden kînnen."
+ END
+
+

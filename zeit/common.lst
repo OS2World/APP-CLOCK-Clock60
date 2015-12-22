@@ -1,0 +1,466 @@
+;	Static Name Aliases
+;
+;	$S1287_sDays	EQU	sDays
+	TITLE   common.c
+	.286p
+	.287
+INCLUDELIB	SLIBCE
+_TEXT	SEGMENT  WORD PUBLIC 'CODE'
+_TEXT	ENDS
+_DATA	SEGMENT  WORD PUBLIC 'DATA'
+_DATA	ENDS
+CONST	SEGMENT  WORD PUBLIC 'CONST'
+CONST	ENDS
+_BSS	SEGMENT  WORD PUBLIC 'BSS'
+_BSS	ENDS
+DGROUP	GROUP	CONST, _BSS, _DATA
+	ASSUME DS: DGROUP, SS: DGROUP
+EXTRN	_outbyte:NEAR
+EXTRN	_inbyte:NEAR
+_DATA      SEGMENT
+$S1287_sDays	DW	01fH
+	DW	01cH
+	DW	01fH
+	DW	01eH
+	DW	01fH
+	DW	01eH
+	DW	01fH
+	DW	01fH
+	DW	01eH
+	DW	01fH
+	DW	01eH
+	DW	01fH
+_DATA      ENDS
+_TEXT      SEGMENT
+	ASSUME	CS: _TEXT
+; Line 1
+; Line 40
+; Line 32
+; Line 649
+; Line 37
+; Line 52
+; Line 1865
+; Line 59
+; Line 61
+; Line 43
+; Line 85
+; Line 102
+; Line 4923
+; Line 86
+; Line 87
+; Line 121
+; Line 41
+; Line 32
+; Line 50
+	PUBLIC	_atoi
+_atoi	PROC NEAR
+	enter	6,0
+	push	si
+;	i = -4
+;	n = -6
+;	v = -2
+;	a = 4
+; Line 51
+	sub	ax,ax
+	mov	WORD PTR [bp-4],ax	;i
+	mov	WORD PTR [bp-6],ax	;n
+	mov	WORD PTR [bp-2],1	;v
+; Line 53
+	jmp	SHORT $L20000
+$FC1258:
+; Line 54
+	inc	WORD PTR [bp-4]	;i
+$L20000:
+	les	bx,DWORD PTR [bp+4]	;a
+	mov	si,WORD PTR [bp-4]	;i
+	cmp	BYTE PTR es:[bx][si],32
+	je	$FC1258
+; Line 55
+	cmp	BYTE PTR es:[bx][si],45
+	jne	$F1261
+; Line 56
+; Line 57
+	mov	WORD PTR [bp-2],-1	;v
+$FC1262:
+	inc	WORD PTR [bp-4]	;i
+$F1261:
+	mov	si,WORD PTR [bp-4]	;i
+	cmp	BYTE PTR es:[bx][si],48
+	jl	$FB1263
+	cmp	BYTE PTR es:[bx][si],57
+	jg	$FB1263
+; Line 61
+	mov	al,BYTE PTR es:[bx][si]
+	cbw	
+	imul	cx,WORD PTR [bp-6],10	;n
+	add	ax,cx
+	sub	ax,48
+	mov	WORD PTR [bp-6],ax	;n
+	jmp	SHORT $FC1262
+$FB1263:
+; Line 62
+	mov	ax,WORD PTR [bp-2]	;v
+	imul	WORD PTR [bp-6]	;n
+; Line 63
+	pop	si
+	leave	
+	ret	
+
+_atoi	ENDP
+; Line 66
+	PUBLIC	_lower
+_lower	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	a = 4
+; Line 67
+	cmp	BYTE PTR [bp+4],65	;a
+	jl	$I1266
+	cmp	BYTE PTR [bp+4],90	;a
+	jg	$I1266
+; Line 68
+	mov	al,BYTE PTR [bp+4]	;a
+	add	al,32
+	leave	
+	ret	
+$I1266:
+; Line 70
+	mov	al,BYTE PTR [bp+4]	;a
+; Line 71
+	leave	
+	ret	
+
+_lower	ENDP
+; Line 74
+	PUBLIC	_hextoint
+_hextoint	PROC NEAR
+	enter	6,0
+	push	si
+;	i = -4
+;	n = -6
+;	a = -2
+;	data = 4
+; Line 78
+	les	bx,DWORD PTR [bp+4]	;data
+	mov	al,BYTE PTR es:[bx]
+	push	ax
+	call	_lower
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;a
+; Line 79
+	sub	ax,ax
+	mov	WORD PTR [bp-6],ax	;n
+	mov	WORD PTR [bp-4],ax	;i
+	jmp	SHORT $F1273
+$I1278:
+; Line 84
+	mov	al,BYTE PTR [bp-2]	;a
+	cbw	
+	mov	cx,WORD PTR [bp-6]	;n
+	sub	cx,3
+	shl	cx,4
+	add	cx,ax
+$L20001:
+	mov	WORD PTR [bp-6],cx	;n
+; Line 85
+	mov	bx,WORD PTR [bp-4]	;i
+	les	si,DWORD PTR [bp+4]	;data
+	mov	al,BYTE PTR es:[bx+1][si]
+	push	ax
+	call	_lower
+	pop	bx
+	mov	BYTE PTR [bp-2],al	;a
+; Line 86
+	inc	WORD PTR [bp-4]	;i
+$F1273:
+	cmp	BYTE PTR [bp-2],48	;a
+	jl	$FB1277
+	cmp	BYTE PTR [bp-2],57	;a
+	jle	$FB1276
+$FB1277:
+	cmp	BYTE PTR [bp-2],97	;a
+	jl	$FB1275
+	cmp	BYTE PTR [bp-2],102	;a
+	jg	$FB1275
+$FB1276:
+; Line 80
+; Line 81
+	cmp	BYTE PTR [bp-2],97	;a
+	jl	$I1278
+	cmp	BYTE PTR [bp-2],102	;a
+	jg	$I1278
+; Line 82
+	mov	al,BYTE PTR [bp-2]	;a
+	cbw	
+	mov	cx,WORD PTR [bp-6]	;n
+	shl	cx,4
+	add	cx,ax
+	sub	cx,87
+	jmp	SHORT $L20001
+$FB1275:
+; Line 87
+	mov	ax,WORD PTR [bp-6]	;n
+; Line 88
+	pop	si
+	leave	
+	ret	
+
+_hextoint	ENDP
+; Line 91
+	PUBLIC	_bin2bcd
+_bin2bcd	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	us = 4
+; Line 92
+	mov	ax,WORD PTR [bp+4]	;us
+	mov	cx,10
+	sub	dx,dx
+	div	cx
+	shl	ax,4
+	mov	dx,ax
+	mov	ax,WORD PTR [bp+4]	;us
+	mov	bx,dx
+	sub	dx,dx
+	div	cx
+	mov	ax,dx
+	add	ax,bx
+; Line 93
+	leave	
+	ret	
+
+_bin2bcd	ENDP
+; Line 96
+	PUBLIC	_bcd2bin
+_bcd2bin	PROC NEAR
+	push	bp
+	mov	bp,sp
+;	us = 4
+; Line 97
+	mov	ax,WORD PTR [bp+4]	;us
+	and	ax,15
+	mov	cx,WORD PTR [bp+4]	;us
+	shr	cx,4
+	mov	dx,ax
+	imul	ax,cx,10
+	add	ax,dx
+; Line 98
+	leave	
+	ret	
+
+_bcd2bin	ENDP
+; Line 107
+	PUBLIC	_lastDay
+_lastDay	PROC NEAR
+	enter	2,0
+;	rc = -2
+;	year = 6
+;	month = 4
+; Line 112
+	dec	WORD PTR [bp+4]	;month
+	mov	bx,WORD PTR [bp+4]	;month
+	shl	bx,1
+	mov	ax,WORD PTR $S1287_sDays[bx]
+	mov	WORD PTR [bp-2],ax	;rc
+; Line 115
+	cmp	WORD PTR [bp+4],1	;month
+	jne	$I1293
+; Line 116
+; Line 117
+	mov	ax,WORD PTR [bp+6]	;year
+	mov	cx,4
+	cwd	
+	idiv	cx
+	or	dx,dx
+	jne	$I1293
+; Line 118
+; Line 119
+	mov	ax,WORD PTR [bp+6]	;year
+	mov	cx,100
+	cwd	
+	idiv	cx
+	or	dx,dx
+	jne	$I1291
+; Line 120
+; Line 121
+	mov	ax,WORD PTR [bp+6]	;year
+	mov	cx,400
+	cwd	
+	idiv	cx
+	or	dx,dx
+	jne	$I1293
+$I1291:
+; Line 125
+	mov	WORD PTR [bp-2],29	;rc
+$I1293:
+; Line 126
+; Line 127
+; Line 129
+	mov	ax,WORD PTR [bp-2]	;rc
+; Line 130
+	leave	
+	ret	
+
+_lastDay	ENDP
+; Line 133
+	PUBLIC	_setClock
+_setClock	PROC NEAR
+	enter	2,0
+;	sStatus = -2
+;	pdt = 4
+; Line 137
+	push	11
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 138
+	push	113
+	call	_inbyte
+	pop	bx
+	mov	WORD PTR [bp-2],ax	;sStatus
+; Line 139
+	push	11
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 140
+	mov	ax,WORD PTR [bp-2]	;sStatus
+	or	al,128
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 143
+	push	0
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 144
+	mov	bx,WORD PTR [bp+4]	;pdt
+	mov	al,BYTE PTR [bx+2]
+	sub	ah,ah
+	push	ax
+	call	_bin2bcd
+	pop	bx
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 145
+	push	2
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 146
+	mov	bx,WORD PTR [bp+4]	;pdt
+	mov	al,BYTE PTR [bx+1]
+	sub	ah,ah
+	push	ax
+	call	_bin2bcd
+	pop	bx
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 147
+	push	4
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 148
+	mov	bx,WORD PTR [bp+4]	;pdt
+	mov	al,BYTE PTR [bx]
+	sub	ah,ah
+	push	ax
+	call	_bin2bcd
+	pop	bx
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 149
+	push	7
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 150
+	mov	bx,WORD PTR [bp+4]	;pdt
+	mov	al,BYTE PTR [bx+3]
+	sub	ah,ah
+	push	ax
+	call	_bin2bcd
+	pop	bx
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 151
+	push	8
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 152
+	mov	bx,WORD PTR [bp+4]	;pdt
+	mov	al,BYTE PTR [bx+4]
+	sub	ah,ah
+	push	ax
+	call	_bin2bcd
+	pop	bx
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 153
+	push	9
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 154
+	mov	bx,WORD PTR [bp+4]	;pdt
+	mov	ax,WORD PTR [bx+5]
+	mov	cx,100
+	sub	dx,dx
+	div	cx
+	push	dx
+	call	_bin2bcd
+	pop	bx
+	push	ax
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 157
+	push	11
+	push	112
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 158
+	push	WORD PTR [bp-2]	;sStatus
+	push	113
+	call	_outbyte
+	pop	bx
+	pop	bx
+; Line 160
+	mov	ax,1
+; Line 161
+	leave	
+	ret	
+
+_setClock	ENDP
+_TEXT	ENDS
+END

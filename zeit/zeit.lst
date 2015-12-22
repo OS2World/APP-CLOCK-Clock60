@@ -1,0 +1,2684 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 1 - 1
+
+
+				        .286p
+				        page    60,80
+				        title   DCF_DD  -  DCF Device Driver
+
+				;/**********************************************
+				*************************/
+				;/*                                             
+				                        */
+				;/* Driver Name: ZEIT.SYS - DCF77 device driver 
+				for external devices    */
+				;/*              -------------------------------
+				--------------------    */
+				;/*                                             
+				                        */
+				;/* Source File Name: ZEIT.ASM                  
+				                        */
+				;/*                                             
+				                        */
+				;/* Descriptive Name: Device Driver fÅr externe 
+				DCF77 Empfangsmodule    */
+				;/*                                             
+				                        */
+				;/* Function: - Strategieroutine mit Funktionsdi
+				spatcher                */
+				;/*           - Assembler-Unterprogramme        
+				                        */
+				;/*                                             
+				                        */
+				;/*---------------------------------------------
+				------------------------*/
+				;/* Options:                                    
+				                        */
+				;/*                                             
+				                        */
+				;/*---------------------------------------------
+				------------------------*/
+				;/* Assemble: keine Optionen                    
+				                        */
+				;/*---------------------------------------------
+				------------------------*/
+				;/*                                             
+				                        */
+				;/* Change Log                                  
+				                        */
+				;/*                                             
+				                        */
+				;/* Version  Date       Comment                 
+				                        */
+				;/* -------  ----       -------                 
+				                        */
+				;/* 4.10     11.03.96   erste Version mit HR-Tim
+				er-Support              */
+				;/* 4.20     13.12.98   Korrektur im HR-Timer-Su
+				pport                   */
+				;/* 5.00     22.06.00   kleinere Anpassungen (Bu
+				ildumgebung, Texte)     */
+				;/* 5.10     28.01.01   Korrektur der Minutenanz
+				eige                    */
+				;/* 5.20     09.06.01   Fehlerkorrektur Audiodat
+				en                      */
+				;/* 5.30     16.01.02   Implementierung der Erin
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 2 - 1
+
+
+				nerungsfunktion         */
+				;/* 5.40     22.11.03   Fehlerkorrektur Erinneru
+				ngsfunktion             */
+				;/*                                             
+				                        */
+				;/*  Copyright (C) noller & breining software 20
+				03                      */
+				;/*                                             
+				                        */
+				;/**********************************************
+				*************************/
+				        .model  small
+
+				option M510
+
+				        include reqpkt.inc              ; Defini
+				tionen Dev Header
+			      C ; static char *SCCSID = "@(#)reqpkt.h   6.4 92/0
+			      C 5/08";  
+			      C ;***********************************************
+			      C ************************  
+			      C ;                                               
+			      C                           
+			      C ;  Driver Name: ADD/DM - Include Files          
+			      C                           
+			      C ;               ----------------------          
+			      C                           
+			      C ;                                               
+			      C                           
+			      C ;  Source File Name: REQPKT.H                   
+			      C                           
+			      C ;                                               
+			      C                           
+			      C ;  Descriptive Name: OS/2 Request Packet structu
+			      C res                       
+			      C ;                                               
+			      C                           
+			      C ;  Function: Defines OS/2 Request Packets for BL
+			      C OCK type devices.         
+			      C ;                                               
+			      C                           
+			      C ;                                               
+			      C                           
+			      C ; ----------------------------------------------
+			      C ------------------------  
+			      C ;                                               
+			      C                           
+			      C ;  Copyright (C) 1992 IBM Corporation           
+			      C                           
+			      C ;                                               
+			      C                           
+			      C ;  DISCLAIMER OF WARRANTIES.  The following [enc
+			      C losed] code is            
+			      C ;  provided to you solely for the purpose of ass
+			      C isting you in             
+			      C ;  the development of your applications. The cod
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 3 - 1
+
+
+			      C e is provided             
+			      C ;  "AS IS", without warranty of any kind. IBM sh
+			      C all not be liable         
+			      C ;  for any damages arising out of your use of th
+			      C is code, even if          
+			      C ;  they have been advised of the possibility of 
+			      C such damages.             
+			      C ;                                               
+			      C                           
+			      C ; ----------------------------------------------
+			      C ------------------------  
+			      C ;                                               
+			      C                           
+			      C ;  Change Log                                   
+			      C                           
+			      C ;                                               
+			      C                           
+			      C ;  Mark    Date      Programmer  Comment        
+			      C                           
+			      C ;  ----    ----      ----------  -------        
+			      C                           
+			      C ;  0001    08.10.92  Breining    Umbau auf getre
+			      C nnte Assemblierbarkeit ohne weitere Module
+			      C ;                                               
+			      C                           
+			      C ;                                               
+			      C                           
+			      C ;***********************************************
+			      C ************************  
+			      C ; ---------------------------------  
+			      C ;  Misc constants                    
+			      C ; ---------------------------------  
+ = 001D			      C MAX_DISKDD_CMD	EQU	29 
+			      C ;******************************  
+			      C ;  Device Driver Header          
+			      C ;******************************  
+			      C 
+ 001E			      C DDHDR	STRUC
+ 0000  00000000		      C DDH_NextHeader	DD	?
+ 0004  0000		      C DDH_DevAttr	DW	?
+ 0006  0000		      C DDH_StrategyEP	DW	?
+ 0008  0000		      C DDH_InterruptEP	DW	?
+ 000A  20 20 20 20 20 20      C DDH_DevName	DB	'        '
+       20 20
+ 0012  0000		      C DDH_ProtModeCS	DW	?
+ 0014  0000		      C DDH_ProtModeDS	DW	?
+ 0016  0000		      C DDH_RealModeCS	DW	?
+ 0018  0000		      C DDH_RealModeDS	DW	?
+ 001A  00000000		      C DDH_SDevCaps	DD	?                   ;  b
+			      C it map of DD /MM restrictions   
+			      C DDHDR	ENDS
+			      C ;******************************  
+			      C ;  BIOS Parameter Block          
+			      C ;******************************  
+			      C 
+ 001F			      C BPB	STRUC
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 4 - 1
+
+
+ 0000  0000		      C BPB_BytesPerSector	DW	?
+ 0002  00		      C BPB_SectorsPerCluster	DB	?
+ 0003  0000		      C BPB_ReservedSectors	DW	?
+ 0005  00		      C BPB_NumFATs		DB	?
+ 0006  0000		      C BPB_MaxDirEntries	DW	?
+ 0008  0000		      C BPB_TotalSectors	DW	?
+ 000A  00		      C BPB_MediaType		DB	?
+ 000B  0000		      C BPB_NumFATSectors	DW	?
+ 000D  0000		      C BPB_SectorsPerTrack	DW	?
+ 000F  0000		      C BPB_NumHeads		DW	?
+ 0011  00000000		      C BPB_HiddenSectors	DD	?
+ 0015  00000000		      C BPB_BigTotalSectors	DD	?
+ 0019  0006 [		      C BPB_Reserved_1		DB	6 DUP (?)
+        00
+       ]
+			      C BPB	ENDS
+			      C ;**************************  
+			      C ;   Request Packet Header    
+			      C ;**************************  
+			      C 
+ 000D			      C RPH	STRUC
+ 0000  00		      C RPH_Len		DB	?
+ 0001  00		      C RPH_Unit	DB	?
+ 0002  00		      C RPH_Cmd		DB	?
+ 0003  0000		      C RPH_Status	DW	?
+ 0005  00		      C RPH_Flags	DB	?
+ 0006  0003 [		      C RPH_Reserved_1	DB	3 DUP (?)
+        00
+       ]
+ 0009  00000000		      C RPH_Link	DD	?
+			      C RPH	ENDS
+			      C ;  Status word in RPH   
+ = 8000			      C STERR			EQU	8000H           
+			      C  ;  Bit 15 - Error
+ = 0400			      C STINTER			EQU	0400H           
+			      C  ;  Bit 10 - Interim character
+ = 0200			      C STBUI			EQU	0200H           
+			      C  ;  Bit  9 - Busy
+ = 0100			      C STDON			EQU	0100H           
+			      C  ;  Bit  8 - Done
+ = 00FF			      C STECODE			EQU	00FFH           
+			      C  ;  Error code
+ = 0000			      C WRECODE			EQU	0000H 
+ = 0100			      C STATUS_DONE		EQU	0100H 
+ = 8003			      C STATUS_ERR_UNKCMD	EQU	8003H 
+			      C ;  Bit definitions for Flags field in RPH   
+ = 0001			      C RPF_Int13RP		EQU	01H         ;  I
+			      C nt 13 Request Packet             
+ = 0002			      C RPF_CallOutDone		EQU	02H         ;  I
+			      C nt 13 Callout completed          
+ = 0004			      C RPF_PktDiskIOTchd	EQU	04H         ;  D
+			      C isk_IO has touched this packet   
+ = 0008			      C RPF_CHS_ADDRESSING	EQU	08H         ;  C
+			      C HS Addressing used in RBA field  
+ = 0010			      C RPF_Internal		EQU	10H         ;  I
+			      C nternal request packet command   
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 5 - 1
+
+
+ = 0020			      C RPF_TraceComplete	EQU	20H         ;  T
+			      C race completion flag             
+			      C ;***********************  
+			      C ;   Init Request Packet   
+			      C ;***********************  
+			      C 
+ 0017			      C RPINIT	STRUC
+ 0000  000D [		      C RPINI_rph	DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPINI_Unit	DB	?
+ 000E  0004 [		      C RPINI_DevHlpEP	DB	SIZE DWORD DUP (?)
+        00
+       ]
+ 0012  0004 [		      C RPINI_InitArgs	DB	SIZE DWORD DUP (?)
+        00
+       ]
+ 0016  00		      C RPINI_DriveNum	DB	?
+			      C RPINIT	ENDS
+			      C 
+ 0018			      C RPINITOUT	STRUC
+ 0000  000D [		      C RPINO_rph	DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPINO_Unit	DB	?
+ 000E  0000		      C RPINO_CodeEnd	DW	?
+ 0010  0000		      C RPINO_DataEnd	DW	?
+ 0012  00000000		      C RPINO_BPBArray	DD	?
+ 0016  0000		      C RPINO_Status	DW	?
+			      C RPINITOUT	ENDS
+			      C ;********************************************  
+			      C ;  struct DDD_Parm_List moved to H\DSKINIT.H   
+			      C ;********************************************  
+			      C ifndef INCL_INITRP_ONLY
+			      C ;******************************  
+			      C ;   Media Check Request Packet   
+			      C ;******************************  
+			      C 
+ 0013			      C RP_MEDIACHECK	STRUC
+ 0000  000D [		      C RPMC_rph	DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPMC_MediaDescr	DB	?
+ 000E  00		      C RPMC_rc		DB	?
+ 000F  0004 [		      C RPMC_PrevVolID	DB	SIZE DWORD DUP (?)
+        00
+       ]
+			      C RP_MEDIACHECK	ENDS
+			      C ;******************************  
+			      C ;   Build BPB                    
+			      C ;******************************  
+			      C 
+ 0017			      C RP_BUILDBPB	STRUC
+ 0000  000D [		      C RPBPB_rph		DB	SIZE RPH DUP (?)
+        00
+       ]
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 6 - 1
+
+
+ 000D  00		      C RPBPB_MediaDescr	DB	?
+ 000E  00000000		      C RPBPB_XferAddr		DD	?
+ 0012  0004 [		      C RPBPB_bpb		DB	SIZE DWORD DUP (
+        00		      C ?)
+       ]
+ 0016  00		      C RPBPB_DriveNum		DB	?
+			      C RP_BUILDBPB	ENDS
+			      C ;******************************  
+			      C ;   Read, Write, Write Verify    
+			      C ;******************************  
+			      C 
+ 001A			      C RP_RWV	STRUC
+ 0000  000D [		      C RPRWV_rph		DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPRWV_MediaDescr	DB	?
+ 000E  00000000		      C RPRWV_XferAddr		DD	?
+ 0012  0000		      C RPRWV_NumSectors	DW	?
+ 0014  00000000		      C RPRWV_rba		DD	?
+ 0018  0000		      C RPRWV_sfn		DW	?
+			      C RP_RWV	ENDS
+			      C ;******************************  
+			      C ;   Nondestructive Read          
+			      C ;******************************  
+			      C 
+ 000E			      C RP_NONDESTRUCREAD	STRUC
+ 0000  000D [		      C RPNDR_rph		DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPNDR_character		DB	?
+			      C RP_NONDESTRUCREAD	ENDS
+			      C ;******************************  
+			      C ;   Open/Close Device            
+			      C ;******************************  
+			      C 
+ 000F			      C RP_OPENCLOSE	STRUC
+ 0000  000D [		      C RPOC_rph	DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  0000		      C RPOC_sfn	DW	?
+			      C RP_OPENCLOSE	ENDS
+			      C ;************************  
+			      C ;   IOCTL Request Packet   
+			      C ;************************  
+			      C 
+ 0019			      C RP_GENIOCTL	STRUC
+ 0000  000D [		      C RPGIO_rph		DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPGIO_Category		DB	?
+ 000E  00		      C RPGIO_Function		DB	?
+ 000F  0004 [		      C RPGIO_ParmPacket	DB	SIZE DWORD DUP (
+        00		      C ?)
+       ]
+ 0013  0004 [		      C RPGIO_DataPacket	DB	SIZE DWORD DUP (
+        00		      C ?)
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 7 - 1
+
+
+       ]
+ 0017  0000		      C RPGIO_sfn		DW	?
+			      C RP_GENIOCTL	ENDS
+			      C ;******************************  
+			      C ;   Partitionable Fixed Disks    
+			      C ;******************************  
+			      C 
+ 000E			      C RP_PARTFIXEDDISKS	STRUC
+ 0000  000D [		      C RPFD_rph		DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00		      C RPFD_NumFixedDisks	DB	?
+			      C RP_PARTFIXEDDISKS	ENDS
+			      C ;******************************  
+			      C ;   Get Unit Map                 
+			      C ;******************************  
+			      C 
+ 0011			      C RP_GETUNITMAP	STRUC
+ 0000  000D [		      C RPUM_rph	DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  00000000		      C RPUM_UnitMap	DD	?
+			      C RP_GETUNITMAP	ENDS
+			      C ;*********************************  
+			      C ;   Get Driver Capabilities  0x1D   
+			      C ;*********************************  
+			      C 
+ 0018			      C RP_GETDRIVERCAPS	STRUC
+ 0000  000D [		      C RPDC_rph	DB	SIZE RPH DUP (?)
+        00
+       ]
+ 000D  0003 [		      C RPDC_Reserved	DB	3 DUP (?)
+        00
+       ]
+ 0010  0004 [		      C RPDC_pDCS	DB	SIZE DWORD DUP (?)
+        00
+       ]
+ 0014  0004 [		      C RPDC_pVCS	DB	SIZE DWORD DUP (?)
+        00
+       ]
+			      C RP_GETDRIVERCAPS	ENDS
+			      C endif
+			      C 
+			      C 
+				        include devhlp.inc              ; Defini
+				tionen device help calls
+			      C ;       SCCSID = @(#)devhlp.inc 6.10 91/11/13
+			      C ; **********************************************
+			      C ******************************
+			      C ; *                                             
+			      C                              *
+			      C ; *                       IBM/Microsoft Confiden
+			      C tial                         *
+			      C ; *                                             
+			      C                              *
+			      C ; *                 Copyright (c) IBM Corporatio
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 8 - 1
+
+
+			      C n  1987, 1990                *
+			      C ; *                 Copyright (c) Microsoft Corp
+			      C .  1987, 1990                *
+			      C ; *                           All Rights Reserve
+			      C d                            *
+			      C ; *                                             
+			      C                              *
+			      C ; **********************************************
+			      C ******************************
+			      C 
+			      C SUBTTL  DevHlp - Definitions for device driver h
+			      C elper functions
+			      C 
+			      C 
+ = 0000			      C DevHlp_SchedClock       EQU      0      ;  0    
+			      C Called each timer tick
+ = 0001			      C DevHlp_DevDone          EQU      1      ;  1    
+			      C Device I/O complete
+ = 0002			      C DevHlp_Yield            EQU      2      ;  2    
+			      C yield CPU if resched set
+ = 0003			      C DevHlp_TCYield          EQU      3      ;  3    
+			      C yield to time critical task
+			      C 
+ = 0004			      C DevHlp_ProcBlock        EQU      4      ;  4    
+			      C Block on event
+ = 0005			      C DevHlp_ProcRun          EQU      5      ;  5    
+			      C Unblock process
+			      C 
+ = 0006			      C DevHlp_SemRequest       EQU      6      ;  6    
+			      C claim a semaphore
+ = 0007			      C DevHlp_SemClear         EQU      7      ;  7    
+			      C release a semaphore
+ = 0008			      C DevHlp_SemHandle        EQU      8      ;  8    
+			      C obtain a semaphore handle
+			      C 
+ = 0009			      C DevHlp_PushRequest      EQU      9      ;  9    
+			      C Push the request
+ = 000A			      C DevHlp_PullRequest      EQU     10      ;  A    
+			      C Pull next request from Q
+ = 000B			      C DevHlp_PullParticular   EQU     11      ;  B    
+			      C Pull a specific request
+ = 000C			      C DevHlp_SortRequest      EQU     12      ;  C    
+			      C Push request in sorted order
+			      C 
+ = 000D			      C DevHlp_AllocReqPacket   EQU     13      ;  D    
+			      C allocate request packet
+ = 000E			      C DevHlp_FreeReqPacket    EQU     14      ;  E    
+			      C free request packet
+			      C 
+ = 000F			      C DevHlp_QueueInit        EQU     15      ;  F    
+			      C Init/Clear char queue
+ = 0010			      C DevHlp_QueueFlush       EQU     16      ; 10    
+			      C flush queue
+ = 0011			      C DevHlp_QueueWrite       EQU     17      ; 11    
+			      C Put a char in the queue
+ = 0012			      C DevHlp_QueueRead        EQU     18      ; 12    
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 9 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C Get a char from the queue
+			      C 
+ = 0013			      C DevHlp_Lock             EQU     19      ; 13    
+			      C Lock segment
+ = 0014			      C DevHlp_Unlock           EQU     20      ; 14    
+			      C Unlock segment
+			      C 
+ = 0015			      C DevHlp_PhysToVirt       EQU     21      ; 15    
+			      C convert physical address to virtual
+ = 0016			      C DevHlp_VirtToPhys       EQU     22      ; 16    
+			      C convert virtual address to physical
+ = 0017			      C DevHlp_PhysToUVirt      EQU     23      ; 17    
+			      C convert physical to LDT
+			      C 
+ = 0018			      C DevHlp_AllocPhys        EQU     24      ; 18    
+			      C allocate physical memory
+ = 0019			      C DevHlp_FreePhys         EQU     25      ; 19    
+			      C free physical memory
+			      C 
+ = 001A			      C DevHlp_SetROMVector     EQU     26      ; 1A    
+			      C set a ROM service routine vector
+ = 001B			      C DevHlp_SetIRQ           EQU     27      ; 1B    
+			      C set an IRQ interrupt
+ = 001C			      C DevHlp_UnSetIRQ         EQU     28      ; 1C    
+			      C unset an IRQ interrupt
+			      C 
+ = 001D			      C DevHlp_SetTimer         EQU     29      ; 1D    
+			      C set timer request handler
+ = 001E			      C DevHlp_ResetTimer       EQU     30      ; 1E    
+			      C unset timer request handler
+			      C 
+ = 001F			      C DevHlp_MonitorCreate    EQU     31      ; 1F    
+			      C create a monitor
+ = 0020			      C DevHlp_Register         EQU     32      ; 20    
+			      C install a monitor
+ = 0021			      C DevHlp_DeRegister       EQU     33      ; 21    
+			      C remove a monitor
+ = 0022			      C DevHlp_MonWrite         EQU     34      ; 22    
+			      C pass data records to monitor
+ = 0023			      C DevHlp_MonFlush         EQU     35      ; 23    
+			      C remove all data from stream
+			      C 
+ = 0024			      C DevHlp_GetDOSVar        EQU     36      ; 24    
+			      C Return pointer to DOS variable
+			      C 
+			      C ; Dos variable indexes used in DevHlp_GetDOSVar
+ = 0001			      C DHGETDOSV_SYSINFOSEG    EQU     1
+ = 0002			      C DHGETDOSV_LOCINFOSEG    EQU     2
+ = 0004			      C DHGETDOSV_VECTORSDF     EQU     4
+ = 0005			      C DHGETDOSV_VECTORREBOOT  EQU     5
+ = 0006			      C DHGETDOSV_VECTORMSATS   EQU     6
+ = 000D			      C DHGETDOSV_INTERRUPTLEV  EQU     13      ; Interr
+			      C upt level
+ = 000E			      C DHGETDOSV_DEVICECLASSTABLE EQU     14   ; Device
+			      C  Class Table
+ = 000F			      C DHGETDOSV_DMQSSEL       EQU     15      ; DMQS s
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 10 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C elector
+			      C 
+ = 0025			      C DevHlp_SendEvent        EQU     37      ; 25    
+			      C an event occurred
+ = 0026			      C DevHlp_ROMCritSection   EQU     38      ; 26    
+			      C ROM Critical Section
+ = 0027			      C DevHlp_VerifyAccess     EQU     39      ; 27    
+			      C Verify access to memory
+ = 0028			      C DevHlp_RAS              EQU     40      ; 28    
+			      C Put info in RAS trace buffer
+			      C 
+ = 0029			      C DevHlp_ABIOSGetParms    EQU     41      ; 29    
+			      C Get ABIOS Calling Parms
+ = 002A			      C DevHlp_AttachDD         EQU     42      ; 2A    
+			      C Attach to a device driver
+ = 002B			      C DevHlp_InternalError    EQU     43      ; 2B    
+			      C Signal an internal error
+ = 002C			      C DevHlp_ModifyPriority   EQU     44      ; 2C    
+			      C Undocumented (used by PM)
+ = 002D			      C DevHlp_AllocGDTSelector EQU     45      ; 2D    
+			      C Allocate GDT Selectors
+ = 002E			      C DevHlp_PhysToGDTSelector EQU    46      ; 2E    
+			      C Convert phys addr to GDT sel
+ = 002F			      C DevHlp_RealToProt       EQU     47      ; 2F    
+			      C Change from real to protected mode
+ = 0030			      C DevHlp_ProtToReal       EQU     48      ; 30    
+			      C Change from protected to real mode
+			      C 
+ = 0031			      C DevHlp_EOI              EQU     49      ; 31    
+			      C Send EOI to PIC
+ = 0032			      C DevHlp_UnPhysToVirt     EQU     50      ; 32    
+			      C mark completion of PhysToVirt
+ = 0033			      C DevHlp_TickCount        EQU     51      ; 33    
+			      C modify timer
+			      C 
+ = 0034			      C DevHlp_GetLIDEntry      EQU     52      ; 34    
+			      C Obtain Logical ID
+ = 0035			      C DevHlp_FreeLIDEntry     EQU     53      ; 35    
+			      C Release Logical ID
+ = 0036			      C DevHlp_ABIOSCall        EQU     54      ; 36    
+			      C Call ABIOS
+ = 0037			      C DevHlp_ABIOSCommonEntry EQU     55      ; 37    
+			      C Invoke Common Entry Point
+ = 0038			      C DevHlp_GetDeviceBlock   EQU     56      ; 38    
+			      C Get ABIOS Device Block
+			      C                                         ; 39    
+			      C Reserved for Profiling Kernel
+ = 003A			      C DevHlp_RegisterStackUsage EQU   58      ; 3A    
+			      C Register for stack usage
+ = 003B			      C DevHlp_LogEntry         EQU     59      ; 3B    
+			      C Place data in log buffer
+			      C 
+ = 003C			      C DevHlp_VideoPause       EQU     60      ; 3C Vid
+			      C eo pause on/off      - D607
+			      C 
+ = 003D			      C DevHlp_Save_Message     EQU     61      ; 3D    
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 11 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C Save msg in SysInit Message Table
+			      C 
+ = 003E			      C DevHlp_SegRealloc       EQU     62      ; 3E    
+			      C Realloc DD protect mode segment
+ = 003F			      C DevHlp_PutWaitingQueue  EQU     63      ; 3F    
+			      C Put I/O request on waiting queue
+ = 0040			      C DevHlp_GetWaitingQueue  EQU     64      ; 40    
+			      C Get I/O request from waiting queue
+			      C ;DevHlp_PhysToSys        EQU     65      ; 41   
+			      C  Address conversion for the AOX
+			      C ;DevHlp_PhysToSysHook    EQU     66      ; 42   
+			      C  Address conversion for the AOX
+ = 0043			      C DevHlp_RegisterDeviceClass EQU     67      ; 43 
+			      C    Register DC entry point
+			      C ;
+			      C ; 32-Bit DevHelps start at 80 (50h)
+			      C ;
+ = 0050			      C DevHlp_RegisterPDD      EQU     80      ; 50    
+			      C Register PDD entry point with
+			      C                                         ;       
+			      C VDM manager for later PDD-VDD
+			      C                                         ;       
+			      C communication
+ = 0051			      C DevHlp_RegisterBeep     EQU     81      ; 51    
+			      C register PTD beep service
+			      C                                         ;       
+			      C entry point with kernel
+ = 0052			      C DevHlp_Beep             EQU     82      ; 52    
+			      C preempt beep service via PTD
+			      C 
+ = 0053			      C DevHlp_FreeGDTSelector  EQU     83      ; 53    
+			      C Free allocated GDT selector
+			      C 
+ = 0054			      C DevHlp_PhysToGDTSel     EQU     84      ; 54    
+			      C Convert Phys Addr to GDT sel
+			      C                                         ;       
+			      C with given access
+			      C                                         ;   BUGB
+			      C UG: TEMPORARY!!!
+			      C 
+ = 0055			      C DevHlp_VMLock           EQU     85      ; 55    
+			      C Lock linear address range
+			      C 
+ = 0056			      C DevHlp_VMUnlock         EQU     86      ; 56    
+			      C Unlock address range
+			      C 
+ = 0057			      C DevHlp_VMAlloc          EQU     87      ; 56    
+			      C Allocate memory
+			      C 
+ = 0058			      C DevHlp_VMFree           EQU     88      ; 58    
+			      C Free memory or mapping
+			      C 
+ = 0059			      C DevHlp_VMProcessToGlobal EQU    89      ; 59    
+			      C Create global mapping to process
+			      C                                         ;       
+			      C memory
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 12 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C 
+ = 005A			      C DevHlp_VMGlobalToProcess EQU    90      ; 5A    
+			      C Create process mapping to global
+			      C                                         ;       
+			      C memory
+			      C 
+ = 005B			      C DevHlp_VirtToLin        EQU     91      ; 5B Con
+			      C vert virtual address to linear
+			      C 
+ = 005C			      C DevHlp_LinToGDTSelector EQU     92      ; 5C Con
+			      C vert linear address to virtual
+			      C 
+ = 005D			      C DevHlp_GetDescInfo      EQU     93      ; 5D Ret
+			      C urn descriptor information
+			      C 
+ = 005E			      C DevHlp_LinToPageList    EQU     94      ; 5E bui
+			      C ld pagelist array from lin addr
+			      C 
+ = 005F			      C DevHlp_PageListToLin    EQU     95      ; 5F map
+			      C  page list array to lin addr
+			      C 
+ = 0060			      C DevHlp_PageListToGDTSelector EQU    96  ; 60 map
+			      C  page list array to GDT sel.
+			      C 
+ = 0061			      C DevHlp_RegisterTmrDD    EQU     97      ; 61 Reg
+			      C ister TMR Device Driver.
+			      C 
+ = 0062			      C DevHlp_RegisterPerfCtrs EQU     98      ; 62 Reg
+			      C ister device driver perf. ctrs (PVW).
+			      C 
+ = 0063			      C DevHlp_AllocateCtxHook  EQU     99      ; 63 All
+			      C ocate a context hook
+			      C 
+ = 0064			      C DevHlp_FreeCtxHook      EQU     100     ; 64 Fre
+			      C e a context hook
+			      C 
+ = 0065			      C DevHlp_ArmCtxHook       EQU     101     ; 65 Arm
+			      C  a context hook
+			      C 
+ = 0066			      C DevHlp_VMSetMem         EQU     102     ; 66H co
+			      C mmit/decommit memory
+			      C 
+ = 0067			      C DevHlp_OpenEventSem     EQU     103     ; 67H op
+			      C en an event semaphore
+			      C 
+ = 0068			      C DevHlp_CloseEventSem    EQU     104     ; 68H cl
+			      C ose an event semaphore
+			      C 
+ = 0069			      C DevHlp_PostEventSem     EQU     105     ; 69H po
+			      C st an event semaphore
+			      C 
+ = 006A			      C DevHlp_ResetEventSem    EQU     106     ; 6AH re
+			      C set an event semaphore
+			      C 
+ = 006B			      C DevHlp_RegisterFreq     EQU     107     ; 6BH   
+			      C register PTD freq service
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 13 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C                                         ;       
+			      C entry point with kernel
+			      C 
+ = 006C			      C DevHlp_DynamicAPI       EQU     108     ; 6CH ad
+			      C d a dynamic API
+			      C ;
+			      C ; Request bit definitions used in DevHlp_Dynamic
+			      C API
+ = 0001			      C DHDYNAM_16B_CALLGATE    EQU     1       ; 1 = 16
+			      C  bit callgate, 0 = 32 bit
+ = 0002			      C DHDYNAM_16B_APIRTN      EQU     2       ; 1 = 16
+			      C  bit API rtn,  0 = 32 rtn
+			      C 
+ = 006D			      C DevHlp_ProcRun2         EQU     109     ; 6DH  U
+			      C nblock process via procrun2
+			      C ;
+ = 006E			      C DevHlp_CreateInt13VDM   EQU     110 ;6EH Create 
+			      C Int13 VDM (Internal Only) OEMINT13
+			      C 
+			      C ;
+ = 006F			      C DevHlp_RegisterKrnlExit EQU     111 ;6FH Used to
+			      C  capture Kernel Exits   F78693
+ = 0070			      C DevHlp_PMPostEventSem   EQU     112     ; 70h  P
+			      C M Post Event Semaphore
+			      C 
+			      C ; DevHlp's 70-7C used by other OS/2 versions    
+			      C                           ;@SEC
+			      C 
+ = 007D			      C DevHlp_KillProc         EQU     125 ;7DH Kill Pr
+			      C oc                        ;@SEC
+ = 007E			      C DevHlp_QSysState        EQU     126 ;7EH Query S
+			      C ystem State               ;@SEC
+			      C 
+ = 0000			      C event_SM_Mou            equ     0       ; event 
+			      C was Session Manager-mouse@@
+ = 0000			      C     event_MUF           equ     0       ; (OBSOL
+			      C ETE) event was muf key
+ = 0001			      C event_CtrlBrk           equ     1       ; event 
+			      C was Ctrl-Break
+ = 0002			      C event_CtrlC             equ     2       ; event 
+			      C was Ctrl-C
+ = 0003			      C event_CtrlScrLk         equ     3       ; event 
+			      C was Ctrl-ScrollLock
+ = 0004			      C event_CtrlPrtSc         equ     4       ; event 
+			      C was Ctrl-PrtSc
+ = 0005			      C event_ShftPrtSc         equ     5       ; event 
+			      C was Shift-PrtSc
+ = 0006			      C event_SM_Kbd            equ     6       ; event 
+			      C was Session Manager -keyboard@@
+ = 0007			      C event_SM_CAD            equ     7       ; event 
+			      C was Ctl-Alt-Del
+ = 0008			      C event_HOT_PLUG          equ     8       ; Keyboa
+			      C rd Hot Plug/Reset   DCR1187
+ = 0009			      C event_POWER             equ     9       ; Power 
+			      C suspend event #26087
+ = 000A			      C event_POWEROFF          equ     10      ; Power 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 14 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C off event           ;d153441
+ = 000B			      C event_count             equ     11      ; Number
+			      C  of possible events ;d153441
+			      C ;
+			      C ; file system devhelps (2/19/96) SRD
+ = 007F			      C DevHlp_OpenFile         EQU     127     ; 7FH  R
+			      C ing-0 File system Write
+ = 0080			      C DevHlp_CloseFile        EQU     128     ; 80H  R
+			      C ing-0 File system Seek
+ = 0081			      C DevHlp_ReadFile         EQU     129     ; 81H  R
+			      C ing-0 File system Read
+ = 0082			      C DevHlp_ReadFileAt       EQU     130     ; 82H  F
+			      C ile system Read at (seek)
+			      C 
+			      C ;       Character Queue structure
+			      C ;
+			      C ;       QueueInit must be called before any othe
+			      C r queue manipulation
+			      C ;       subroutine.  The Qsize field must be ini
+			      C tialized before
+			      C ;       calling QueueInit.
+			      C 
+ 0007			      C CharQueue STRUC
+ 0000  0000		      C         Qsize   DW      ?               ; Size o
+			      C f queue in bytes
+ 0002  0000		      C         Qchrout DW      ?               ; Index 
+			      C of next char out
+ 0004  0000		      C         Qcount  DW      ?               ; Count 
+			      C of characters in the queue
+ 0006  00		      C         Qbase   DB      ?               ; Queue 
+			      C buffer
+			      C CharQueue ENDS
+			      C 
+ 0008			      C RASrouter struc
+ 0000  0000		      C         pretrace_addr   dw      0
+ 0002  0000		      C         preminor        dw      0
+ 0004  0000		      C         posttrace_addr  dw      0
+ 0006  0000		      C         postminor       dw      0
+			      C RASrouter ends
+			      C 
+			      C 
+			      C ; Following are constants used in conversion of 
+			      C LDT pseudo-tiled addresses
+			      C 
+ = 01fff0000h		      C SEL_FLATMASK    equ     01fff0000h
+ = 000D			      C SEL_FLAT_SHIFT  equ     0dh
+ = 0007			      C SEL_LDT_RPL3    equ     07h
+			      C 
+			      C 
+			      C SelToFlat  MACRO        ;; Converts LDTsel:offse
+			      C t to Flat linear address
+			      C ;
+			      C ;      This macro converts given LDT selector:o
+			      C ffset pair to Flat linear
+			      C ;  address. No verification is done on paramete
+			      C rs. It is the invoker's
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 15 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C ;  responsibility to assure that the selector i
+			      C s valid, not a call gate,
+			      C ;;  and given offset is within descriptor's limi
+			      C t.
+			      C ;
+			      C ;      ENTRY   (AX) = selector
+			      C ;              (BX) = offset
+			      C ;      EXIT   (EAX) = Flat address
+			      C 
+			      C         shl     eax, SEL_FLAT_SHIFT
+			      C         and     eax, SEL_FLATMASK
+			      C         mov     ax, bx
+			      C ENDM
+			      C 
+			      C 
+			      C 
+			      C FlatToSel  MACRO        ;; Convert flat linear a
+			      C ddress to LDTsel:offset pair
+			      C ;
+			      C ;      This macro converts given flat address t
+			      C o selector:offset pair. No
+			      C ;  verification is done on the parameters. It i
+			      C s the invoker's responsibility
+			      C ;  to ensure that the flat address is in the LD
+			      C T pseudo-tiled compatibility
+			      C ;  region, and that the selector returned is va
+			      C lid.
+			      C ;      Linear addresses < 20000000h (512 Meg) f
+			      C all into the LDT compatibility
+			      C ;  region. All memory allocated in this region 
+			      C with selector mapping request
+			      C ;  will have valid selectors.
+			      C ;  WARNING: The returned selector will have RPL
+			      C  level 3. Selectors
+			      C ;  corresponding to IOPL segments should have t
+			      C heir lowest bit turned off.
+			      C ;
+			      C ;      ENTRY  (EAX) = Flat address
+			      C ;      EXIT    (AX) = selector
+			      C ;              (BX) = offset
+			      C 
+			      C         mov     bx, ax
+			      C         shr     eax, SEL_FLAT_SHIFT
+			      C         or      ax, SEL_LDT_RPL3
+			      C 
+			      C ENDM
+			      C 
+				        include devsym.inc              ; Defini
+				tionen Error etc.
+			      C ;       SCCSID = @(#)devsym.inc 6.1 90/11/16
+			      C ;      SCCSID = @(#)devsym.inc  13.12 90/06/14
+			      C 
+			      C page ,132
+			      C 
+			      C include devhdr.inc
+ = 0008			      C DEV_CBNAME	EQU	8 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 16 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C 
+ 001A			      C SysDev	STRUC
+ 0000  00000000		      C SDevNext	DD	?
+ 0004  0000		      C SDevAtt	DW	?
+ 0006  0000		      C SDevStrat	DW	?
+ 0008  0000		      C SDevInt	DW	?
+ 000A  20 20 20 20 20 20      C SDevName        DB      "        "
+       20 20
+			      C 
+ 0012  0000		      C SDevProtCS	DW	?
+ 0014  0000		      C SDevProtDS	DW	?
+ 0016  0000		      C SDevRealCS	DW	?
+ 0018  0000		      C SDevRealDS	DW	?
+			      C SysDev	ENDS
+			      C 
+			      C 
+ 001E			      C SysDev3	STRUC
+ 0000  001A [		      C SysDevBef3	DB	SIZE SysDev DUP (?)
+        00
+       ]
+ 001A  00000000		      C SDevCaps	DD	?
+			      C SysDev3	ENDS
+			      C 
+ = 0001			      C DEV_IOCTL2	EQU	0001H  
+ = 0002			      C DEV_16MB	EQU	0002H  
+ = 0004			      C DEV_PARALLEL	EQU	0004H  
+ = 0008			      C DEV_ADAPTER_DD	EQU	0008H  
+ = 0010			      C DEV_INITCOMPLETE	EQU	0010H  
+ = 0020			      C DEV_SAVERESTORE	EQU	0020H 
+ = 0001			      C DEV_CIN	EQU	0001H   
+ = 0002			      C DEV_COUT	EQU	0002H   
+ = 0004			      C DEV_NULL	EQU	0004H   
+ = 0008			      C DEV_CLOCK	EQU	0008H   
+ = 0010			      C DEV_SPEC	EQU	0010H   
+ = 0020			      C DEV_ADD_ON	EQU	0020H   
+ = 0040			      C DEV_GIOCTL	EQU	0040H   
+ = 0380			      C DEV_FCNLEV	EQU	0380H   
+ = 0800			      C DEV_30	EQU	0800H   
+ = 1000			      C DEV_SHARE	EQU	1000H   
+ = 2000			      C DEV_NON_IBM	EQU	2000H   
+ = 4000			      C DEV_IOCTL	EQU	4000H   
+ = 8000			      C DEV_CHAR_DEV	EQU	8000H   
+ = 0000			      C DEVLEV_0	EQU	0000H       
+ = 0080			      C DEVLEV_1	EQU	0080H       
+ = 0100			      C DEVLEV_2	EQU	0100H       
+ = 0180			      C DEVLEV_3	EQU	0180H       
+			      C Dev_FuncLev     macro   ReqLev, DevAttr
+			      C         and     DevAttr,DEV_FCNLEV          
+			      C         cmp     DevAttr,ReqLev              
+			      C                                             
+			      C endm
+			      C 
+			      C 
+			      C include devcmd.inc
+ = 0000			      C CMDInit	EQU	0        
+ = 0001			      C CMDMedChk	EQU	1        
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 17 - 1
+DevHlp - Definitions for device driver helper functions
+
+ = 0002			      C CMDBldBPB	EQU	2        
+ = 0003			      C CMDIOCTLR	EQU	3        
+ = 0004			      C CMDINPUT	EQU	4        
+ = 0005			      C CMDNDR	EQU	5        
+ = 0006			      C CMDInputS	EQU	6        
+ = 0007			      C CMDInputF	EQU	7        
+ = 0008			      C CMDOUTPUT	EQU	8        
+ = 0009			      C CMDOUTPUTV	EQU	9        
+ = 000A			      C CMDOutputS	EQU	10       
+ = 000B			      C CMDOutputF	EQU	11       
+ = 000C			      C CMDIOCTLW	EQU	12       
+ = 000D			      C CMDOpen	EQU	13       
+ = 000E			      C CMDClose	EQU	14       
+ = 000F			      C CMDRemMed	EQU	15       
+ = 0010			      C CMDGenIOCTL	EQU	16       
+ = 0011			      C CMDResMed	EQU	17       
+ = 0012			      C CMDGetLogMap	EQU	18 
+ = 0013			      C CMDSetLogMap	EQU	19 
+ = 0014			      C CMDDeInstall	EQU	20       
+ = 0016			      C CMDPartfixeddisks	EQU	22       
+ = 0017			      C CMDGetfd_logunitsmap	EQU	23       
+ = 0018			      C CMDInputBypass	EQU	24       
+ = 0019			      C CMDOutputBypass	EQU	25       
+ = 001A			      C CMDOutputBypassV	EQU	26       
+ = 001B			      C CMDInitBase	EQU	27       
+ = 001C			      C CMDShutdown	EQU	28 
+ = 001D			      C CMDGetDevSupport	EQU	29       
+ = 001F			      C CMDInitComplete	EQU	31       
+ = 0020			      C CMDSaveRestore	EQU	32 
+ = 0061			      C CMDAddOnPrep	EQU	97       
+ = 0062			      C CMDStar	EQU	98       
+ = 0063			      C CMDStop	EQU	99       
+			      C 
+			      C 
+			      C ;**     Static Request Header
+			      C ;
+			      C ;       This structure defines the fixed first part of a device request
+			      C ;       record.  Depending upon the request there may be other fields
+			      C ;       which follow this header.
+			      C ;
+			      C ; Zibo notes that we should STOP using this weird stuff and use one set of
+			      C ; structures and equates rather than lots of casting.  After this section is
+			      C ; the new stuff we should use.
+			      C ;
+			      C 
+ 000D			      C SrHead  STRUC
+ 0000  00		      C ReqLen  DB      ?               ; Length in bytes of request block
+ 0001  00		      C ReqUnit DB      ?               ; Device unit number
+ 0002  00		      C ReqFunc DB      ?               ; Type of request
+ 0003  0000		      C ReqStat DW      ?               ; Status Word
+ 0005  00000000		      C         DD      ?               ; RESERVED
+ 0009  00000000		      C DevLink DD      ?               ; link field for use by driver to chain
+			      C                                 ;   requests.  (A service in DevHelp)
+			      C SrHead  ENDS
+			      C 
+			      C 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 18 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C ;*      Other fields beyond the standard 13 byte header
+			      C 
+			      C 
+			      C ; Status word masks
+ = 8000			      C STERR   EQU     8000H           ; Bit 15 - Error
+ = 0400			      C STINTER EQU     0400H           ; Bit 10 - Interim character
+ = 0200			      C STBUI   EQU     0200H           ; Bit  9 - Busy
+ = 0100			      C STDON   EQU     0100H           ; Bit  8 - Done
+ = 00FF			      C STECODE EQU     00FFH           ; Error code
+ = 0000			      C WRECODE EQU     0
+			      C 
+			      C ;**     Device Driver Request Packet Defintions
+			      C ;
+			      C 
+			      C 
+ = 0012			      C PktMax          equ     18
+ = 000D			      C PktHeadSize     equ     13
+			      C 
+ 001F			      C Packet          struc
+ 0000  00		      C PktLen          db      ?               ; length in bytes of packet
+ 0001  00		      C PktUnit         db      ?               ; subunit number of block device
+ 0002  00		      C PktCmd          db      ?               ; command code
+ 0003  0000		      C PktStatus       dw      ?               ; status word
+ 0005  00		      C PktFlag         db      ?               ; disk driver internal flags
+ 0006  0003 [		      C                 db      3 dup(?)        ; reserved
+        00
+       ]
+ 0009  00000000		      C PktDevLink      dd      ?               ; device multiple-request link
+ 000D  0012 [		      C PktData         db      PktMax dup (?)  ; data pertaining to specific packet
+        00
+       ]
+			      C Packet          ends
+			      C 
+ = 0005			      C PktDOSLink      equ     (dword ptr PktFlag)
+			      C 
+			      C ;**     Device Driver Request Packet Equates
+			      C ;
+			      C 
+			      C 
+ = 0001			      C fPktInt13RP     equ     01H             ; Int 13 Request Packet
+ = 0002			      C fPktCallOutDone equ     02H             ; Int 13 Callout completed
+ = 0004			      C fPktDiskIOTchd  equ     04H             ; Disk_IO has touched this packet
+			      C 
+			      C 
+			      C ;CMDInit                equ     0                       ; INIT command
+			      C ;CMDInitBase    equ     27                      ; INIT command for base DDs
+ = 000D			      C InitcUnit       equ     byte ptr PktData        ; number of units returned
+ = 000E			      C InitpEnd        equ     dword ptr PktData+1     ; pointer to free mem after dev
+ = 000E			      C InitDevHlp      equ     dword ptr PktData+1     ; address of Device Helper router
+ = 000E			      C InitEcode       equ     word ptr PktData+1      ; size of code segment
+ = 0010			      C InitEdata       equ     word ptr PktData+3      ; size of data segment
+ = 0012			      C InitParms       equ     dword ptr PktData+5     ; pointer parameters
+ = 0012			      C InitpBPB        equ     dword ptr PktData+5     ; pointer to BPBs
+ = 0016			      C Initdrv         equ     byte ptr PktData+9      ; drive no. assigned to unit 0
+			      C                                                 ; for resident drivers only:
+ = 0018			      C InitSysiData    equ     byte ptr PktData+11     ; SysInit's DOSALIAS selector
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 19 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C 
+ = 000A			      C LENInit         equ     10                      ; non-resident drivers
+ = 000C			      C LENInitRes      equ     (LENInit + 2)           ; resident drivers
+			      C .errnz          (PktMax LT LENInit)
+			      C .errnz          (PktMax LT LENInitRes)
+			      C 
+			      C ;CMDGetDevSupport equ   1dh                     ; query for extended capability
+ = 0010			      C DCS_Addr        equ     dword ptr PktData+3     ; 16:16 of driver caps struc
+ = 0014			      C VCS_Addr        equ     dword ptr PktData+7     ; 16:16 of volume char struc
+ = 000B			      C LENGetDevSpprt  equ     11
+			      C 
+			      C ;CMDMedChk      equ     1                       ; Media Check
+ = 000D			      C MedChkmedia     equ     byte ptr PktData        ; last media byte seen
+ = 000E			      C MedChkflag      equ     byte ptr PktData+1      ; -1=change 0=dont know 1=no change
+ = 000F			      C MedChkpVID      equ     dword ptr PktData+2     ; pointer to VID
+ = 0006			      C LENMedChk       equ     6
+			      C .errnz          (PktMax LT LENMedChk)
+			      C 
+			      C ;CMDBldBPB      equ     2                       ; build BPB
+ = 000D			      C BldBPBmedia     equ     byte ptr PktData        ; media byte
+ = 000E			      C BldBPBbuffer    equ     dword ptr PktData+1     ; scratch buffer
+ = 0012			      C BldBPBpBPB      equ     dword ptr PktData+5     ; returned pointer to BPB
+ = 0009			      C LENBldBPB       equ     9
+			      C .errnz          (PktMax LT LENBldBPB)
+			      C 
+			      C ;CMDIOCTLR      equ     3                       ; reserved for 3.x compatability
+			      C ;CMDINPUT       equ     4                       ; read data from device
+			      C ;CMDOUTPUT      equ     8                       ; write data to device
+			      C ;CMDOUTPUTV     equ     9                       ; write data and verify
+			      C ;CMDInputBypass      EQU    24                  ; cache bypass read data    ?? Needed any more ??
+			      C ;CMDOutputBypass             EQU    25                  ; cache bypass write data   ?? Needed any mo
+			      C re ??
+			      C ;CMDOutputBypassV     EQU    26                 ; cache bypass write data and verify  ?? Needed any 
+			      C more ??
+			      C ;CMDIOCTLW      equ     12                      ; reserved for 3.x compatability
+ = 000D			      C IOmedia         equ     byte ptr PktData        ; media byte
+ = 000E			      C IOpData         equ     dword ptr PktData+1     ; transfer address
+ = 0012			      C IOcount         equ     word ptr PktData+5      ; count of bytes/sectors
+ = 0014			      C IOstart         equ     word ptr PktData+7      ; starting sector (block)
+			      C                                                 ; starting sector is a DD
+ = 0014			      C IOPhysRBA       equ     dword ptr PktData+7     ; physical starting sector
+			      C 
+			      C ; IOSFN allows char device to virtualize based on open instance. E.g. if user
+			      C ; opens LPT twice the spooler can use IOSFN field to tell one from another.
+			      C ; IOSFN is mapped as follows (let N = RESIOSFN):
+			      C ;            0  to       MAXSFN-1: real SFN    [MAXSFN <= 65536-512-N]
+			      C ;  65536-512-N  to  65536-256-N-1: fake SFN
+			      C ;  65536-256-N  to      65536-N-1: FCB SFN
+			      C ;      65536-N  to        65536-1: unknown
+			      C ;
+			      C ; Note for multiple 3xbox the range for fake SFN will have to be expanded by
+			      C ; 256 per 3xbox. Either that or choose a different mapping scheme.
+			      C 
+ = 0018			      C IOSFN           equ     word ptr PktData+11     ; for device only
+ = 000D			      C LENIO           equ     13
+ = 001A			      C PktAdvise       equ     word ptr PktData+13     ; for >= v12 only
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 20 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C .errnz          (PktMax LT LENIO)
+			      C 
+ = 0014			      C ReadBypassAdj   equ     CMDInputBypass-CMDINPUT ; used internally by kernel
+ = 0011			      C WriteBypassAdj  equ     CMDOutputBypass-CMDOUTPUT ; used internally by kernel
+			      C 
+			      C ;CMDNDR         equ     5                       ; non-destructive read
+ = 000D			      C NDRbyte         equ     byte ptr PktData        ; byte read from device
+ = 0001			      C LENNDR          equ     1
+			      C .errnz          (PktMax LT LENNDR)
+			      C 
+			      C ;CMDInputS      equ     6                       ; input status
+			      C ;CMDOutputS     equ     10                      ; output status
+ = 0000			      C LENStatus       equ     0
+			      C .errnz          (PktMax LT LENStatus)
+			      C 
+			      C ;CMDInputF      equ     7                       ; input flush
+			      C ;CMDOutputF     equ     11                      ; output flush
+ = 0000			      C LENFlush        equ     0
+			      C .errnz          (PktMax LT LENFlush)
+			      C 
+			      C ;CMDOpen                equ     13                      ; device open
+			      C ;CMDClose       equ     14                      ; device close
+ = 000D			      C OCSFN           equ     word ptr PktData        ; sfn of open instance for virtualization
+ = 000F			      C OCLastRef       equ     word ptr PktData+2      ; flag indicating last close
+ = 0004			      C LENOpnCls       equ     4
+			      C .errnz          (PktMax LT LENOpnCls)
+			      C 
+			      C ;CMDRemMed      equ     15                      ; is media removable
+ = 0000			      C LENRemMed       equ     0
+			      C .errnz          (PktMax LT LENRemMed)
+			      C 
+			      C ;CMDStart EQU   98                              ; start console output
+			      C ;CMDStop EQU    99                              ; stop console output
+ = 000D			      C CStpSKG EQU     BYTE PTR PktData+0              ; Screen/Keyboard number
+ = 0001			      C LenStp  EQU     1                               ; Size of request additions.
+			      C .errnz          (PktMax LT LenStp)
+			      C 
+			      C ;CMDGenIOCTL    EQU     16                      ; Generic IOCTL
+ = 000D			      C GIOCategory     EQU     BYTE PTR PktData        ; Category Code
+ = 000E			      C GIOFunction     EQU     BYTE PTR PktData+1      ; Function code
+ = 000F			      C GIOParaPack     EQU     DWORD PTR PktData+2     ; pointer to parameter packet
+ = 0013			      C GIODataPack     EQU     DWORD PTR PktData+6     ; pointer to data packet
+ = 0017			      C GIOSFN          EQU     WORD PTR PktData+10     ; (used by Spooler?)
+ = 000C			      C LENGenIOCTL     EQU     12                      ; length w/o new parameters
+			      C .errnz          (PktMax LT LENGenIOCTL)
+			      C                                                 ; new parameters
+ = 0019			      C GIOParaLen      EQU     WORD PTR PktData+12     ; length of parameter packet
+ = 001B			      C GIODataLen      EQU     WORD PTR PktData+14     ; length of data packet
+ = 0010			      C LENGenIOCTL2    EQU     16                      ; length w/ new parameters
+			      C .errnz          (PktMax LT LENGenIOCTL2)
+			      C 
+			      C 
+			      C ;CMDDeInstall   EQU     20                      ; De-Install driver
+			      C ; DINEndLocn    EQU     DWORD PTR PktData
+			      C ; DINLength     EQU     WORD PTR PktData+5
+ = 0000			      C LENDeIn         EQU     0
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 21 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C .errnz          (PktMax LT LENDeIn)
+			      C 
+			      C ;CMDResMed      EQU     17                      ; reset media uncertain
+ = 0000			      C LENResMed       equ     0
+			      C .errnz          (PktMax LT LENResMed)
+			      C 
+			      C ;CMDAddOnPrep   EQU     97                      ; Prepare for add on
+ = 000D			      C Add_On_NewDD    EQU     DWORD PTR PktData
+ = 000D			      C Add_On_SrvRout  EQU     DWORD PTR PktData
+ = 0004			      C LenAddOn        EQU     4
+			      C 
+			      C ;CMDGetLogMap   EQU     18
+			      C ;CMDSetLogMap   EQU     19
+ = 000D			      C Logical_Drive   EQU     BYTE PTR PktData; logical drive number
+ = 0001			      C LenGetSetLog    EQU     1
+			      C 
+			      C ;CMDPartfixeddisks      EQU  22            ; Partitionable Fixed Disks
+			      C ;CMDGetfd_logunitsmap   EQU  23            ; Get Fixed Disk/Logical Unit Map
+			      C 
+ = 0005			      C LENShutdown     equ     5
+ = 000D			      C SDFuncCode      equ     byte ptr PktData
+ = 000E			      C SDReserveLow    equ     word ptr PktData+1
+ = 0010			      C SDReserveHigh   equ     word ptr PktData+3
+			      C ;CMDShutdown    equ     28
+			      C 
+ = 4000			      C STDDERROR            EQU     4000H               ; Equate for Device Driver Defined Error
+ = FE00			      C ERROR_DEVICEDRIVER_DEFINED_BASE EQU 0FE00H       ; Equate for Device Driver Defined Error High Byte
+			      C 
+			      C ;
+			      C ; The next two symbols are used in the files DEV.ASM and SPROC.ASM to
+			      C ; set up and verify the set of request packets that the kernel keeps in
+			      C ; a segment, and to control req pkt allocation and initialization.
+			      C ;
+			      C ; See: dev.asm, sproc.asm
+			      C ;
+ = 0080			      C StaticPackets    EQU    128             ; 128 * 32 = 4k
+			      C 
+ = 0020			      C ReqPktSize      EQU     32              ; "Nice" size for packet (power of 2)
+			      C .ERRNZ  (SIZE Packet - 31)              ; Device Driver packet size has changed
+			      C ;
+			      C 
+			      C ; ***********************************************
+			      C ;  PhysDiskTbl - Physical Disk Entry Structure  *
+			      C ; ***********************************************
+			      C 
+ 000E			      C  diskentry  STRUC
+			      C 
+ 0000  00000000		      C  ddheader       DD  0        ; Pointer to Device Driver Header
+ 0004  00		      C  ereserved      DB  0        ; Reserved
+ 0005  00		      C  reldisknum     DB  0        ; Relative Physical Disk # for Device Driver
+ 0006  0000		      C  devpid         DW  0        ; PID
+ 0008  0000		      C  deveflags      DW  0        ; Flags for the physical disk
+ 000A  00000000		      C  logunitbitmap  DD  0        ; Logical Unit Bit Map
+			      C 
+			      C  diskentry  ends
+			      C 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 22 - 1
+DevHlp - Definitions for device driver helper functions
+
+			      C SUBTTL
+			      C 
+			      C ;*      Obsolete information - use for background info only
+			      C ;
+			      C ;
+			      C ; Attribute bit masks
+			      C ;
+			      C ;   Character devices:
+			      C ;
+			      C ;   Bit 15 -> must be 1
+			      C ;       14 -> 1 if the device understands IOCTL control strings
+			      C ;       13 -> 1 if the device supports output-until-busy
+			      C ;       12 -> unused
+			      C ;       11 -> 1 if the device understands Open/Close
+			      C ;       10 -> must be 0
+			      C ;        9 -> must be 0
+			      C ;        8 -> 1 if the device understands Pause/Restart/Gen. IOCTL
+			      C ;        7 -> unused
+			      C ;        6 -> unused
+			      C ;        5 -> unused
+			      C ;        4 -> 1 if device is recipient of INT 29h
+			      C ;        3 -> 1 if device is clock device
+			      C ;        2 -> 1 if device is null device
+			      C ;        1 -> 1 if device is console output
+			      C ;        0 -> 1 if device is console input
+			      C ;
+			      C ;   Block devices:
+			      C ;
+			      C ;   Bit 15 -> must be 0
+			      C ;       14 -> 1 if the device understands IOCTL control strings
+			      C ;       13 -> 1 if the device determines media by examining the FAT ID byte.
+			      C ;           This requires the first sector of the fat to *always* reside in
+			      C ;           the same place.
+			      C ;       12 -> unused
+			      C ;       11 -> 1 if the device understands Open/Close/removable media
+			      C ;       10 -> must be 0
+			      C ;        9 -> must be 0
+			      C ;        8 -> 1 if the device understands Pause/Restart/Gen. IOCTL
+			      C ;        7 -> unused
+			      C ;        6 -> unused
+			      C ;        5 -> unused
+			      C ;        4 -> unused
+			      C ;        3 -> unused
+			      C ;        2 -> unused
+			      C ;        1 -> unused
+			      C ;        0 -> unused
+			      C ;
+			      C ;DevTyp      EQU     8000H               ; Bit 15 - 1  if Char, 0 if block
+			      C ;DevIOCtl    EQU     4000H               ; Bit 14 - CONTROL mode bit
+			      C ;ISFATBYDEV  EQU     2000H               ; Bit 13 - Device uses FAT ID bytes,
+			      C ;                                       ;  comp media.
+			      C ;ISNET       EQU     1000H               ; Bit 12 - 1 if a NET device, 0 if
+			      C ;                                       ;  not.  Currently block only.
+			      C ;DEVOPCL     EQU     0800H               ; Bit 11 - 1 if this device has
+			      C ;                                       ;  OPEN,CLOSE and REMOVABLE MEDIA
+			      C ;                                       ;  entry points, 0 if not
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 23 - 1
+
+
+			      C ;
+			      C ; NOTE Bit 9 is currently used on IBM systems to indicate "drive is shared".
+			      C ;    See IOCTL function 9.  THIS USE IS NOT DOCUMENTED, it is used by some
+			      C ;    of the utilities which are supposed to FAIL on shared drives on server
+			      C ;    machines (FORMAT,CHKDSK,RECOVER,..).
+			      C ;
+			      C ;IsVID       equ     0080h               ; bit 7 - 1 if device issues UNCERTAIN MEDIA
+			      C ;;ISSPEC     EQU     0010H               ; Bit 4 - This is special UNUSED
+			      C ;ISCLOCK     EQU     0008H               ; Bit 3 - This is the clock device.
+			      C ;ISNULL      EQU     0004H               ; Bit 2 - This is the null device.
+			      C ;ISCOUT      EQU     0002H               ; Bit 1 - This is the console output.
+			      C ;ISCIN       EQU     0001H               ; Bit 0 - This is the console input.
+			      C 
+ = 2000			      C OutTilBusy  EQU     2000h                ; Output until busy is enabled
+ = 0040			      C DEV320      EQU     0040H                ; Bit 6 - If Device supports Dos 3.2
+			      C 
+ = 0001			      C LENSaveRestore EQU  1
+ = 000D			      C SRFuncCode     EQU  byte ptr PktData
+ = 0000			      C SRFC_Save      EQU  0
+ = 0001			      C SRFC_Restore   EQU  1
+			      C 
+				        include zeit_c.inc
+			      C 
+			      C ;-----  Timer-Modus
+ = 0000			      C TIMER_MODE_UNK  equ     0               ; Typ noch nicht bekannt
+ = 0001			      C TIMER_MODE_SYSI equ     1               ; Typ vorlÑufig System-Timer
+ = 0002			      C TIMER_MODE_SYS  equ     2               ; Typ ist System-Timer
+ = 0003			      C TIMER_MODE_HR   equ     3               ; Typ ist High Resolution-Timer
+			      C 
+			      C 
+			      C 
+
+				option NOM510
+
+				;-----  Request Header
+ 0000				rh          segment     at 0
+ 0000 00			rh_len          db      ?               ; length of request header
+ 0001 00			rh_unit         db      ?               ; unit CSEG (not used)
+ 0002 00			rh_command      db      ?               ; command CSEG
+ 0003 0000			rh_status       dw      ?               ; status
+ 0005  0002 [			rh_rsvd         dw      2 dup (?)       ; reserved for DOS
+        0000
+       ]
+ 0009  0002 [			rh_q_link       dw      2 dup (?)       ; request queue linkage
+        0000
+       ]
+ 000D 00			rh_ioctl_categ  db      ?               ; category CSEG
+ 000E 00			rh_ioctl_funct  db      ?               ; function CSEG
+ 000F 00000000			rh_ioctl_parm   dd      ?               ; addr of parms (offset and selector)
+ 0013 00000000			rh_ioctl_buff   dd      ?               ; addr of buffer (offset and selector)
+ 0017				rh          ends
+
+ 0000				_BSS        segment     word public 'BSS'
+ 0000				_BSS        ends
+
+ 0000				c_common    segment     word public 'BSS'
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 24 - 1
+
+
+ 0000				c_common    ends
+
+ 0000				_INITEXT    segment     word public 'CODE'
+ 0000				_INITEXT    ends
+
+				public  __acrtused                      ; trick to force in startup
+ = 9876				        __acrtused = 9876h              ; funny value not easily
+				                                        ; matched in SYMDEB
+
+				;*************************************************************
+				; CONST segment
+				;*************************************************************
+ 0000				CONST       segment     word public 'CONST'
+
+ 0000				function_table  label   word
+ 0000  0000 E			                dw      offset initialize               ;  0
+ 0002  003F R			                dw      offset bad_command              ;  1: media_check
+ 0004  003F R			                dw      offset bad_command              ;  2: build_bpb
+ 0006  003F R			                dw      offset bad_command              ;  3
+ 0008  003F R			                dw      offset bad_command              ;  4: read
+ 000A  003F R			                dw      offset bad_command              ;  5: non_destr_read
+ 000C  003F R			                dw      offset bad_command              ;  6: input_status
+ 000E  003F R			                dw      offset bad_command              ;  7: input_flush
+ 0010  003F R			                dw      offset bad_command              ;  8: write
+ 0012  003F R			                dw      offset bad_command              ;  9: write_verify
+ 0014  003F R			                dw      offset bad_command              ;  A: output_status
+ 0016  003F R			                dw      offset bad_command              ;  B: output_flush
+ 0018  003F R			                dw      offset bad_command              ;  C
+ 001A  0046 R			                dw      offset dev_open                 ;  D
+ 001C  0046 R			                dw      offset dev_close                ;  E
+ 001E  003F R			                dw      offset bad_command              ;  F: remov_media
+ 0020  021E R			                dw      offset ioctl                    ; 10
+ 0022  003F R			                dw      offset bad_command              ; 11: reset_media
+ 0024  003F R			                dw      offset bad_command              ; 12: get_logical_drv_map
+ 0026  003F R			                dw      offset bad_command              ; 13: set_logical_drv_map
+ 0028  003F R			                dw      offset bad_command              ; 14: deinstall
+ 002A  003F R			                dw      offset bad_command              ; 15
+ 002C  003F R			                dw      offset bad_command              ; 16: partitionable
+ 002E  003F R			                dw      offset bad_command              ; 17: get_hd_map
+ 0030  003F R			                dw      offset bad_command              ; 18
+ 0032  003F R			                dw      offset bad_command              ; 19
+ 0034  003F R			                dw      offset bad_command              ; 1A
+ 0036  003F R			                dw      offset bad_command              ; 1B
+ 0038  003F R			                dw      offset bad_command              ; 1C: shutdown
+ 003A  003F R			                dw      offset bad_command              ; 1D: get_drv_caps
+ 003C  003F R			                dw      offset bad_command              ; 1E
+ 003E  0258 R			                dw      offset init_cpl                 ; 1F
+
+ 0040 = 001F			MCW             equ     ($-function_table)/2-1          ; hîchster zulÑssiger Befehlscode
+
+ 0040				CONST       ends
+
+				;*************************************************************
+				; DSEG segment
+				;*************************************************************
+ 0000				_DATA       segment     word public 'DATA'
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 25 - 1
+
+
+
+				        public  DeviceHelp
+				        public  IniArgSeg               ; öbergabeparameter
+				        public  IniArgOfs               ; öbergabeparameter
+				        public  _usTimerMode
+
+				        extern  _usTickLen: word
+
+				;-----  Device Header
+ 0000 FFFFFFFF 8980 0000 R	DDHd    SysDev  <-1,                \   ; Zeiger auf nÑchsten Device Header
+       0000 44 43 46 37
+       37 24 20 20 0000
+       0000 0000 0000
+				                 DEV_CHAR_DEV +     \   ; Device Attribute
+				                 DEV_30 +           \
+				                 DEVLEV_3,          \
+				                 offset strategy,,  \   ; Strategie-Routine
+				                 'DCF77$'>              ; Device Name
+ 001A 00000012			DevCaps dword   DEV_16MB +          \   ; Char-DD mit voller Addressierbarkeit
+				                DEV_INITCOMPLETE        ; InitComplete Request-Paket wird unterstÅtzt
+
+ 001E 00000000			DeviceHelp      dword   ?               ; device help interface pointer
+ 0022 0000			IniArgSeg       word    ?               ; öbergabeparmeter
+ 0024 0000			IniArgOfs       word    ?               ; öbergabeparameter
+
+ 0026 0000			InitComplete    word    0               ; 1 = InitComplete beendet
+ 0028 0000			_usTimerMode    word    TIMER_MODE_UNK  ; Modus, siehe TIMER_MODE_x
+
+ 002A				pBuffLvl        label   dword           ; Bit-Level-Puffer
+ 002A 0000			pBuffLvlL       word    0
+ 002C 0000			pBuffLvlH       word    0
+ 002E				hLockLvl        label   dword           ; Lock handle fÅr Bit-Level-Puffer
+ 002E 0000			hLockLvlL       word    0
+ 0030 0000			hLockLvlH       word    0
+ 0032 0000			uscLvl          word    0               ; FÅllstand fÅr Bit-Level-Puffer
+ 0034 0000			usMaxLvl        word    0               ; Puffergrî·e des Bit-Level-Puffers
+
+
+ 0036				_DATA       ends
+
+ 0000				_INIDATA    segment     word public 'INIDATA'
+ 0000				_INIDATA    ends
+
+				;*************************************************************
+				; CSEG segment
+				;*************************************************************
+
+ 0000				_TEXT       segment     word public 'CODE'
+				            assume      cs:CGROUP, ds:DGROUP, es:rh
+
+				        extrn   initialize:     far
+				        extrn   _registerTimer: near
+				        extrn   _ioctl:         near
+				        extrn   _timerHandler:  far
+
+				;-----  Device Strategy Entry Point
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 26 - 1
+
+
+ 0000				strategy proc   far
+				;       INT     3
+ 0000  26: C7 87 0003 R		        mov     rh_status[bx], 0100h    ; store successful return CSEG and
+       0100
+				                                        ;   request complete status in
+				                                        ;   request header status word
+
+				;-----  Test, ob der High-Resolution-Timer registriert werden soll
+ 0007  83 3E 0028 R 01		        cmp     _usTimerMode, TIMER_MODE_SYSI
+ 000C  75 1F			        jne     strat1
+ 000E  83 3E 0026 R 00		        cmp     InitComplete, 0         ; Timer0 darf erst nach InitComplete
+ 0013  74 18			        je      strat1                  ;   registriert werden
+ 0015  06			        push    es
+ 0016  53			        push    bx
+ 0017  6A 00			        push    0
+ 0019  6A 03			        push    TIMER_MODE_HR
+ 001B  E8 0000 E		        call    _registerTimer
+ 001E  83 C4 04			        add     sp, 4
+ 0021  0B C0			        or      ax, ax
+ 0023  75 06			        jnz     @f
+ 0025  C7 06 0028 R 0002	        mov     _usTimerMode, TIMER_MODE_SYS
+ 002B  5B			@@:     pop     bx
+ 002C  07			        pop     es
+
+ 002D  26: 8A 87 0002 R		strat1: mov     al, rh_command[bx]      ; route control based on
+ 0032  3C 1F			        cmp     al, MCW                 ;   command CSEG
+ 0034  77 09			        ja      bad_command             ; zu hoher Funktions-Code
+ 0036  D0 E0			        sal     al, 1                   ; set up to
+ 0038  98			        cbw                             ;   take the
+ 0039  8B F0			        mov     si, ax                  ;   correct jump into the table
+ 003B  FF A4 0000 R		        jmp     function_table[si]
+
+				;-----  ungÅltige Command-Codes
+ 003F				bad_command::
+ 003F  26: C7 87 0003 R		        mov     rh_status[bx], 8103h    ; store unknown command error and
+       8103
+				                                        ;    request complete status in
+				                                        ;    request header status word
+ 0046				dev_open::
+ 0046				dev_close::
+ 0046  CB			        ret
+ 0047				strategy endp
+
+ 0047				outbyte proc    near C public, port:word, value:word
+ 0047  55		   *	    push   bp
+ 0048  8B EC		   *	    mov    bp, sp
+ 004A  8B 56 04			        mov     dx, port
+ 004D  8B 46 06			        mov     ax, value
+ 0050  EE			        out     dx, al
+				        RET
+ 0051  C9		   *	    leave  
+ 0052  C3		   *	    ret    00000h
+ 0053				outbyte endp
+
+ 0053				inbyte  proc    near C public, port:word
+ 0053  55		   *	    push   bp
+Microsoft (R) Macro Assembler Version 6.00     	08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 27 - 1
+
+
+ 0054  8B EC		   *	    mov    bp, sp
+ 0056  8B 56 04			        mov     dx, port
+ 0059  EC			        in      al, dx
+				        RET
+ 005A  C9		   *	    leave  
+ 005B  C3		   *	    ret    00000h
+ 005C				inbyte  endp
+
+ 005C				f_strlen proc   far C public uses di es, source: far ptr byte
+
+ 005C  55		   *	    push   bp
+ 005D  8B EC		   *	    mov    bp, sp
+ 005F  57		   *	    push   di
+ 0060  06		   *	    push   es
+ 0061  FC			        cld
+
+ 0062  B0 00			        mov     al, 0
+ 0064  B9 FFFF			        mov     cx, 0ffffh
+ 0067  C4 7E 06			        les     di, source
+ 006A  F2/ AE			 repne  scasb
+ 006C  F7 D1			        not     cx                                     ; StringlÑnge ohne Terminator '\0'
+ 006E  49			        dec     cx
+
+ 006F  8B C1			        mov     ax, cx
+				        RET
+ 0071  07		   *	    pop    es
+ 0072  5F		   *	    pop    di
+ 0073  C9		   *	    leave  
+ 0074  CB		   *	    ret    00000h
+ 0075				f_strlen endp
+
+ 0075				f_strcpy proc   far C public uses si di es ds, dest:far ptr byte, source: far ptr byte
+
+ 0075  55		   *	    push   bp
+ 0076  8B EC		   *	    mov    bp, sp
+ 0078  56		   *	    push   si
+ 0079  57		   *	    push   di
+ 007A  06		   *	    push   es
+ 007B  1E		   *	    push   ds
+ 007C  C4 7E 06			        les     di, dest
+ 007F  C5 76 0A			        lds     si, source
+ 0082  AC			lp:     lodsb
+ 0083  AA			        stosb
+ 0084  0A C0			        or      al, al
+ 0086  75 FA			        jnz     lp
+
+ 0088  8C C2			        mov     dx, es
+ 008A  8B 46 06			        mov     ax, word ptr dest
+				        RET
+ 008D  1F		   *	    pop    ds
+ 008E  07		   *	    pop    es
+ 008F  5F		   *	    pop    di
+ 0090  5E		   *	    pop    si
+ 0091  C9		   *	    leave  
+ 0092  CB		   *	    ret    00000h
+ 0093				f_strcpy endp
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 28 - 1
+
+
+
+ 0093				f_memcpy proc   far C public uses si di es ds, dest:far ptr byte, source: far ptr byte, count: word
+
+ 0093  55		   *	    push   bp
+ 0094  8B EC		   *	    mov    bp, sp
+ 0096  56		   *	    push   si
+ 0097  57		   *	    push   di
+ 0098  06		   *	    push   es
+ 0099  1E		   *	    push   ds
+ 009A  8B 4E 0E			        mov     cx, count
+ 009D  C4 7E 06			        les     di, dest
+ 00A0  C5 76 0A			        lds     si, source
+ 00A3  F3/ A4			 rep    movsb
+
+ 00A5  8C C2			        mov     dx, es
+ 00A7  8B 46 06			        mov     ax, word ptr dest
+				        RET
+ 00AA  1F		   *	    pop    ds
+ 00AB  07		   *	    pop    es
+ 00AC  5F		   *	    pop    di
+ 00AD  5E		   *	    pop    si
+ 00AE  C9		   *	    leave  
+ 00AF  CB		   *	    ret    00000h
+ 00B0				f_memcpy endp
+
+ 00B0				iTimerHandler proc far C public
+ 00B0  FB			        sti
+ 00B1  9A ---- 0000 E		        call    _timerHandler
+ 00B6  CB			        RET
+ 00B7				iTimerHandler endp
+
+ 00B7				DevHelp_SetTimer proc  far Pascal public uses si di, TimerHandler:word
+
+ 00B7  55		   *	    push   bp
+ 00B8  8B EC		   *	    mov    bp, sp
+ 00BA  56		   *	    push   si
+ 00BB  57		   *	    push   di
+ 00BC  8B 46 06			        mov     ax, TimerHandler                ; Offset Timer-Handler
+ 00BF  B2 1D			        mov     dl, DevHlp_SetTimer
+ 00C1  FF 1E 001E R		        call    DeviceHelp
+ 00C5  B8 0000			        mov     ax, 0
+ 00C8  73 03			        jnc     Exit
+ 00CA  B8 0001			        mov     ax, 1
+ 00CD				Exit:   RET
+ 00CD  5F		   *	    pop    di
+ 00CE  5E		   *	    pop    si
+ 00CF  C9		   *	    leave  
+ 00D0  CA 0002		   *	    ret    00002h
+ 00D3				DevHelp_SetTimer endp
+
+ 00D3				DevHelp_ResetTimer proc far Pascal public uses si di, TimerHandler:word
+
+ 00D3  55		   *	    push   bp
+ 00D4  8B EC		   *	    mov    bp, sp
+ 00D6  56		   *	    push   si
+ 00D7  57		   *	    push   di
+Microsoft (R) Macro Assembler Version 6.00     	08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 29 - 1
+
+
+ 00D8  8B 46 06			        mov     ax, TimerHandler
+ 00DB  B2 1E			        mov     dl, DevHlp_ResetTimer
+ 00DD  FF 1E 001E R		        call    DeviceHelp
+				        RET
+ 00E1  5F		   *	    pop    di
+ 00E2  5E		   *	    pop    si
+ 00E3  C9		   *	    leave  
+ 00E4  CA 0002		   *	    ret    00002h
+ 00E7				DevHelp_ResetTimer endp
+
+ 00E7				DevHelp_AttachDD proc   far Pascal public uses si di, DDName:word, IDCTable:word
+
+ 00E7  55		   *	    push   bp
+ 00E8  8B EC		   *	    mov    bp, sp
+ 00EA  56		   *	    push   si
+ 00EB  57		   *	    push   di
+ 00EC  8B 5E 08			        mov     bx, DDName                      ; Device-Driver Name
+ 00EF  8B 7E 06			        mov     di, IDCTable                    ; Ergebnis-Struktur
+ 00F2  B2 2A			        mov     dl, DevHlp_AttachDD
+ 00F4  FF 1E 001E R		        call    DeviceHelp
+ 00F8  B8 0000			        mov     ax, 0
+ 00FB  73 03			        jnc     Exit
+ 00FD  B8 0001			        mov     ax, 1
+ 0100				Exit:   RET
+ 0100  5F		   *	    pop    di
+ 0101  5E		   *	    pop    si
+ 0102  C9		   *	    leave  
+ 0103  CA 0004		   *	    ret    00004h
+ 0106				DevHelp_AttachDD endp
+
+ 0106				LvlIsReady proc near C public
+
+ 0106  B8 0001			        mov     ax, 1
+ 0109  83 3E 0034 R 00		        cmp     usMaxLvl, 0
+ 010E  74 03			        je      Exit
+ 0110  B8 0000			        mov     ax, 0
+
+ 0113  C3			Exit:   RET
+ 0114				LvlIsReady endp
+
+				        .386p
+ 0114				LvlWait proc    near C public uses si di, pBuffer:far ptr byte, uscBuffer:word
+
+				;-----  IOCTL-Datenbereich locken
+ 0114  55		   *	    push   bp
+ 0115  8B EC		   *	    mov    bp, sp
+ 0117  56		   *	    push   si
+ 0118  57		   *	    push   di
+ 0119  8B 46 06			        mov     ax, word ptr pBuffer[2]         ; ax: Puffer-Segment
+ 011C  BB 0100			        mov     bx, 0100H                       ; longterm Lock; blockieren, bis verfÅgbar
+ 011F  B2 13			        mov     dl, DevHlp_Lock
+ 0121  FF 1E 001E R		        call    DeviceHelp
+ 0125  72 59			        jc      Error                           ; Fehler: Segment kann nicht gelockt werden
+ 0127  89 1E 002E R		        mov     hLockLvlL, bx                   ; Lock handle sichern
+ 012B  A3 0030 R		        mov     hLockLvlH, ax
+
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 30 - 1
+
+
+				;-----  IOCTL-Puffer in physikalische Adresse konvertieren
+ 012E  1E			        push    ds
+ 012F  8C DE			        mov     si, ds
+ 0131  8E C6			        mov     es, si
+ 0133  C5 76 04			        lds     si, pBuffer                     ; virtuelle Adresse des Puffers im Strategie-Kontext
+ 0136  B2 16			        mov     dl, DevHlp_VirtToPhys
+ 0138  26: FF 1E 001E R		        call    es:DeviceHelp
+ 013D  1F			        pop     ds
+ 013E  72 32			        jc      Exit                            ; Fehler: gelocktes Segment kann nicht konvertiert w
+				erden
+
+ 0140  89 1E 002A R		        mov     pBuffLvlL, bx                   ; Zeiger auf Puffer initialisieren
+ 0144  A3 002C R		        mov     pBuffLvlH, ax
+ 0147  C7 06 0032 R 0000	        mov     uscLvl, 0                       ; FÅllgrad-ZÑhler initialisieren
+ 014D  8B 46 08			        mov     ax, uscBuffer
+ 0150  A3 0034 R		        mov     usMaxLvl, ax                    ; Puffergrî·e kopieren
+
+ 0153  FA			WaitLp: cli                                     ; Wakeup-Test mit maskierten Interrupts!
+ 0154  A1 0034 R		        mov     ax, usMaxLvl                    ; usMaxLvl ist nach einem Block 0
+ 0157  39 06 0032 R		        cmp     uscLvl, ax
+ 015B  73 15			        jae     Exit                            ; Wakeup-Test
+ 015D  8B 1E 002A R		        mov     bx, pBuffLvlL                   ; Event_id
+ 0161  A1 002C R		        mov     ax, pBuffLvlH
+ 0164  B9 FFFF			        mov     cx, 0FFFFH                      ; Timeout
+ 0167  8B F9			        mov     di, cx
+ 0169  BA 0004			        mov     dx, DevHlp_ProcBlock            ; ProcBlock, unterbrechbar
+ 016C  FF 1E 001E R		        call    DeviceHelp
+ 0170  73 E1			        jnc     WaitLp
+
+ 0172  FB			Exit:   sti
+ 0173  8B 1E 002E R		        mov     bx, hLockLvlL                   ; Lock auf Puffer wieder entfernen
+ 0177  A1 0030 R		        mov     ax, hLockLvlH
+ 017A  B2 14			        mov     dl, DevHlp_Unlock
+ 017C  FF 1E 001E R		        call    DeviceHelp
+
+ 0180  C7 06 0034 R 0000	Error:  mov     usMaxLvl, 0
+ 0186  A1 0032 R		        mov     ax, uscLvl
+
+				        RET
+ 0189  5F		   *	    pop    di
+ 018A  5E		   *	    pop    si
+ 018B  5D		   *	    pop    bp
+ 018C  C3		   *	    ret    00000h
+ 018D				LvlWait endp
+
+
+				;********************************************************
+				;  SUBROUTINE NAME:  LvlInsert
+				;
+				;  DESCRIPTIVE NAME:  EinfÅgen eines Byte in Puffer
+				;
+				;  FUNCTION:  FÅgt ein Byte in den Puffer fÅr die
+				;             Darstellung der EmpfangsqualitÑt ein.
+				;             LvlWait wird wieder freigegeben, sobald
+				;             der Puffer voll ist.
+				;
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 31 - 1
+
+
+				;  NOTES:
+				;
+				;  INPUT:  Stack: einzufÅgenden Byte
+				;*******************************************************
+ 018D				LvlInsert proc  near C public uses si di, chr:byte
+
+ 018D  55		   *	    push   bp
+ 018E  8B EC		   *	    mov    bp, sp
+ 0190  56		   *	    push   si
+ 0191  57		   *	    push   di
+ 0192  8B 0E 0034 R		        mov     cx, usMaxLvl                    ; cx wird auch als Segment-LÑnge fÅr PhysToVirt benu
+				tzt
+ 0196  0B C9			        or      cx, cx
+ 0198  74 3D			        jz      Exit
+
+ 019A  FA			        cli
+ 019B  A1 002C R		        mov     ax, pBuffLvlH                   ; physikalische Adresse
+ 019E  8B 1E 002A R		        mov     bx, pBuffLvlL
+ 01A2  BA 0115			        mov     dx, 0100H + DevHlp_PhysToVirt   ; Ergebnis in ES:DI
+ 01A5  FF 1E 001E R		        call    DeviceHelp
+ 01A9  72 18			        jc      Error
+
+ 01AB  03 3E 0032 R		        add     di, uscLvl
+ 01AF  8A 46 04			        mov     al, chr
+ 01B2  26: 88 05		        mov     es:[di], al
+ 01B5  FB			        sti
+
+ 01B6  FF 06 0032 R		        inc     uscLvl
+ 01BA  A1 0034 R		        mov     ax, usMaxLvl
+ 01BD  39 06 0032 R		        cmp     uscLvl, ax
+ 01C1  72 14			        jb      Exit
+
+ 01C3  FB			Error:  sti
+ 01C4  8B 1E 002A R		        mov     bx, pBuffLvlL                   ; Event_id
+ 01C8  A1 002C R		        mov     ax, pBuffLvlH
+ 01CB  B2 05			        mov     dl, DevHlp_ProcRun
+ 01CD  FF 1E 001E R		        call    DeviceHelp
+
+ 01D1  C7 06 0034 R 0000	        mov     usMaxLvl, 0
+ 01D7				Exit:   RET
+ 01D7  5F		   *	    pop    di
+ 01D8  5E		   *	    pop    si
+ 01D9  5D		   *	    pop    bp
+ 01DA  C3		   *	    ret    00000h
+ 01DB				LvlInsert endp
+
+
+				;********************************************************
+				;  SUBROUTINE NAME:  LvlComIns
+				;
+				;  DESCRIPTIVE NAME:  EinfÅgen in Puffer
+				;
+				;  FUNCTION:  FÅgt Bytes in den Puffer fÅr die
+				;             Darstellung der EmpfangsqualitÑt ein.
+				;             LvlWait wird wieder freigegeben, sobald
+				;             der Puffer voll ist. Diese Routine wird
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 32 - 1
+
+
+				;             fÅr die Ausgabe von getcom benîtigt
+				;             chr = 0FFH:  EinfÅgen von 1 Byte "1"
+				;             chr = sonst: EinfÅgen von 8 Byte "0"/"1",
+				;                          je nach Anzahl von 0/1-Bits
+				;                          in chr; MSB zuerst
+				;
+				;  NOTES:
+				;
+				;  INPUT:  Stack: einzufÅgenden Byte
+				;*******************************************************
+ 01DB				LvlComIns proc near C public uses si di, chr:byte
+
+ 01DB  55		   *	    push   bp
+ 01DC  8B EC		   *	    mov    bp, sp
+ 01DE  56		   *	    push   si
+ 01DF  57		   *	    push   di
+ 01E0  80 7E 04 FF		        cmp     chr, 0FFH
+ 01E4  75 0A			        jne     @f
+ 01E6  6A 01			        push    1                               ; Byte war FF -> 1x1 einfÅgen
+ 01E8  E8 FFA2			        call    LvlInsert
+ 01EB  83 C4 02			        add     sp, 2
+ 01EE  EB 2A			        jmp     short Exit
+
+ 01F0  B9 0007			@@:     mov     cx, 7                           ; Byte != FF
+ 01F3  8A 56 04			        mov     dl, chr
+ 01F6  33 C0			_Loop:  xor     ax, ax                          ; Bit == 0 -> AX = 0
+ 01F8  0F A3 CA			        bt      dx, cx                          ; Bit testen; Bit 7 zuerst, absteigend
+ 01FB  73 01			        jnc     @f
+ 01FD  40			        inc     ax                              ; Bit == 1 -> AX = 1
+ 01FE  52			@@:     push    dx
+ 01FF  51			        push    cx
+ 0200  50			        push    ax                              ; öbergabewert 0/1
+ 0201  E8 FF89			        call    LvlInsert                       ; 2x einfÅgen, da 1 bit = 20ms
+ 0204  E8 FF86			        call    LvlInsert                       ;    HR-Timer-Intervall = 10ms
+ 0207  83 C4 02			        add     sp, 2
+ 020A  59			        pop     cx
+ 020B  5A			        pop     dx
+ 020C  49			        dec     cx                              ; 8 DurchlÑufe
+ 020D  7D E7			        jge     _Loop
+
+ 020F  6A 00			        push    0                               ; 20 ms fehlen wegen Startbit
+ 0211  E8 FF79			        call    LvlInsert
+ 0214  E8 FF76			        call    LvlInsert
+ 0217  83 C4 02			        add     sp, 2
+
+ 021A				Exit:   RET
+ 021A  5F		   *	    pop    di
+ 021B  5E		   *	    pop    si
+ 021C  5D		   *	    pop    bp
+ 021D  C3		   *	    ret    00000h
+ 021E				LvlComIns endp
+
+				;********************************************************
+				;  SUBROUTINE NAME:  IOCTL
+				;
+				;  DESCRIPTIVE NAME:  IOCtl-Routine
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 33 - 1
+
+
+				;
+				;  FUNCTION:  Bearbeitet IOCtl-Requests
+				;
+				;  NOTES:  Fragt Zeit, Datum, etc.
+				;
+				;  INPUT:  ES:BX : Zeiger auf request packet
+				;*******************************************************
+ 021E				ioctl   proc    far uses si di
+
+ 021E  56		   *	    push   si
+ 021F  57		   *	    push   di
+ 0220  26: C7 87 0003 R		        mov     rh_status[bx], 0
+       0000
+
+				;-----  Fill Port Funct
+ 0227  53			        push    bx
+ 0228  06			        push    es
+ 0229  26: 8A 87 000E R		        mov     al, rh_ioctl_funct[bx]
+ 022E  26: 8A A7 000D R		        mov     ah, rh_ioctl_categ[bx]
+ 0233  50			        push    ax
+ 0234  66| 26: FF B7 0013 R	        push    dword ptr rh_ioctl_buff[bx]
+ 023A  66| 26: FF B7 000F R	        push    dword ptr rh_ioctl_parm[bx]
+ 0240  E8 0000 E		        call    _ioctl              ; lade Daten in Buffer
+ 0243  83 C4 0A			        add     sp, 10
+ 0246  F8			        clc                         ; Clear CARRY = kein Fehler
+ 0247  07			@@:     pop     es
+ 0248  5B			        pop     bx
+ 0249  26: 89 87 0003 R		        mov     rh_status[bx], ax
+ 024E  26: 81 8F 0003 R		        or      rh_status[bx], STDON
+       0100
+				        RET
+ 0255  5F		   *	    pop    di
+ 0256  5E		   *	    pop    si
+ 0257  CB		   *	    ret    00000h
+ 0258				ioctl   endp
+
+				;********************************************************
+				;  SUBROUTINE NAME:  init_cpl
+				;
+				;  DESCRIPTIVE NAME:  InitComplete-Routine
+				;
+				;  FUNCTION:  Setzt ein Flag, das dem Treiber
+				;             den InitComplete-Zustand anzeigt
+				;
+				;  NOTES:
+				;
+				;  INPUT:  ES:BX : Zeiger auf request packet
+				;*******************************************************
+ 0258				init_cpl proc   far public
+
+ 0258  C7 06 0026 R 0001	        mov     InitComplete, 1
+ 025E  CB			        ret
+ 025F				init_cpl endp
+
+
+				;-----  PrÅft, ob ein Parameter/Daten-Segment fÅr einen IOCtl existiert
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Page 34 - 1
+
+
+				;       Eingang: 1. Parameter: FAR PTR: Zeiger auf Segment,
+				;                2. Parameter: USHORT : MindestsegmentlÑnge
+				;       Ausgang: Ret-Value: Bool: 0 = Fehler, 1 = OK
+ 025F				TestSeg proc    near C public, pSeg:dword, segLen:word
+
+ 025F  55		   *	    push   bp
+ 0260  8B EC		   *	    mov    bp, sp
+ 0262  8B 4E 08			        mov     cx, segLen
+ 0265  66| 8B 5E 04		        mov     ebx, pSeg
+ 0269  BA 0000			        mov     dx, 0
+
+ 026C  03 CB			        add     cx, bx
+ 026E  66| C1 EB 10		        shr     ebx, 16
+ 0272  0F 00 E3			        verr    bx
+ 0275  B8 0000			        mov     ax, 0
+ 0278  75 08			        jnz     Exit                            ; keine Zugriffsrechte fÅr Segment
+ 027A  0F 03 DB			        lsl     bx, bx
+ 027D  3B D9			        cmp     bx, cx                          ; CY=1: Segment zu klein
+ 027F  F5			        cmc
+ 0280  D1 D0			        rcl     ax, 1
+
+ 0282				Exit:   RET
+ 0282  5D		   *	    pop    bp
+ 0283  C3		   *	    ret    00000h
+ 0284				TestSeg endp
+
+				        .286P
+
+ 0284				_TEXT       ends
+
+				DGROUP      group       CONST, _BSS, c_common, _DATA, _INIDATA
+				CGROUP      group       _TEXT, _INITEXT
+
+				            end         strategy
+
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 35 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+Dev_FuncLev  . . . . . . . . . .	Proc
+FlatToSel  . . . . . . . . . . .	Proc
+SelToFlat  . . . . . . . . . . .	Proc
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 36 - 1
+
+
+
+
+Structures and Unions:
+
+                N a m e                  Size
+                                         Offset      Type
+
+BPB  . . . . . . . . . . . . . .	 001F
+  BPB_BytesPerSector . . . . . .	 0000	     Word
+  BPB_SectorsPerCluster  . . . .	 0002	     Byte
+  BPB_ReservedSectors  . . . . .	 0003	     Word
+  BPB_NumFATs  . . . . . . . . .	 0005	     Byte
+  BPB_MaxDirEntries  . . . . . .	 0006	     Word
+  BPB_TotalSectors . . . . . . .	 0008	     Word
+  BPB_MediaType  . . . . . . . .	 000A	     Byte
+  BPB_NumFATSectors  . . . . . .	 000B	     Word
+  BPB_SectorsPerTrack  . . . . .	 000D	     Word
+  BPB_NumHeads . . . . . . . . .	 000F	     Word
+  BPB_HiddenSectors  . . . . . .	 0011	     DWord
+  BPB_BigTotalSectors  . . . . .	 0015	     DWord
+  BPB_Reserved_1 . . . . . . . .	 0019	     Byte
+CharQueue  . . . . . . . . . . .	 0007
+  Qsize  . . . . . . . . . . . .	 0000	     Word
+  Qchrout  . . . . . . . . . . .	 0002	     Word
+  Qcount . . . . . . . . . . . .	 0004	     Word
+  Qbase  . . . . . . . . . . . .	 0006	     Byte
+DDHDR  . . . . . . . . . . . . .	 001E
+  DDH_NextHeader . . . . . . . .	 0000	     DWord
+  DDH_DevAttr  . . . . . . . . .	 0004	     Word
+  DDH_StrategyEP . . . . . . . .	 0006	     Word
+  DDH_InterruptEP  . . . . . . .	 0008	     Word
+  DDH_DevName  . . . . . . . . .	 000A	     Byte
+  DDH_ProtModeCS . . . . . . . .	 0012	     Word
+  DDH_ProtModeDS . . . . . . . .	 0014	     Word
+  DDH_RealModeCS . . . . . . . .	 0016	     Word
+  DDH_RealModeDS . . . . . . . .	 0018	     Word
+  DDH_SDevCaps . . . . . . . . .	 001A	     DWord
+Packet . . . . . . . . . . . . .	 001F
+  PktLen . . . . . . . . . . . .	 0000	     Byte
+  PktUnit  . . . . . . . . . . .	 0001	     Byte
+  PktCmd . . . . . . . . . . . .	 0002	     Byte
+  PktStatus  . . . . . . . . . .	 0003	     Word
+  PktFlag  . . . . . . . . . . .	 0005	     Byte
+  PktDevLink . . . . . . . . . .	 0009	     DWord
+  PktData  . . . . . . . . . . .	 000D	     Byte
+RASrouter  . . . . . . . . . . .	 0008
+  pretrace_addr  . . . . . . . .	 0000	     Word
+  preminor . . . . . . . . . . .	 0002	     Word
+  posttrace_addr . . . . . . . .	 0004	     Word
+  postminor  . . . . . . . . . .	 0006	     Word
+RPH  . . . . . . . . . . . . . .	 000D
+  RPH_Len  . . . . . . . . . . .	 0000	     Byte
+  RPH_Unit . . . . . . . . . . .	 0001	     Byte
+  RPH_Cmd  . . . . . . . . . . .	 0002	     Byte
+  RPH_Status . . . . . . . . . .	 0003	     Word
+  RPH_Flags  . . . . . . . . . .	 0005	     Byte
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 37 - 1
+
+
+
+
+Structures and Unions:
+
+                N a m e                  Size
+                                         Offset      Type
+
+  RPH_Reserved_1 . . . . . . . .	 0006	     Byte
+  RPH_Link . . . . . . . . . . .	 0009	     DWord
+RPINITOUT  . . . . . . . . . . .	 0018
+  RPINO_rph  . . . . . . . . . .	 0000	     Byte
+  RPINO_Unit . . . . . . . . . .	 000D	     Byte
+  RPINO_CodeEnd  . . . . . . . .	 000E	     Word
+  RPINO_DataEnd  . . . . . . . .	 0010	     Word
+  RPINO_BPBArray . . . . . . . .	 0012	     DWord
+  RPINO_Status . . . . . . . . .	 0016	     Word
+RPINIT . . . . . . . . . . . . .	 0017
+  RPINI_rph  . . . . . . . . . .	 0000	     Byte
+  RPINI_Unit . . . . . . . . . .	 000D	     Byte
+  RPINI_DevHlpEP . . . . . . . .	 000E	     Byte
+  RPINI_InitArgs . . . . . . . .	 0012	     Byte
+  RPINI_DriveNum . . . . . . . .	 0016	     Byte
+RP_BUILDBPB  . . . . . . . . . .	 0017
+  RPBPB_rph  . . . . . . . . . .	 0000	     Byte
+  RPBPB_MediaDescr . . . . . . .	 000D	     Byte
+  RPBPB_XferAddr . . . . . . . .	 000E	     DWord
+  RPBPB_bpb  . . . . . . . . . .	 0012	     Byte
+  RPBPB_DriveNum . . . . . . . .	 0016	     Byte
+RP_GENIOCTL  . . . . . . . . . .	 0019
+  RPGIO_rph  . . . . . . . . . .	 0000	     Byte
+  RPGIO_Category . . . . . . . .	 000D	     Byte
+  RPGIO_Function . . . . . . . .	 000E	     Byte
+  RPGIO_ParmPacket . . . . . . .	 000F	     Byte
+  RPGIO_DataPacket . . . . . . .	 0013	     Byte
+  RPGIO_sfn  . . . . . . . . . .	 0017	     Word
+RP_GETDRIVERCAPS . . . . . . . .	 0018
+  RPDC_rph . . . . . . . . . . .	 0000	     Byte
+  RPDC_Reserved  . . . . . . . .	 000D	     Byte
+  RPDC_pDCS  . . . . . . . . . .	 0010	     Byte
+  RPDC_pVCS  . . . . . . . . . .	 0014	     Byte
+RP_GETUNITMAP  . . . . . . . . .	 0011
+  RPUM_rph . . . . . . . . . . .	 0000	     Byte
+  RPUM_UnitMap . . . . . . . . .	 000D	     DWord
+RP_MEDIACHECK  . . . . . . . . .	 0013
+  RPMC_rph . . . . . . . . . . .	 0000	     Byte
+  RPMC_MediaDescr  . . . . . . .	 000D	     Byte
+  RPMC_rc  . . . . . . . . . . .	 000E	     Byte
+  RPMC_PrevVolID . . . . . . . .	 000F	     Byte
+RP_NONDESTRUCREAD  . . . . . . .	 000E
+  RPNDR_rph  . . . . . . . . . .	 0000	     Byte
+  RPNDR_character  . . . . . . .	 000D	     Byte
+RP_OPENCLOSE . . . . . . . . . .	 000F
+  RPOC_rph . . . . . . . . . . .	 0000	     Byte
+  RPOC_sfn . . . . . . . . . . .	 000D	     Word
+RP_PARTFIXEDDISKS  . . . . . . .	 000E
+  RPFD_rph . . . . . . . . . . .	 0000	     Byte
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 38 - 1
+
+
+
+
+Structures and Unions:
+
+                N a m e                  Size
+                                         Offset      Type
+
+  RPFD_NumFixedDisks . . . . . .	 000D	     Byte
+RP_RWV . . . . . . . . . . . . .	 001A
+  RPRWV_rph  . . . . . . . . . .	 0000	     Byte
+  RPRWV_MediaDescr . . . . . . .	 000D	     Byte
+  RPRWV_XferAddr . . . . . . . .	 000E	     DWord
+  RPRWV_NumSectors . . . . . . .	 0012	     Word
+  RPRWV_rba  . . . . . . . . . .	 0014	     DWord
+  RPRWV_sfn  . . . . . . . . . .	 0018	     Word
+SrHead . . . . . . . . . . . . .	 000D
+  ReqLen . . . . . . . . . . . .	 0000	     Byte
+  ReqUnit  . . . . . . . . . . .	 0001	     Byte
+  ReqFunc  . . . . . . . . . . .	 0002	     Byte
+  ReqStat  . . . . . . . . . . .	 0003	     Word
+  DevLink  . . . . . . . . . . .	 0009	     DWord
+SysDev3  . . . . . . . . . . . .	 001E
+  SysDevBef3 . . . . . . . . . .	 0000	     Byte
+  SDevCaps . . . . . . . . . . .	 001A	     DWord
+SysDev . . . . . . . . . . . . .	 001A
+  SDevNext . . . . . . . . . . .	 0000	     DWord
+  SDevAtt  . . . . . . . . . . .	 0004	     Word
+  SDevStrat  . . . . . . . . . .	 0006	     Word
+  SDevInt  . . . . . . . . . . .	 0008	     Word
+  SDevName . . . . . . . . . . .	 000A	     Byte
+  SDevProtCS . . . . . . . . . .	 0012	     Word
+  SDevProtDS . . . . . . . . . .	 0014	     Word
+  SDevRealCS . . . . . . . . . .	 0016	     Word
+  SDevRealDS . . . . . . . . . .	 0018	     Word
+diskentry  . . . . . . . . . . .	 000E
+  ddheader . . . . . . . . . . .	 0000	     DWord
+  ereserved  . . . . . . . . . .	 0004	     Byte
+  reldisknum . . . . . . . . . .	 0005	     Byte
+  devpid . . . . . . . . . . . .	 0006	     Word
+  deveflags  . . . . . . . . . .	 0008	     Word
+  logunitbitmap  . . . . . . . .	 000A	     DWord
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 39 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+CGROUP . . . . . . . . . . . . .	GROUP
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0284	  Word	  Public  'CODE'	
+_INITEXT . . . . . . . . . . . .	16 Bit	 0000	  Word	  Public  'CODE'	
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0036	  Word	  Public  'DATA'	
+_BSS . . . . . . . . . . . . . .	16 Bit	 0000	  Word	  Public  'BSS'  
+c_common . . . . . . . . . . . .	16 Bit	 0000	  Word	  Public  'BSS'  
+CONST  . . . . . . . . . . . . .	16 Bit	 0040	  Word	  Public  'CONST'	 
+_INIDATA . . . . . . . . . . . .	16 Bit	 0000	  Word	  Public  'INIDATA'  
+rh . . . . . . . . . . . . . . .	16 Bit	 0017	  Abs	  Private 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 40 - 1
+
+
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+DevHelp_AttachDD . . . . . . . .	P Far	 00E7	  _TEXT	Length= 001F Public PASCAL
+  DDName . . . . . . . . . . . .	Word	 bp + 0008
+  IDCTable . . . . . . . . . . .	Word	 bp + 0006
+  Exit . . . . . . . . . . . . .	L Near	 0100	  _TEXT	
+DevHelp_ResetTimer . . . . . . .	P Far	 00D3	  _TEXT	Length= 0014 Public PASCAL
+  TimerHandler . . . . . . . . .	Word	 bp + 0006
+DevHelp_SetTimer . . . . . . . .	P Far	 00B7	  _TEXT	Length= 001C Public PASCAL
+  TimerHandler . . . . . . . . .	Word	 bp + 0006
+  Exit . . . . . . . . . . . . .	L Near	 00CD	  _TEXT	
+LvlComIns  . . . . . . . . . . .	P Near	 01DB	  _TEXT	Length= 0043 Public C
+  chr  . . . . . . . . . . . . .	Byte	 bp + 0004
+  _Loop  . . . . . . . . . . . .	L Near	 01F6	  _TEXT	
+  Exit . . . . . . . . . . . . .	L Near	 021A	  _TEXT	
+LvlInsert  . . . . . . . . . . .	P Near	 018D	  _TEXT	Length= 004E Public C
+  chr  . . . . . . . . . . . . .	Byte	 bp + 0004
+  Error  . . . . . . . . . . . .	L Near	 01C3	  _TEXT	
+  Exit . . . . . . . . . . . . .	L Near	 01D7	  _TEXT	
+LvlIsReady . . . . . . . . . . .	P Near	 0106	  _TEXT	Length= 000E Public C
+  Exit . . . . . . . . . . . . .	L Near	 0113	  _TEXT	
+LvlWait  . . . . . . . . . . . .	P Near	 0114	  _TEXT	Length= 0079 Public C
+  pBuffer  . . . . . . . . . . .	DWord	 bp + 0004
+  uscBuffer  . . . . . . . . . .	Word	 bp + 0008
+  WaitLp . . . . . . . . . . . .	L Near	 0153	  _TEXT	
+  Exit . . . . . . . . . . . . .	L Near	 0172	  _TEXT	
+  Error  . . . . . . . . . . . .	L Near	 0180	  _TEXT	
+TestSeg  . . . . . . . . . . . .	P Near	 025F	  _TEXT	Length= 0025 Public C
+  pSeg . . . . . . . . . . . . .	DWord	 bp + 0004
+  segLen . . . . . . . . . . . .	Word	 bp + 0008
+  Exit . . . . . . . . . . . . .	L Near	 0282	  _TEXT	
+f_memcpy . . . . . . . . . . . .	P Far	 0093	  _TEXT	Length= 001D Public C
+  dest . . . . . . . . . . . . .	DWord	 bp + 0006
+  source . . . . . . . . . . . .	DWord	 bp + 000A
+  count  . . . . . . . . . . . .	Word	 bp + 000E
+f_strcpy . . . . . . . . . . . .	P Far	 0075	  _TEXT	Length= 001E Public C
+  dest . . . . . . . . . . . . .	DWord	 bp + 0006
+  source . . . . . . . . . . . .	DWord	 bp + 000A
+  lp . . . . . . . . . . . . . .	L Near	 0082	  _TEXT	
+f_strlen . . . . . . . . . . . .	P Far	 005C	  _TEXT	Length= 0019 Public C
+  source . . . . . . . . . . . .	DWord	 bp + 0006
+iTimerHandler  . . . . . . . . .	P Far	 00B0	  _TEXT	Length= 0007 Public C
+inbyte . . . . . . . . . . . . .	P Near	 0053	  _TEXT	Length= 0009 Public C
+  port . . . . . . . . . . . . .	Word	 bp + 0004
+init_cpl . . . . . . . . . . . .	P Far	 0258	  _TEXT	Length= 0007 Public
+ioctl  . . . . . . . . . . . . .	P Far	 021E	  _TEXT	Length= 003A Public
+outbyte  . . . . . . . . . . . .	P Near	 0047	  _TEXT	Length= 000C Public C
+  port . . . . . . . . . . . . .	Word	 bp + 0004
+  value  . . . . . . . . . . . .	Word	 bp + 0006
+strategy . . . . . . . . . . . .	P Far	 0000	  _TEXT	Length= 0047 Public
+  strat1 . . . . . . . . . . . .	L Near	 002D	  _TEXT	
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 41 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+Add_On_NewDD . . . . . . . . . .	DWord 	 000Dh	 
+Add_On_SrvRout . . . . . . . . .	DWord 	 000Dh	 
+BldBPBbuffer . . . . . . . . . .	DWord 	 000Eh	 
+BldBPBmedia  . . . . . . . . . .	Byte  	 000Dh	 
+BldBPBpBPB . . . . . . . . . . .	DWord 	 0012h	 
+CMDAddOnPrep . . . . . . . . . .	Number	 0061h	 
+CMDBldBPB  . . . . . . . . . . .	Number	 0002h	 
+CMDClose . . . . . . . . . . . .	Number	 000Eh	 
+CMDDeInstall . . . . . . . . . .	Number	 0014h	 
+CMDGenIOCTL  . . . . . . . . . .	Number	 0010h	 
+CMDGetDevSupport . . . . . . . .	Number	 001Dh	 
+CMDGetLogMap . . . . . . . . . .	Number	 0012h	 
+CMDGetfd_logunitsmap . . . . . .	Number	 0017h	 
+CMDINPUT . . . . . . . . . . . .	Number	 0004h	 
+CMDIOCTLR  . . . . . . . . . . .	Number	 0003h	 
+CMDIOCTLW  . . . . . . . . . . .	Number	 000Ch	 
+CMDInitBase  . . . . . . . . . .	Number	 001Bh	 
+CMDInitComplete  . . . . . . . .	Number	 001Fh	 
+CMDInit  . . . . . . . . . . . .	Number	 0000h	 
+CMDInputBypass . . . . . . . . .	Number	 0018h	 
+CMDInputF  . . . . . . . . . . .	Number	 0007h	 
+CMDInputS  . . . . . . . . . . .	Number	 0006h	 
+CMDMedChk  . . . . . . . . . . .	Number	 0001h	 
+CMDNDR . . . . . . . . . . . . .	Number	 0005h	 
+CMDOUTPUTV . . . . . . . . . . .	Number	 0009h	 
+CMDOUTPUT  . . . . . . . . . . .	Number	 0008h	 
+CMDOpen  . . . . . . . . . . . .	Number	 000Dh	 
+CMDOutputBypassV . . . . . . . .	Number	 001Ah	 
+CMDOutputBypass  . . . . . . . .	Number	 0019h	 
+CMDOutputF . . . . . . . . . . .	Number	 000Bh	 
+CMDOutputS . . . . . . . . . . .	Number	 000Ah	 
+CMDPartfixeddisks  . . . . . . .	Number	 0016h	 
+CMDRemMed  . . . . . . . . . . .	Number	 000Fh	 
+CMDResMed  . . . . . . . . . . .	Number	 0011h	 
+CMDSaveRestore . . . . . . . . .	Number	 0020h	 
+CMDSetLogMap . . . . . . . . . .	Number	 0013h	 
+CMDShutdown  . . . . . . . . . .	Number	 001Ch	 
+CMDStar  . . . . . . . . . . . .	Number	 0062h	 
+CMDStop  . . . . . . . . . . . .	Number	 0063h	 
+CStpSKG  . . . . . . . . . . . .	Byte  	 000Dh	 
+DCS_Addr . . . . . . . . . . . .	DWord 	 0010h	 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 42 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+DDHd . . . . . . . . . . . . . .	SysDev	 0000	  _DATA	
+DEV320 . . . . . . . . . . . . .	Number	 0040h	 
+DEVLEV_0 . . . . . . . . . . . .	Number	 0000h	 
+DEVLEV_1 . . . . . . . . . . . .	Number	 0080h	 
+DEVLEV_2 . . . . . . . . . . . .	Number	 0100h	 
+DEVLEV_3 . . . . . . . . . . . .	Number	 0180h	 
+DEV_16MB . . . . . . . . . . . .	Number	 0002h	 
+DEV_30 . . . . . . . . . . . . .	Number	 0800h	 
+DEV_ADAPTER_DD . . . . . . . . .	Number	 0008h	 
+DEV_ADD_ON . . . . . . . . . . .	Number	 0020h	 
+DEV_CBNAME . . . . . . . . . . .	Number	 0008h	 
+DEV_CHAR_DEV . . . . . . . . . .	Number	 8000h	 
+DEV_CIN  . . . . . . . . . . . .	Number	 0001h	 
+DEV_CLOCK  . . . . . . . . . . .	Number	 0008h	 
+DEV_COUT . . . . . . . . . . . .	Number	 0002h	 
+DEV_FCNLEV . . . . . . . . . . .	Number	 0380h	 
+DEV_GIOCTL . . . . . . . . . . .	Number	 0040h	 
+DEV_INITCOMPLETE . . . . . . . .	Number	 0010h	 
+DEV_IOCTL2 . . . . . . . . . . .	Number	 0001h	 
+DEV_IOCTL  . . . . . . . . . . .	Number	 4000h	 
+DEV_NON_IBM  . . . . . . . . . .	Number	 2000h	 
+DEV_NULL . . . . . . . . . . . .	Number	 0004h	 
+DEV_PARALLEL . . . . . . . . . .	Number	 0004h	 
+DEV_SAVERESTORE  . . . . . . . .	Number	 0020h	 
+DEV_SHARE  . . . . . . . . . . .	Number	 1000h	 
+DEV_SPEC . . . . . . . . . . . .	Number	 0010h	 
+DHDYNAM_16B_APIRTN . . . . . . .	Number	 0002h	 
+DHDYNAM_16B_CALLGATE . . . . . .	Number	 0001h	 
+DHGETDOSV_DEVICECLASSTABLE . . .	Number	 000Eh	 
+DHGETDOSV_DMQSSEL  . . . . . . .	Number	 000Fh	 
+DHGETDOSV_INTERRUPTLEV . . . . .	Number	 000Dh	 
+DHGETDOSV_LOCINFOSEG . . . . . .	Number	 0002h	 
+DHGETDOSV_SYSINFOSEG . . . . . .	Number	 0001h	 
+DHGETDOSV_VECTORMSATS  . . . . .	Number	 0006h	 
+DHGETDOSV_VECTORREBOOT . . . . .	Number	 0005h	 
+DHGETDOSV_VECTORSDF  . . . . . .	Number	 0004h	 
+DevCaps  . . . . . . . . . . . .	DWord	 001A	  _DATA	
+DevHlp_ABIOSCall . . . . . . . .	Number	 0036h	 
+DevHlp_ABIOSCommonEntry  . . . .	Number	 0037h	 
+DevHlp_ABIOSGetParms . . . . . .	Number	 0029h	 
+DevHlp_AllocGDTSelector  . . . .	Number	 002Dh	 
+DevHlp_AllocPhys . . . . . . . .	Number	 0018h	 
+DevHlp_AllocReqPacket  . . . . .	Number	 000Dh	 
+DevHlp_AllocateCtxHook . . . . .	Number	 0063h	 
+DevHlp_ArmCtxHook  . . . . . . .	Number	 0065h	 
+DevHlp_AttachDD  . . . . . . . .	Number	 002Ah	 
+DevHlp_Beep  . . . . . . . . . .	Number	 0052h	 
+DevHlp_CloseEventSem . . . . . .	Number	 0068h	 
+DevHlp_CloseFile . . . . . . . .	Number	 0080h	 
+DevHlp_CreateInt13VDM  . . . . .	Number	 006Eh	 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 43 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+DevHlp_DeRegister  . . . . . . .	Number	 0021h	 
+DevHlp_DevDone . . . . . . . . .	Number	 0001h	 
+DevHlp_DynamicAPI  . . . . . . .	Number	 006Ch	 
+DevHlp_EOI . . . . . . . . . . .	Number	 0031h	 
+DevHlp_FreeCtxHook . . . . . . .	Number	 0064h	 
+DevHlp_FreeGDTSelector . . . . .	Number	 0053h	 
+DevHlp_FreeLIDEntry  . . . . . .	Number	 0035h	 
+DevHlp_FreePhys  . . . . . . . .	Number	 0019h	 
+DevHlp_FreeReqPacket . . . . . .	Number	 000Eh	 
+DevHlp_GetDOSVar . . . . . . . .	Number	 0024h	 
+DevHlp_GetDescInfo . . . . . . .	Number	 005Dh	 
+DevHlp_GetDeviceBlock  . . . . .	Number	 0038h	 
+DevHlp_GetLIDEntry . . . . . . .	Number	 0034h	 
+DevHlp_GetWaitingQueue . . . . .	Number	 0040h	 
+DevHlp_InternalError . . . . . .	Number	 002Bh	 
+DevHlp_KillProc  . . . . . . . .	Number	 007Dh	 
+DevHlp_LinToGDTSelector  . . . .	Number	 005Ch	 
+DevHlp_LinToPageList . . . . . .	Number	 005Eh	 
+DevHlp_Lock  . . . . . . . . . .	Number	 0013h	 
+DevHlp_LogEntry  . . . . . . . .	Number	 003Bh	 
+DevHlp_ModifyPriority  . . . . .	Number	 002Ch	 
+DevHlp_MonFlush  . . . . . . . .	Number	 0023h	 
+DevHlp_MonWrite  . . . . . . . .	Number	 0022h	 
+DevHlp_MonitorCreate . . . . . .	Number	 001Fh	 
+DevHlp_OpenEventSem  . . . . . .	Number	 0067h	 
+DevHlp_OpenFile  . . . . . . . .	Number	 007Fh	 
+DevHlp_PMPostEventSem  . . . . .	Number	 0070h	 
+DevHlp_PageListToGDTSelector . .	Number	 0060h	 
+DevHlp_PageListToLin . . . . . .	Number	 005Fh	 
+DevHlp_PhysToGDTSelector . . . .	Number	 002Eh	 
+DevHlp_PhysToGDTSel  . . . . . .	Number	 0054h	 
+DevHlp_PhysToUVirt . . . . . . .	Number	 0017h	 
+DevHlp_PhysToVirt  . . . . . . .	Number	 0015h	 
+DevHlp_PostEventSem  . . . . . .	Number	 0069h	 
+DevHlp_ProcBlock . . . . . . . .	Number	 0004h	 
+DevHlp_ProcRun2  . . . . . . . .	Number	 006Dh	 
+DevHlp_ProcRun . . . . . . . . .	Number	 0005h	 
+DevHlp_ProtToReal  . . . . . . .	Number	 0030h	 
+DevHlp_PullParticular  . . . . .	Number	 000Bh	 
+DevHlp_PullRequest . . . . . . .	Number	 000Ah	 
+DevHlp_PushRequest . . . . . . .	Number	 0009h	 
+DevHlp_PutWaitingQueue . . . . .	Number	 003Fh	 
+DevHlp_QSysState . . . . . . . .	Number	 007Eh	 
+DevHlp_QueueFlush  . . . . . . .	Number	 0010h	 
+DevHlp_QueueInit . . . . . . . .	Number	 000Fh	 
+DevHlp_QueueRead . . . . . . . .	Number	 0012h	 
+DevHlp_QueueWrite  . . . . . . .	Number	 0011h	 
+DevHlp_RAS . . . . . . . . . . .	Number	 0028h	 
+DevHlp_ROMCritSection  . . . . .	Number	 0026h	 
+DevHlp_ReadFileAt  . . . . . . .	Number	 0082h	 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 44 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+DevHlp_ReadFile  . . . . . . . .	Number	 0081h	 
+DevHlp_RealToProt  . . . . . . .	Number	 002Fh	 
+DevHlp_RegisterBeep  . . . . . .	Number	 0051h	 
+DevHlp_RegisterDeviceClass . . .	Number	 0043h	 
+DevHlp_RegisterFreq  . . . . . .	Number	 006Bh	 
+DevHlp_RegisterKrnlExit  . . . .	Number	 006Fh	 
+DevHlp_RegisterPDD . . . . . . .	Number	 0050h	 
+DevHlp_RegisterPerfCtrs  . . . .	Number	 0062h	 
+DevHlp_RegisterStackUsage  . . .	Number	 003Ah	 
+DevHlp_RegisterTmrDD . . . . . .	Number	 0061h	 
+DevHlp_Register  . . . . . . . .	Number	 0020h	 
+DevHlp_ResetEventSem . . . . . .	Number	 006Ah	 
+DevHlp_ResetTimer  . . . . . . .	Number	 001Eh	 
+DevHlp_Save_Message  . . . . . .	Number	 003Dh	 
+DevHlp_SchedClock  . . . . . . .	Number	 0000h	 
+DevHlp_SegRealloc  . . . . . . .	Number	 003Eh	 
+DevHlp_SemClear  . . . . . . . .	Number	 0007h	 
+DevHlp_SemHandle . . . . . . . .	Number	 0008h	 
+DevHlp_SemRequest  . . . . . . .	Number	 0006h	 
+DevHlp_SendEvent . . . . . . . .	Number	 0025h	 
+DevHlp_SetIRQ  . . . . . . . . .	Number	 001Bh	 
+DevHlp_SetROMVector  . . . . . .	Number	 001Ah	 
+DevHlp_SetTimer  . . . . . . . .	Number	 001Dh	 
+DevHlp_SortRequest . . . . . . .	Number	 000Ch	 
+DevHlp_TCYield . . . . . . . . .	Number	 0003h	 
+DevHlp_TickCount . . . . . . . .	Number	 0033h	 
+DevHlp_UnPhysToVirt  . . . . . .	Number	 0032h	 
+DevHlp_UnSetIRQ  . . . . . . . .	Number	 001Ch	 
+DevHlp_Unlock  . . . . . . . . .	Number	 0014h	 
+DevHlp_VMAlloc . . . . . . . . .	Number	 0057h	 
+DevHlp_VMFree  . . . . . . . . .	Number	 0058h	 
+DevHlp_VMGlobalToProcess . . . .	Number	 005Ah	 
+DevHlp_VMLock  . . . . . . . . .	Number	 0055h	 
+DevHlp_VMProcessToGlobal . . . .	Number	 0059h	 
+DevHlp_VMSetMem  . . . . . . . .	Number	 0066h	 
+DevHlp_VMUnlock  . . . . . . . .	Number	 0056h	 
+DevHlp_VerifyAccess  . . . . . .	Number	 0027h	 
+DevHlp_VideoPause  . . . . . . .	Number	 003Ch	 
+DevHlp_VirtToLin . . . . . . . .	Number	 005Bh	 
+DevHlp_VirtToPhys  . . . . . . .	Number	 0016h	 
+DevHlp_Yield . . . . . . . . . .	Number	 0002h	 
+DeviceHelp . . . . . . . . . . .	DWord	 001E	  _DATA	Public
+ERROR_DEVICEDRIVER_DEFINED_BASE 	Number	 FE00h	 
+GIOCategory  . . . . . . . . . .	Byte  	 000Dh	 
+GIODataLen . . . . . . . . . . .	Word  	 001Bh	 
+GIODataPack  . . . . . . . . . .	DWord 	 0013h	 
+GIOFunction  . . . . . . . . . .	Byte  	 000Eh	 
+GIOParaLen . . . . . . . . . . .	Word  	 0019h	 
+GIOParaPack  . . . . . . . . . .	DWord 	 000Fh	 
+GIOSFN . . . . . . . . . . . . .	Word  	 0017h	 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 45 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+IOPhysRBA  . . . . . . . . . . .	DWord 	 0014h	 
+IOSFN  . . . . . . . . . . . . .	Word  	 0018h	 
+IOcount  . . . . . . . . . . . .	Word  	 0012h	 
+IOmedia  . . . . . . . . . . . .	Byte  	 000Dh	 
+IOpData  . . . . . . . . . . . .	DWord 	 000Eh	 
+IOstart  . . . . . . . . . . . .	Word  	 0014h	 
+IniArgOfs  . . . . . . . . . . .	Word	 0024	  _DATA	Public
+IniArgSeg  . . . . . . . . . . .	Word	 0022	  _DATA	Public
+InitComplete . . . . . . . . . .	Word	 0026	  _DATA	
+InitDevHlp . . . . . . . . . . .	DWord 	 000Eh	 
+InitEcode  . . . . . . . . . . .	Word  	 000Eh	 
+InitEdata  . . . . . . . . . . .	Word  	 0010h	 
+InitParms  . . . . . . . . . . .	DWord 	 0012h	 
+InitSysiData . . . . . . . . . .	Byte  	 0018h	 
+InitcUnit  . . . . . . . . . . .	Byte  	 000Dh	 
+Initdrv  . . . . . . . . . . . .	Byte  	 0016h	 
+InitpBPB . . . . . . . . . . . .	DWord 	 0012h	 
+InitpEnd . . . . . . . . . . . .	DWord 	 000Eh	 
+LENBldBPB  . . . . . . . . . . .	Number	 0009h	 
+LENDeIn  . . . . . . . . . . . .	Number	 0000h	 
+LENFlush . . . . . . . . . . . .	Number	 0000h	 
+LENGenIOCTL2 . . . . . . . . . .	Number	 0010h	 
+LENGenIOCTL  . . . . . . . . . .	Number	 000Ch	 
+LENGetDevSpprt . . . . . . . . .	Number	 000Bh	 
+LENIO  . . . . . . . . . . . . .	Number	 000Dh	 
+LENInitRes . . . . . . . . . . .	Number	 000Ch	 
+LENInit  . . . . . . . . . . . .	Number	 000Ah	 
+LENMedChk  . . . . . . . . . . .	Number	 0006h	 
+LENNDR . . . . . . . . . . . . .	Number	 0001h	 
+LENOpnCls  . . . . . . . . . . .	Number	 0004h	 
+LENRemMed  . . . . . . . . . . .	Number	 0000h	 
+LENResMed  . . . . . . . . . . .	Number	 0000h	 
+LENSaveRestore . . . . . . . . .	Number	 0001h	 
+LENShutdown  . . . . . . . . . .	Number	 0005h	 
+LENStatus  . . . . . . . . . . .	Number	 0000h	 
+LenAddOn . . . . . . . . . . . .	Number	 0004h	 
+LenGetSetLog . . . . . . . . . .	Number	 0001h	 
+LenStp . . . . . . . . . . . . .	Number	 0001h	 
+Logical_Drive  . . . . . . . . .	Byte  	 000Dh	 
+MAX_DISKDD_CMD . . . . . . . . .	Number	 001Dh	 
+MCW  . . . . . . . . . . . . . .	Number	 001Fh	 
+MedChkflag . . . . . . . . . . .	Byte  	 000Eh	 
+MedChkmedia  . . . . . . . . . .	Byte  	 000Dh	 
+MedChkpVID . . . . . . . . . . .	DWord 	 000Fh	 
+NDRbyte  . . . . . . . . . . . .	Byte  	 000Dh	 
+OCLastRef  . . . . . . . . . . .	Word  	 000Fh	 
+OCSFN  . . . . . . . . . . . . .	Word  	 000Dh	 
+OutTilBusy . . . . . . . . . . .	Number	 2000h	 
+PktAdvise  . . . . . . . . . . .	Word  	 001Ah	 
+PktDOSLink . . . . . . . . . . .	DWord 	 0005h	 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 46 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+PktHeadSize  . . . . . . . . . .	Number	 000Dh	 
+PktMax . . . . . . . . . . . . .	Number	 0012h	 
+RPF_CHS_ADDRESSING . . . . . . .	Number	 0008h	 
+RPF_CallOutDone  . . . . . . . .	Number	 0002h	 
+RPF_Int13RP  . . . . . . . . . .	Number	 0001h	 
+RPF_Internal . . . . . . . . . .	Number	 0010h	 
+RPF_PktDiskIOTchd  . . . . . . .	Number	 0004h	 
+RPF_TraceComplete  . . . . . . .	Number	 0020h	 
+ReadBypassAdj  . . . . . . . . .	Number	 0014h	 
+ReqPktSize . . . . . . . . . . .	Number	 0020h	 
+SDFuncCode . . . . . . . . . . .	Byte  	 000Dh	 
+SDReserveHigh  . . . . . . . . .	Word  	 0010h	 
+SDReserveLow . . . . . . . . . .	Word  	 000Eh	 
+SEL_FLATMASK . . . . . . . . . .	Text   	 01fff0000h
+SEL_FLAT_SHIFT . . . . . . . . .	Number	 000Dh	 
+SEL_LDT_RPL3 . . . . . . . . . .	Number	 0007h	 
+SRFC_Restore . . . . . . . . . .	Number	 0001h	 
+SRFC_Save  . . . . . . . . . . .	Number	 0000h	 
+SRFuncCode . . . . . . . . . . .	Byte  	 000Dh	 
+STATUS_DONE  . . . . . . . . . .	Number	 0100h	 
+STATUS_ERR_UNKCMD  . . . . . . .	Number	 8003h	 
+STBUI  . . . . . . . . . . . . .	Number	 0200h	 
+STDDERROR  . . . . . . . . . . .	Number	 4000h	 
+STDON  . . . . . . . . . . . . .	Number	 0100h	 
+STECODE  . . . . . . . . . . . .	Number	 00FFh	 
+STERR  . . . . . . . . . . . . .	Number	 8000h	 
+STINTER  . . . . . . . . . . . .	Number	 0400h	 
+StaticPackets  . . . . . . . . .	Number	 0080h	 
+TIMER_MODE_HR  . . . . . . . . .	Number	 0003h	 
+TIMER_MODE_SYSI  . . . . . . . .	Number	 0001h	 
+TIMER_MODE_SYS . . . . . . . . .	Number	 0002h	 
+TIMER_MODE_UNK . . . . . . . . .	Number	 0000h	 
+VCS_Addr . . . . . . . . . . . .	DWord 	 0014h	 
+WRECODE  . . . . . . . . . . . .	Number	 0000h	 
+WriteBypassAdj . . . . . . . . .	Number	 0011h	 
+__acrtused . . . . . . . . . . .	Number	 9876h	 Public
+_ioctl . . . . . . . . . . . . .	L Near	 0000	  _TEXT	External
+_registerTimer . . . . . . . . .	L Near	 0000	  _TEXT	External
+_timerHandler  . . . . . . . . .	L Far	 0000	  External
+_usTickLen . . . . . . . . . . .	Word	 0000	  _DATA	External
+_usTimerMode . . . . . . . . . .	Word	 0028	  _DATA	Public
+bad_command  . . . . . . . . . .	L Near	 003F	  _TEXT	
+dev_close  . . . . . . . . . . .	L Near	 0046	  _TEXT	
+dev_open . . . . . . . . . . . .	L Near	 0046	  _TEXT	
+event_CtrlBrk  . . . . . . . . .	Number	 0001h	 
+event_CtrlC  . . . . . . . . . .	Number	 0002h	 
+event_CtrlPrtSc  . . . . . . . .	Number	 0004h	 
+event_CtrlScrLk  . . . . . . . .	Number	 0003h	 
+event_HOT_PLUG . . . . . . . . .	Number	 0008h	 
+event_MUF  . . . . . . . . . . .	Number	 0000h	 
+Microsoft (R) Macro Assembler Version 6.00     		    08/13/05 10:27:39
+DCF_DD  -  DCF Device Driver				     Symbols 47 - 1
+
+
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+event_POWEROFF . . . . . . . . .	Number	 000Ah	 
+event_POWER  . . . . . . . . . .	Number	 0009h	 
+event_SM_CAD . . . . . . . . . .	Number	 0007h	 
+event_SM_Kbd . . . . . . . . . .	Number	 0006h	 
+event_SM_Mou . . . . . . . . . .	Number	 0000h	 
+event_ShftPrtSc  . . . . . . . .	Number	 0005h	 
+event_count  . . . . . . . . . .	Number	 000Bh	 
+fPktCallOutDone  . . . . . . . .	Number	 0002h	 
+fPktDiskIOTchd . . . . . . . . .	Number	 0004h	 
+fPktInt13RP  . . . . . . . . . .	Number	 0001h	 
+function_table . . . . . . . . .	Word	 0000	  CONST	
+hLockLvlH  . . . . . . . . . . .	Word	 0030	  _DATA	
+hLockLvlL  . . . . . . . . . . .	Word	 002E	  _DATA	
+hLockLvl . . . . . . . . . . . .	DWord	 002E	  _DATA	
+initialize . . . . . . . . . . .	L Far	 0000	  External
+pBuffLvlH  . . . . . . . . . . .	Word	 002C	  _DATA	
+pBuffLvlL  . . . . . . . . . . .	Word	 002A	  _DATA	
+pBuffLvl . . . . . . . . . . . .	DWord	 002A	  _DATA	
+rh_command . . . . . . . . . . .	Byte	 0002	  rh	
+rh_ioctl_buff  . . . . . . . . .	DWord	 0013	  rh	
+rh_ioctl_categ . . . . . . . . .	Byte	 000D	  rh	
+rh_ioctl_funct . . . . . . . . .	Byte	 000E	  rh	
+rh_ioctl_parm  . . . . . . . . .	DWord	 000F	  rh	
+rh_len . . . . . . . . . . . . .	Byte	 0000	  rh	
+rh_q_link  . . . . . . . . . . .	Word	 0009	  rh	
+rh_rsvd  . . . . . . . . . . . .	Word	 0005	  rh	
+rh_status  . . . . . . . . . . .	Word	 0003	  rh	
+rh_unit  . . . . . . . . . . . .	Byte	 0001	  rh	
+usMaxLvl . . . . . . . . . . . .	Word	 0034	  _DATA	
+uscLvl . . . . . . . . . . . . .	Word	 0032	  _DATA	
+
+	   0 Warnings
+	   0 Errors

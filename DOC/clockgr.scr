@@ -1,0 +1,1716 @@
+.*----------------------------------------------------------
+.* WPDCR77 -- Systemuhr mit DCF77-UnterstÅtzung
+.*
+.* IPF Help File
+.*
+.*----------------------------------------------------------
+
+.imd ..\som2\clockpan.h
+:userdoc.
+
+.*----------------------------------------------------------
+.*  Systemuhr mit DCF77-UnterstÅtzung
+.*----------------------------------------------------------
+:h1 res=&PANEL_MAIN..Systemuhr mit DCF77/GPS-UnterstÅtzung
+:i1.Systemuhr mit DCF77/GPS-UnterstÅtzung
+
+:p.Mit dieser modifizierten :hp2.Systemuhr:ehp2. kînnen Sie die Systemzeit einstellen,
+eine Uhrzeit fÅr die Alarmfunktion vorgeben sowie die Einstellungen fÅr
+den DCF77/GPS-Treiber vornehmen.
+Die Uhr kann in verschiedenen Formaten angezeigt 
+werden (z. B. analog oder digital mit oder ohne 
+Systemdatum). Gehen Sie folgenderma·en vor&colon. 
+
+:ol compact.
+:li. Das KontextmenÅ fÅr die Systemuhr anzeigen. 
+:li. Den Pfeil rechts neben ôffnen auswÑhlen. 
+:li. Einstellungen auswÑhlen. 
+:eol.
+
+:p.Zugehîrige Informationen&colon.
+:ul compact.
+:li.:link reftype=hd res=10001.Anzeigen von KontextmenÅs:elink.
+:li.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+:eul.    
+
+:p.Ist in Ihrem System ein DCF77/GPS-EmpfÑnger angesteckt, erhÑlt die Systemuhr zusÑtzliche
+Einstellseiten sowie eine Seite zur Anzeige des Status dieses GerÑtes.
+Dazu mu· der entsprechende Treiber :hp1.ZEIT.SYS:ehp1.
+in der Datei :hp1.CONFIG.SYS:ehp1. eingetragen sein.
+
+:p.NÑhere Hinweise zur Technik des DCF77-Empfangs siehe
+:link reftype=hd res=20000.DCF77-Systembeschreibung:elink.; Hinweise zum GPS-Empfang finden sich unter
+:link reftype=hd res=20001.GPS-Systembeschreibung:elink..
+
+.*----------------------------------------------------------
+.*  DCF77 Technik
+.*----------------------------------------------------------
+:h1 res=20000.DCF77 Systembeschreibung
+:i1.DCF77 Systembeschreibung
+
+:p.Die verwendeten DCF77-Funkuhren empfangen das Signal des gleichnamigen Langwellensenders in Mainflingen
+bei Frankfurt am Main. Dieser der Verbreitung der gesetzlichen Zeit der Bundesrepublik Deutschland
+MEZ (englisch: Central European Time, CET) bzw. die MitteleuropÑische Sommerzeit MESZ (englisch: Central European Summer
+Time, CEST). Der Empfang des Senders DCF77 ist nahezu Åberall in Deutschland und im angrenzenden Ausland mîglich. 
+
+:p.Der Sender wird durch die Atomuhren der Physikalisch-Technischen Bundesanstalt (PTB) in Braunschweig gesteuert. Der Fachbereich
+LÑnge und Zeit der PTB kontrolliert die ausgesendeten Signale, welche innerhalb jeder Minute in Sekundenimpulsen codiert die
+komplette Zeitinformation einschlie·lich Uhrzeit, Datum und Wochentag Åbertragen.
+
+Die hochkonstante TrÑgerfrequenz des Zeitsignals betrÑgt 77,5 kHz. Zu Beginn jeder Sekunde wird die TrÑgeramplitude fÅr 0,1 sec oder
+0,2 sec auf ca. 25% abgesenkt. Die so erzeugten Sekundenmarken enthalten binÑr codiert die Zeitinformation. Sekundenmarken mit
+einer Dauer von 0,1 sec entsprechen einer binÑren ˇ0ˇ und solche mit 0,2 sec einer binÑren ˇ1ˇ. Die Information Åber die Uhrzeit und
+das Datum sowie einige Parity- und Statusbits finden sich in den Sekundenmarken 15 bis 58 jeder Minute. Durch das Fehlen der 59.
+Sekundenmarke wird die Minutenmarke angekÅndigt. 
+
+:p.:hp2.Decodierschema DCF77:ehp2.
+:p.:artwork name='dcfcode.bmp' align=left.
+:p.:parml compact tsize=15 break=none.
+:pt.M
+:pd.Minutenmarke (0,1s)
+:pt.R
+:pd.Aussendung Åber Reserveantenne
+:pt.A1 
+:pd.AnkÅndigung Beginn/Ende der Sommerzeit
+:pt.Z1, Z2 
+:pd.Zeitzonenbits
+.br
+Z1, Z2 = 0, 1 Standardzeit (MEZ)
+.br
+Z1, Z2 = 1, 0: Sommerzeit (MESZ)
+:pt.A2 
+:pd.AnkÅndigung einer Schaltsekunde
+:pt.S 
+:pd.Startbit der codierten Zeitinformation (0,2s)
+:pt.P1, P2, P3 
+:pd.PrÅfbits
+:eparml.
+:p.:hp1.(entnommen: Meinberg Funkuhren: Systembeschreibung DCF77):ehp1.
+
+.*----------------------------------------------------------
+.*  DCF77 Technik
+.*----------------------------------------------------------
+:h1 res=20001.GPS Systembeschreibung
+:i1.GPS Systembeschreibung
+
+:p.Das Global Positioning System (GPS) ist ein satellitengestÅtztes System zur Radioortung, Navigation und ZeitÅbertragung. Dieses System
+wurde vom Verteidigungsministerium der USA (US Departement Of Defense) installiert und arbeitet mit zwei Genauigkeitsklassen: den
+Standard Positioning Services (SPS) und den Precise Positioning Services (PPS). Die Struktur der gesendeten Daten des SPS ist
+verîffentlicht und der Empfang zur allgemeinen Nutzung freigegeben worden, wÑhrend die Zeit- und Navigationsdaten des noch
+genaueren PPS verschlÅsselt gesendet werden und daher nur bestimmten (meist militÑrischen) Anwendern zugÑnglich sind.
+
+:p.Das Prinzip der Orts- und Zeitbestimmung mit Hilfe eines GPS-EmpfÑngers beruht auf einer mîglichst genauen Messung der
+Signallaufzeit von den einzelnen Satelliten zum EmpfÑnger. 21 aktive GPS-Satelliten und drei zusÑtzliche Reservesatelliten umkreisen die
+Erde auf sechs Orbitalbahnen in 20000 km Hîhe einmal in ca. 12 Stunden. Dadurch wird sichergestellt, da· zu jeder Zeit an jedem Punkt
+der Erde mindestens vier Satelliten in Sicht sind. Vier Satelliten mÅssen zugleich zu empfangen sein, damit der EmpfÑnger seine Position
+im Raum (x, y, z) und die Abweichung seiner Uhr von der GPS-Systemzeit ermitteln kann.
+
+:p.Kontrollstationen auf der Erde vermessen die Bahnen der Satelliten und registrieren die Abweichungen der an Bord mitgefÅhrten
+Atomuhren von der GPS-Systemzeit. Die ermittelten Daten werden zu den Satelliten hinaufgefunkt und von diesen als Navigationsdaten
+wieder zurÅck zur Erde gesendet. Die hochprÑzisen Bahndaten der Satelliten, genannt Ephemeriden, werden benîtigt, damit der
+EmpfÑnger zu jeder Zeit die genaue Position der Satelliten im Raum berechnen kann. Ein Satz Bahndaten mit reduzierter Genauigkeit
+wird Almanach genannt. Mit Hilfe der Almanachs berechnet der EmpfÑnger bei ungefÑhr bekannter Position und Zeit, welche der
+Satelliten vom Standort aus Åber dem Horizont sichtbar sind. Jeder der Satelliten sendet seine eigenen Ephemeriden sowie die Almanachs
+aller existierender Satelliten aus.
+
+:p.Die GPS-Systemzeit ist eine lineare Zeitskala, die bei Inbetriebnahme des Satellitensystems im Jahre 1980 mit der internationalen
+Zeitskala UTC gleichgesetzt wurde. Seit dieser Zeit wurden jedoch in der UTC-Zeit mehrfach Schaltsekunden eingefÅgt, um die
+UTC-Zeit der énderung der Erddrehung anzupassen. Aus diesem Grund unterscheidet sich heute die GPS-Systemzeit um eine ganze
+Anzahl Sekunden von der UTC-Zeit. Die Anzahl der Differenzsekunden ist jedoch im Datenstrom der Satelliten enthalten, so da· der
+EmpfÑnger intern synchron zur internationalen Zeitskala UTC laufen kann. Umrechnung der UTC-Zeit in die Ortszeit sowie Bestimmung
+von Beginn und Ende der Sommerzeit werden vom Mikroprozessor des EmpfÑngers ausgefÅhrt, da die dazu benîtigten Informationen
+nicht im Datenstrom der Satelliten enthalten sind.
+
+:p.:hp1.(entnommen: Meinberg Funkuhren: Systembeschreibung GPS):ehp1.
+
+.*----------------------------------------------------------
+.*  Analoge Ansicht
+.*----------------------------------------------------------
+:h1 res=&PANEL_VIEWANALOG..Analoge Ansicht
+:i1.Analoge Ansicht
+
+:p.Die :hp1.analoge Ansicht:ehp1. entspricht einer Uhr mit rundem Ziffernblatt und
+Stunden- und Minuteneinteilung sowie einem Sekundenzeiger.
+
+:p.Bei Auswahl von :hp2.Analog:ehp2. wird eine Uhr mit Stunden-
+und Minuteneinteilung und einem Sekundenzeiger dargestellt.
+Au·erhalb des Ziffernblattes befinden sich die Statusanzeigen fÅr den
+DCF77/GPS-Empfang&colon.
+
+:p.:hp5.Empfangsstatus:ehp5.
+:dl compact tsize=6.
+:dt.:artwork name='carrnd.bmp' align=center runin.
+:dd.Treiber (z. B. :hp2.ZEIT.SYS:ehp2.) oder LAN&colon.&colon.Time-Client (:hp2.TIMECLNT.EXE:ehp2.) nicht installiert.
+:dt.:artwork name='carrx.bmp' align=center runin.
+:dd.Hardware nicht installiert, Einstellungen nicht korrekt, die EmpfangsqualitÑt ist zu schlecht oder
+der LAN&colon.&colon.Time-Server (:hp2.TIMESERV.EXE:ehp2.) sendet nicht.
+:dt.:artwork name='carrnok.bmp' align=center runin.
+:dd.Aktuelle Zeit ist nicht gÅltig&colon. Empfangsbedingungen schlecht.
+:dt.:artwork name='carrok.bmp' align=center runin.
+:dd.Aktuelle Zeit ist gÅltig.
+:edl.
+
+:p.:hp5.Zeitzone:ehp5.
+:dl compact tsize=6.
+:dt.:artwork name='winter.bmp' align=center runin.
+:dd.Winterzeit
+:dt.:artwork name='summer.bmp' align=center runin.
+:dd.Sommerzeit
+:edl.
+
+:p.:hp5.Sonstiges:ehp5.
+:dl compact tsize=6.
+:dt.:artwork name='batt.bmp' align=center runin.
+:dd.Batterie leer (nur bei HOPF-Empfangsmodul).
+:edl.
+
+.*----------------------------------------------------------
+.*  Digitale Ansicht
+.*----------------------------------------------------------
+:h1 res=&PANEL_VIEWDIGITAL..Digitale Ansicht
+:i1.Digitale Ansicht
+
+:p.Die :hp2.digitale Ansicht:ehp2. entspricht einer Uhr mit einer alphanumerischen
+Anzeige von Datum und Uhrzeit. Im Gegensatz zur 
+:link reftype=hd res=&PANEL_VIEWANALOG..analogen Ansicht:elink. bietet
+diese Darstellung keine Darstellung des DCF77/GPS-Status.
+
+.*----------------------------------------------------------
+.*  Anzeigen von Notizbuchseiten
+.*----------------------------------------------------------
+:h1 res=10000.Anzeigen von Notizbuchseiten
+:i1.Anzeigen von Notizbuchseiten
+
+:p.Um weitere Seiten des Notizbuchs anzuzeigen, 
+entweder eine Indexzunge oder einen der Pfeile in 
+der unteren rechten Ecke auswÑhlen.   
+
+.*----------------------------------------------------------
+.*  Anzeigen von KontextmenÅs
+.*----------------------------------------------------------
+:h1 res=10001.Anzeigen von KontextmenÅs
+:i1.Anzeigen von KontextmenÅs
+
+:p.Jedes Objekt besitzt ein KontextmenÅ, das alle die 
+Funktionen enthÑlt, die zur Zeit verfÅgbar sind. Das 
+KontextmenÅ fÅr ein beliebiges Objekt wird 
+folgenderma·en angezeigt&colon.
+
+:ol compact.
+:li.Den Mauszeiger zum Uhrensymbol bewegen. 
+:li.Maustaste 2 drÅcken. 
+:eol.
+
+:p.Ist das Objekt geîffnet, kann das 
+MenÅ auch durch Klicken mit Maustaste 2 
+durch Klicken in das Titelleistensymbol in der 
+oberen linken Ecke angezeigt werden. 
+
+:note.Pfeile rechts neben einer MenÅauswahl 
+zeigen an, da· noch weitere Auswahlmîglichkeiten 
+verfÅgbar sind. Ein Pfeil, der sich auf einem 
+stilisierten Druckknopf befindet, bedeutet, da· eine 
+weiterfÅhrende Auswahl als Standardfunktion (durch 
+den Haken gekennzeichnet) vorausgewÑhlt ist, wenn 
+die Åbergeordnete Auswahl angegeben wird. Ein 
+einfacher Pfeil zeigt an, da· noch weitere 
+Auswahlmîglichkeiten zur VerfÅgung stehen. 
+
+.*----------------------------------------------------------
+.*  éndern von Objektnamen
+.*----------------------------------------------------------
+:h1 res=10002.éndern von Objektnamen
+:i1.éndern von Objektnamen
+
+:p.Sie kînnen den Namen von Ordnern und Objekten 
+Ñndern. 
+
+:ol compact.
+:li.Den Mauszeiger zum Titel des Objekts bzw. Ordners bewegen, das bzw. der geÑndert werden soll. 
+:li.Die Taste Alt gedrÅckt halten, dann mit der Maustaste 1 in den Titel klicken. 
+:li.Die énderungen eingeben und den vorigen Namen mit Hilfe der RÅcktaste oder der Taste Entf lîschen. 
+:li.Den Zeiger vom Namen wegbewegen und nochmals die Maustaste 1 drÅcken. 
+:eol.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CANCEL..Widerrufen
+:i1.Widerrufen
+
+:p.Hiermit werden die Werte wiederverwendet, die vor 
+Anzeige dieses aktiven Fensters gÅltig waren.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_STANDARD..Standard
+:i1.Standard
+
+:p.Hiermit werden die Werte wiederverwendet, die beim 
+Installieren des Systems gÅltig waren.   
+
+.*----------------------------------------------------------
+.*  Datum/Uhrzeit
+.*----------------------------------------------------------
+:h1 res=&PANEL_DATETIME..Datum/Uhrzeit
+:i1 id=&PANEL_DATETIME..Datum/Uhrzeit
+
+:p.Ist kein DCF77/GPS-Treiber installiert, kînnen Sie mit :hp2.Datum/Uhrzeit:ehp2. die aktuellen 
+Einstellungen fÅr Datum und Uhrzeit Ñndern. Gehen Sie dazu wie folgt vor&colon.
+
+:ol compact.
+:li.Den Bestandteil der Uhrzeit oder des Datums, 
+der nicht richtig ist, auswÑhlen und mit Hilfe der 
+Pfeile korrigieren. 
+:li.Anschlie·end einen anderen Bereich im Fenster 
+:hp2.Datum und Uhrzeit:ehp2. auswÑhlen. 
+:eol.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_HOURS..Stunde:elink.
+:li.:link reftype=hd res=&PANEL_MINUTES..Minuten:elink.
+:li.:link reftype=hd res=&PANEL_SECONDS..Sekunden:elink.
+:li.:link reftype=hd res=&PANEL_MONTH..Monat:elink.
+:li.:link reftype=hd res=&PANEL_DAY..Tag:elink.
+:li.:link reftype=hd res=&PANEL_YEAR..Jahr:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_HOURS..Stunden
+:i2 refid=&PANEL_DATETIME..Stunden
+
+:p.In diesem Feld wird die Stundenangabe der 
+Systemuhr angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_MINUTES..Minuten
+:i2 refid=&PANEL_DATETIME..Minuten
+
+:p.In diesem Feld wird die aktuelle Minutenangabe der 
+Systemuhr angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus. 
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SECONDS..Sekunden
+:i2 refid=&PANEL_DATETIME..Sekunden
+
+:p.In diesem Feld wird die aktuelle Sekundenangabe der 
+Systemuhr angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_MONTH..Monat
+:i2 refid=&PANEL_DATETIME..Monat
+
+:p.In diesem Feld wird die aktuelle Monatsangabe der 
+Systemuhr angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_DAY..Tag
+:i2 refid=&PANEL_DATETIME..Tag
+
+:p.In diesem Feld wird die aktuelle Wochentagangabe 
+der Systemuhr angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_YEAR..Jahr
+:i2 refid=&PANEL_DATETIME..Jahr
+
+:p.In diesem Feld wird die aktuelle Jahresangabe der 
+Systemuhr angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+.*----------------------------------------------------------
+.*  Zeitoffset
+.*----------------------------------------------------------
+:h1 res=&PANEL_TMOFFS..Zeitoffset
+:i1 id=&PANEL_TMOFFS..Zeitoffset
+
+:p.Diese Seite dient zur Einstellung von Zeitoffsets. Ein :hp2.systemweiter:ehp2. Offset betrifft
+alle Zeitangaben innerhalb des Systems, wÑhrend die :hp2.uhrspezifische:ehp2. Angabe sich
+nur auf eine Zeitdifferenz zwischen der ausgewÑhlten Uhr und der Systemzeit bezieht.
+Es gibt folgende Einstellmîglichkeiten&colon.
+
+:ol compact.
+:li.:link reftype=hd res=&PANEL_UTC..UTC/Greenwich:elink.
+:li.:link reftype=hd res=&PANEL_GOFFSET..Systemweiter Offset:elink.
+:li.:link reftype=hd res=&PANEL_LOFFSET..Uhrspezifischer Offset:elink.
+:li.:link reftype=hd res=&PANEL_TZONE..Zeitzone:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eol.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_UTC..UTC/Greenwich
+:i2 refid=&PANEL_TMOFFS..UTC/Greenwich
+
+:p.Wird dieses Markierungsfeld ausgewÑhlt, wird die vom DCF77-Sender ausgesendete
+Zeitzone (Winter-/Sommerzeit) ignoriert und direkt die UTC-Zeit (Greenwich-Zeit)
+eingestellt.
+Diese Zeit wird vom gesamten System Åbernommen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_GOFFSET..Systemweiter Offset
+:i2 refid=&PANEL_TMOFFS..Systemweiter Offset
+
+:p.Die Stellung dieses Schiebereglers gibt an, wieviele Stunden zu der vom DCF77/GPS-Sender
+ausgesendeten Zeit addiert werden sollen.
+Diese Einstellung wird vom gesamten System Åbernommen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_LOFFSET..Uhrspezifischer Offset
+:i2 refid=&PANEL_TMOFFS..Uhrspezifischer Offset
+
+:p.Die Stellung dieses Schiebereglers gibt an, wieviele Stunden
+zu der vom DCF77/GPS-Sender ausgesendeten Zeit addiert werden sollen.
+Diese Einstellung gilt nur fÅr die ausgewÑhlte Uhr.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TZONE..Zeitzone
+:i2 refid=&PANEL_TZONE..Zeitzone
+
+:p.In dieses Eingabefeld kann der Name der Zeitzone, auf die die ausgewÑhlte Uhr gestellt ist,
+eingegeben werden. Der Text erscheint (nach Schlie·en des Einstellungs-Notizbuches) in der
+Titelzeile der Uhr.
+
+.*----------------------------------------------------------
+.*  Sommer-/Winterzeitumschaltung
+.*----------------------------------------------------------
+:h1 res=&PANEL_TIMEZONE..Sommer-/Winterzeitumschaltung
+:i1.Sommer-/Winterzeitumschaltung
+
+:p.Bei Empfang der Uhrzeit mit Hilfe eines GPS-EmpfÑngers (z. B. hopf 6038), ist
+die Uhrzeit die UTC-Zeit. Diese mu· fÅr die entsprechende Zeitzone auf die Lokalzeit
+zurÅckgerechnet und die Sommer-/Winterzeit berÅcksichtigt werden.
+
+:p.Basis dieser Berechnungen ist eine Zeitzonen-Datei, wie sie auf UNIX-Systemen verwendet
+wird. StandardmÑ·ig wird die Datei :hp1.TZTAB:ehp1. mitgeliefert, die alle weltweit wichtigen
+Zeitzonen enthÑlt. énderungen an dieser Datei kînnen bei lokalen énderungen der 
+Sommer-/Winterzeit-Umschaltpunkte notwendig werden und sind von Hand mit Hilfe eines einfachen
+Texteditors durchzufÅhren.
+
+:p.Ein Eintrag innerhalb dieser Datei hat folgenden Aufbau&colon.
+:ol compact.
+:li.Kommentarzeilen&colon. Diese beginnen mit dem Zeichen '#'. Beispiel&colon.
+  :cgraphic.# Mitteleuropaeische Zeit, Mitteleuropaeische Sommerzeit:ecgraphic.:p.
+:li.Zeitzonenname&colon.Dieser Name ist ein String, der sich zusammensetzt aus dem
+Namen der Zeitzone bei Standardzeit gefolgt einer Zahl, die den Unterschied zur UTC-Zeit
+angibt. Der String endet mit dem Namen der Zeitzone zur Sommerzeit. Beispiel&colon.
+  :cgraphic.
+  MEZ-1MESZ
+   ≥ ≥  ≥
+   ≥ ≥  ¿ƒƒƒƒƒ> mitteleuropÑische Sommerzeit
+   ≥ ¿ƒƒƒƒƒƒƒƒ> Differenz der Winterzeit zu UTC ist -1 Stunde
+   ¿ƒƒƒƒƒƒƒƒƒƒ> mitteleuroÑische Zeit
+  :ecgraphic.
+:p.Bei Zeitzonen, bei denen die Differenz zu UTC kein ganzzahliges Vielfaches eine Stunde ist, werden
+die Minuten durch einen Doppelpunkt abgetrennt (Beispiel&colon. -1&colon.30).:p.
+:li.Umschaltzeitpunkte&colon. Jeder Umschaltzeitpunkt wird in einer Zeile definiert.
+Jede dieser Zeilen hat den Aufbau&colon.
+  :ol compact.
+  :li. Minuten des Umschaltzeitpunktes
+  :li. Stunden des Umschaltzeitpunktes
+  :li. Tag / Tagesintervall des Umschaltzeitpunktes
+  :li. Monat des Umschaltzeitpunktes
+  :li. Jahr / Jahresintervall des Umschaltzeitpunktes
+  :li. Wochentag / Wochentagesintervall des Umschaltzeitpunktes (0=So, 1=Mo, ..., 6=Sa)
+  :li. Name der Zeitzone und Abstand zu UTC
+  :eol.
+Beispiel&colon.
+  :cgraphic.
+  0 3 25-31 3  1983-2038 0   MESZ-2
+   ≥    ≥   ≥      ≥     ≥    ≥
+   ≥    ≥   ≥      ≥     ≥    ¿ƒƒƒƒƒƒƒƒ> mitteleuropÑische Sommerzeit, Abstand zu UTC = -1Stunde
+   ≥    ≥   ≥      ≥     ¿ƒƒƒƒƒƒƒƒƒƒƒƒƒ> Umschalttag ist Sonntag
+   ≥    ≥   ≥      ¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ> gÅltig innerhalb der Jahre 1983 bis 2038 einschlie·lich
+   ≥    ≥   ¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ> Umschaltung ist im MÑrz
+   ≥    ¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ> Umschaltung erfolgt innerhalb der Tage 25 bis 31 einschlie·lich
+   ¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ> Umschaltung erfolgt um 03&colon.00&colon.00 Uhr
+  :ecgraphic.
+:eol.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_TZFILENAME..Dateiname:elink.
+:li.:link reftype=hd res=&PANEL_TZSELECT..AuswÑhlen:elink.
+:li.:link reftype=hd res=&PANEL_TZTIMEZONE..Zeitzone:elink.
+:li.:link reftype=hd res=&PANEL_TZSUMMER..Sommerzeitdefinition:elink.
+:li.:link reftype=hd res=&PANEL_TZWINTER..Winterzeitdefinition:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TZFILENAME..Dateiname
+:i2 refid=&PANEL_TZONE..Dateiname
+
+:p.Dieses Textfeld zeigt die momentan verwendete Zeitzonendatei an.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TZSELECT..AuswÑhlen
+:i2 refid=&PANEL_TZONE..AuswÑhlen
+
+:p.Ein DrÅcken dieses Knopfes îffnet den Dateiauswahldialog, mit dessen Hilfe sich die
+Zeitzonendatei auswÑhlen lÑ·t.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TZTIMEZONE..Zeitzonen
+:i2 refid=&PANEL_TZONE..Zeitzonen
+
+:p.Diese Auswahlliste zeigt die Zeitzonen, die in der Zeitzonendatei aufgefÅhrt sind 
+und lÑ·t die Auswahl eines Eintrages zu. Dieser beeinflu·t nach Schlie·en des Notizbuches
+die Uhrzeit des Systems.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TZSUMMER..Sommerzeitdefinition
+:i2 refid=&PANEL_TZONE..Sommerzeitdefinition
+
+:p.Dieses Textfeld zeigt den nÑchsten Umschaltzeitpunkt fÅr die Sommerzeit.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TZWINTER..Winterzeitdefinition
+:i2 refid=&PANEL_TZONE..Winterzeitdefinition
+
+:p.Dieses Textfeld zeigt den nÑchsten Umschaltzeitpunkt fÅr die Winterzeit.
+
+.*----------------------------------------------------------
+.*  Anzeigen Seite 1/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_SETTING1..Anzeigen Seite 1/3
+:i1.Anzeigen Seite 1/3
+ 
+:p.WÑhlen Sie die gewÅnschte Anzeigeart fÅr die 
+Systemuhr mit Hilfe der Radioknîpfe in den Feldern 
+:hp2.Information:ehp2. und :hp2.Modus:ehp2. aus.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_TIME..Nur Uhrzeit:elink.
+:li.:link reftype=hd res=&PANEL_DATE..Nur Datum:elink.
+:li.:link reftype=hd res=&PANEL_DATIM..Datum und Uhrzeit:elink.
+:li.:link reftype=hd res=&PANEL_DIGITAL..Digital:elink.
+:li.:link reftype=hd res=&PANEL_ANALOG..Analog:elink.
+:li.:link reftype=hd res=&PANEL_SHAND..Sekundenzeiger:elink.
+:li.:link reftype=hd res=&PANEL_HTICK..Stundeneinteilung:elink.
+:li.:link reftype=hd res=&PANEL_MTICK..Minuteneinteilung:elink.
+:li.:link reftype=hd res=&PANEL_BAVARIAN..Bayrischer Anzeigemodus:elink.
+:li.:link reftype=hd res=&PANEL_TITLEBAR..Titelleiste anzeigen:elink.
+:li.:link reftype=hd res=&PANEL_ICONPOS..Iconposition sichern:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+  
+:p.Es kînnen noch weitere Funktionen von :hp2.Anzeigen&colon. Seite 2/3:ehp2.
+ausgehend ausgefÅhrt werden. WÑhlen Sie 
+den Rechtspfeil unten am Fenster aus, um zu 
+:hp2.Anzeigen&colon. Seite 2/3:ehp2. umzuschalten. 
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TIME..Nur Uhrzeit
+:i2 refid=&PANEL_SETTING1..Nur Uhrzeit
+  
+:p.Durch AuswÑhlen von :hp2.Nur Uhrzeit:ehp2. wird die Uhrzeit 
+ohne Datum angezeigt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_DATE..Nur Datum
+:i2 refid=&PANEL_SETTING1..Nur Datum
+  
+:p.Durch AuswÑhlen von :hp2.Nur Datum:ehp2. wird das Datum 
+ohne Uhrzeit angezeigt. Diese Auswahl steht zur 
+VerfÅgung, wenn die Systemuhr :link reftype=hd res=&PANEL_DIGITAL..digital:elink.
+angezeigt wird.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_DATIM..Datum und Uhrzeit
+:i2 refid=&PANEL_SETTING1..Datum und Uhrzeit
+ 
+:p.Durch AuswÑhlen von :hp2.Datum und Uhrzeit:ehp2. werden 
+Datum und Uhrzeit angezeigt.
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_DIGITAL..Digital
+:i2 refid=&PANEL_SETTING1..Digital
+  
+:p.Bei Auswahl von :hp2.Digital:ehp2. wird die Uhrzeit in 
+:link reftype=hd res=&PANEL_DIGITAL..digitaler:elink.
+Darstellung angezeigt.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ANALOG..Analog
+:i2 refid=&PANEL_SETTING1..Analog
+   
+:p.Bei Auswahl von :hp2.Analog:ehp2. wird eine Uhr mit Stunden-
+und Minuteneinteilung und einem Sekundenzeiger 
+(d. h. :link reftype=hd res=&PANEL_VIEWANALOG..analog:elink.) angezeigt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SHAND..Sekundenzeiger
+:i2 refid=&PANEL_SETTING1..Sekundenzeiger
+  
+:p.Bei Auswahl dieses Markierungsfelds wird eine 
+Analoguhr mit Sekundenzeiger angezeigt.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_HTICK..Stundeneinteilung
+:i2 refid=&PANEL_SETTING1..Stundeneinteilung
+  
+:p.Bei Auswahl dieses Markierungsfelds wird eine 
+Analoguhr mit Stundeneinteilung angezeigt.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_MTICK..Minuteneinteilung
+:i2 refid=&PANEL_SETTING1..Minuteneinteilung
+  
+:p.Bei Auswahl dieses Markierungsfelds wird eine 
+Analoguhr mit Minuteneinteilung angezeigt. 
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_BAVARIAN..Bayrischer Anzeigemodus
+:i2 refid=&PANEL_SETTING1..Bayrischer Anzeigemodus
+
+:p.Einfach ausprobieren! 
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_TITLEBAR..Titelleiste anzeigen
+:i2 refid=&PANEL_SETTING1..Titelleiste anzeigen
+ 
+:p.Bei Auswahl dieses Markierungsfelds wird die Uhr mit 
+einer Titelleiste, einem Titelleistensymbol, einem 
+Druckknopf fÅr die Symbolgrî·e und einem Druckknopf fÅr die 
+maximale Grî·e angezeigt. 
+
+Wird :hp2.Titelleiste anzeigen:ehp2. nicht ausgewÑhlt, wird 
+die Uhr in einem Fenster mit einem Rahmen mit wÑhlbarer Grî·e
+angezeigt.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10002.éndern von Objektnamen:elink.
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_ICONPOS..Iconposition sichern
+:i2 refid=&PANEL_SETTING1..Iconposition sichern
+
+:p.StandardmÑ·ig wird die Position von Fenstern im verkleinerten
+Zustand (Symbolgrî·e) vom Betriebssystem festgelegt und nach
+rÑumlichen Gesichtspunkten verwaltet.
+
+:p.Ist dieses Markierungsfeld aktiviert, wird die Position
+der Uhr in Symbolgrî·e gesichert.
+
+.*----------------------------------------------------------
+.*  Anzeigen Seite 2/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_SETTING2..Anzeigen Seite 2/3
+:i1.Anzeigen Seite 2/3
+ 
+:p.WÑhlen Sie die gewÅnschte Anzeigeart fÅr die 
+Systemuhr mit Hilfe der Radioknîpfe in den Feldern 
+:hp2.Farben:ehp2. und :hp2.Schriftarten:ehp2. aus. 
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_CBGND..Hintergrund:elink.
+:li.:link reftype=hd res=&PANEL_CFACE..Zifferblatt:elink.
+:li.:link reftype=hd res=&PANEL_CHTICK..Stundenmarkierung:elink. 
+:li.:link reftype=hd res=&PANEL_CHHAND..Stundenzeiger:elink.
+:li.:link reftype=hd res=&PANEL_CMHAND..Minutenzeiger:elink.
+:li.:link reftype=hd res=&PANEL_CDATEBGND..Datumsfeld:elink.
+:li.:link reftype=hd res=&PANEL_CDATE..Farbe Datum:elink.
+:li.:link reftype=hd res=&PANEL_CTIME..Farbe Uhrzeit:elink.
+:li.:link reftype=hd res=&PANEL_CTRANSPARENT..Transparentfarbe fÅr Bitmaps:elink.
+:li.:link reftype=hd res=&PANEL_CHGCOL..Farbe Ñndern:elink.
+:li.:link reftype=hd res=&PANEL_FDATE..Datum:elink.
+:li.:link reftype=hd res=&PANEL_FTIME..Uhrzeit:elink.
+:li.:link reftype=hd res=&PANEL_CHGFONT..Schriftart Ñndern:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+  
+:p.Es kînnen noch weitere Funktionen von :hp2.Anzeigen&colon.
+Seite 1/3:ehp2. aus ausgefÅhrt werden. WÑhlen Sie den 
+Linkspfeil unten am Fenster aus, um zu :hp2.Anzeigen&colon.
+Seite 1/3:ehp2. umzuschalten. 
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CFACE..Zifferblatt
+:i2 refid=&PANEL_SETTING2..Zifferblatt
+ 
+:p.Durch AuswÑhlen von :hp2.Zifferblatt:ehp2. geben Sie an, da· 
+Sie mit :hp2.Farbe Ñndern:ehp2. die Farbe des fÅr die Uhr 
+verwendeten Zifferblatts Ñndern wollen. 
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CBGND..Hintergrund
+:i2 refid=&PANEL_SETTING2..Hintergrund
+  
+:p.Durch AuswÑhlen von :hp2.Hintergrund:ehp2. geben Sie an, 
+da· Sie mit :hp2.Farbe Ñndern:ehp2. die Farbe des fÅr die Uhr 
+verwendeten Hintergrunds Ñndern wollen.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CHTICK..Stundenmarkierung
+:i2 refid=&PANEL_SETTING2..Stundenmarkierung
+  
+:p.Durch AuswÑhlen von :hp2.Stundenmarkierung:ehp2. geben Sie 
+an, da· Sie mit :hp2.Farbe Ñndern:ehp2. die Farbe der fÅr die 
+Uhr verwendeten Stundeneinteilung Ñndern wollen.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CHHAND..Stundenzeiger
+:i2 refid=&PANEL_SETTING2..Stundenzeiger
+  
+:p.Durch AuswÑhlen von :hp2.Stundenzeiger:ehp2. geben Sie an, da· Sie 
+mit :hp2.Farbe Ñndern:ehp2. die Farbe des Stundenzeigers Ñndern 
+wollen.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CMHAND..Minutenzeiger
+:i2 refid=&PANEL_SETTING2..Minutenzeiger
+  
+:p.Durch AuswÑhlen von :hp2.Minutenzeiger:ehp2. geben Sie an, da· Sie 
+mit :hp2.Farbe Ñndern:ehp2. die Farbe des Minutenzeigers Ñndern 
+wollen.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CDATEBGND..Datumsfeld
+:i2 refid=&PANEL_SETTING2..Datumsfeld
+  
+:p.Durch AuswÑhlen von :hp2.Datumsfeld:ehp2. geben Sie an, da· 
+Sie mit :hp2.Farbe Ñndern:ehp2. die Farbe des Datumsfeldes
+der :link reftype=hd res=&PANEL_ANALOG..analogen:elink. Uhr
+Ñndern wollen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CDATE..Farbe Datum
+:i2 refid=&PANEL_SETTING2..Farbe Datum
+ 
+:p.Durch AuswÑhlen von :hp2.Farbe Datum:ehp2. geben Sie an, da· Sie 
+mit :hp2.Farbe Ñndern:ehp2. die Farbe der Schrift des Datumstextes
+Ñndern wollen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CTIME..Farbe Uhrzeit
+:i2 refid=&PANEL_SETTING2..Farbe Uhrzeit
+ 
+:p.Durch AuswÑhlen von :hp2.Farbe Datum:ehp2. geben Sie an, da· Sie 
+mit :hp2.Farbe Ñndern:ehp2. die Farbe der Schrift des Uhrzeittextes
+der :link reftype=hd res=&PANEL_DIGITAL..digitalen:elink. Uhr Ñndern wollen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CTRANSPARENT..Transparentfarbe fÅr Bitmaps
+:i2 refid=&PANEL_SETTING2..Transparentfarbe fÅr Bitmaps
+
+:p.Durch AuswÑhlen von :hp2.Transparentfarbe fÅr Bitmaps:ehp2. geben Sie an, da·
+Sie mit :hp2.Farbe Ñndern:ehp2. die Transparentfarbe der Bitmapdateien Ñndern wollen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CHGCOL..Farbe Ñndern
+:i2 refid=&PANEL_SETTING2..Farbe Ñndern
+  
+:p.Mit dem Druckknopf :hp2.Farbe Ñndern:ehp2. kînnen Sie die 
+Palette mit den Farben anzeigen, die fÅr die 
+einzelnen Bestandteile der Uhr ausgewÑhlt werden 
+kînnen. Im einzelnen sind die folgenden Schritte 
+erforderlich&colon.
+
+:ol compact.
+:li.Die gewÅnschten AuswÑhlknîpfe im Bereich :hp2.Farbe:ehp2. auswÑhlen, um den Bereich der Uhr anzugeben,
+dessen Farbe geÑndert werden soll. 
+:li.:hp2.Farbe Ñndern:ehp2. auswÑhlen.
+:li.Die Schritte 1 und 2 fÅr andere Bereiche der Uhr wiederholen. 
+:eol.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_FDATE..Datum
+:i2 refid=&PANEL_SETTING2..Datum
+  
+:p.Durch AuswÑhlen von :hp2.Datum:ehp2. geben Sie an, da· Sie 
+mit :hp2.Schriftart Ñndern:ehp2. die fÅr das Datum 
+verwendete Schriftart Ñndern wollen. 
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_FTIME..Uhrzeit
+:i2 refid=&PANEL_SETTING2..Uhrzeit
+  
+:p.Durch AuswÑhlen von :hp2.Uhrzeit:ehp2. geben Sie an, da· Sie 
+mit :hp2.Schriftart Ñndern:ehp2. die fÅr die Uhrzeit 
+verwendete Schriftart Ñndern wollen.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CHGFONT..Schriftart Ñndern
+:i2 refid=&PANEL_SETTING2..Schriftart Ñndern
+ 
+:p.Mit dem Druckknopf :hp2.Schriftart Ñndern:ehp2. wird die 
+Palette mit den Schriftarten angezeigt, die fÅr Datum 
+und Uhrzeit ausgewÑhlt werden kînnen. Im einzelnen 
+sind die folgenden Schritte erforderlich&colon.
+
+:ol compact.
+:li.Einen der Radioknîpfe im Bereich :hp2.Schriftart auswÑhlen:ehp2.,
+um den Bereich der Uhr anzugeben, der geÑndert werden soll. 
+:li.:hp2.Schriftart Ñndern:ehp2. auswÑhlen. 
+:li.Die Schritte 1 und 2 fÅr die anderen Bereiche der Uhr wiederholen. 
+:eol.
+
+.*----------------------------------------------------------
+.*  Font auswÑhlen
+.*----------------------------------------------------------
+:h1 res=&PANEL_FONT..Font auswÑhlen
+:i1.Font auswÑhlen
+
+:p.Mit Hilfe dieser Dialogbox kann der Font fÅr den ausgewÑhlten Text festgelegt werden.
+Die DCF77/GPS-Uhr lÑ·t grundsÑtzlich nur die Auswahl von sogenannten Vektorfonts zu, die
+in Hîhe und Breite so skaliert werden, da· sie in die aktuelle Grî·e des Textbereiches
+passen.
+
+.*----------------------------------------------------------
+.*  Alarm Seite 1/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_ALARM..Alarm / Erinnerung Seite 1/3
+:i1.Alarm Seite 1/3
+ 
+:p.Mit der Auswahl :hp2.Alarm:ehp2. kînnen Sie die Alarm- bzw. 
+Erinnerungsfunktion aktivieren oder inaktivieren und vorgeben, 
+ob der Alarm akustisch oder visuell (Nachrichtenfenster) 
+ausgelîst werden soll.
+
+:p.Um Uhrzeit oder Datum fÅr die Alarmfunktion zu 
+Ñndern, mu· der entsprechende Bestandteil der 
+Zeitangabe ausgewÑhlt und mit den Pfeilen rechts 
+geÑndert werden. 
+  
+:p.Die Erinnerungsfunktion gibt einen Alarm nach Ablauf eines
+in Minuten angegebenen Intervalls aus. Sie wird vom KontextmenÅ
+der Uhr aus gestartet.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_ALARMACT..Alarm aktivieren:elink.
+:li.:link reftype=hd res=&PANEL_REMIND..Erinnerung:elink.
+:li.:link reftype=hd res=&PANEL_ALARMINACT..Alarm inaktivieren:elink.
+:li.:link reftype=hd res=&PANEL_AACOUSTIC..Akustisches Signal:elink.
+:li.:link reftype=hd res=&PANEL_MESSAGE..Nachrichtenfenster:elink.
+:li.:link reftype=hd res=&PANEL_LAUNCH..Programm starten:elink.
+:li.:link reftype=hd res=&PANEL_AHOURS..Stunde:elink.
+:li.:link reftype=hd res=&PANEL_AMINUTES..Minuten:elink.
+:li.:link reftype=hd res=&PANEL_ASECONDS..Sekunden:elink.
+:li.:link reftype=hd res=&PANEL_AMONTH..Monat:elink.
+:li.:link reftype=hd res=&PANEL_ADAY..Tag:elink.
+:li.:link reftype=hd res=&PANEL_AYEAR..Jahr:elink.
+:li.:link reftype=hd res=&PANEL_SINGLE..Einmal:elink.
+:li.:link reftype=hd res=&PANEL_WEEKDAY..Wochentag Mo...So:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:eul.
+  
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ALARMACT..Alarm aktivieren
+:i2 refid=&PANEL_ALARM..Alarm aktivieren
+ 
+:p.Durch AuswÑhlen von :hp2.Alarm aktivieren:ehp2. wird vom 
+System eine Meldung geschickt, wenn die eingestellte 
+Uhrzeit und das eingestellte Datum mit der Systemuhr 
+Åbereinstimmen. Durch AuswÑhlen von :hp2.Akustisches Signal:ehp2.
+oder :hp2.Nachrichtenfenster:ehp2. kann angegeben werden, 
+in welcher Form die Meldung erfolgen soll.   
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_REMIND..Erinnerung
+:i2 refid=&PANEL_ALARM..Erinnerung
+
+:p.Durch AuswÑhlen von :hp2.Erinnerung:ehp2. wird vom
+System eine Meldung geschickt, wenn das eingestellte
+Intervall abgelaufen ist. Das Intervall wird durch den
+MenÅpunkt :hp2.Erinnerung:ehp2. im SystemmenÅ der
+Uhr gestartet.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ALARMINACT..Alarm deaktivieren
+:i2 refid=&PANEL_ALARM..Alarm deaktivieren
+  
+:p.Durch AuswÑhlen von :hp2.Alarm inaktivieren:ehp2. erfolgt 
+keine Meldung vom System, wenn Datum und Uhrzeit 
+der Alarmfunktion mit den Zeitangaben der 
+Systemuhr Åbereinstimmen.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_AACOUSTIC..Akustisches Signal
+:i2 refid=&PANEL_ALARM..Akustisches Signal
+ 
+:p.Bei Auswahl dieses Markierungsfelds ertînt zum 
+vorgegebenen Zeitpunkt ein akustisches Signal.   
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_MESSAGE..Nachrichtenfenster
+:i2 refid=&PANEL_ALARM..Nachrichtenfenster
+ 
+:p.Bei Auswahl dieses Markierungsfelds wird zum 
+vorgegebenen Zeitpunkt eine Nachricht angezeigt.
+Der Inhalt dieser Nachricht kann vorgegeben werden
+(siehe :link reftype=hd res=&PANEL_ALARM2..Alarm Seite 2/2:elink.).
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_LAUNCH..Programm starten
+:i2 refid=&PANEL_ALARM..Programm starten
+ 
+:p.Bei Auswahl dieses Markierungsfelds wird zum 
+vorgegebenen Zeitpunkt das auf der Seite :link reftype=hd res=&PANEL_ALARM3..Alarm Seite 3/3:elink.
+angegebene Programm gestartet.
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_AHOURS..Stunden
+:i2 refid=&PANEL_ALARM..Stunden
+:p.In diesem Feld wird die aktuelle Stundenangabe fÅr 
+die Alarmfunktion angezeigt. Diese Angabe kann mit 
+den Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_AMINUTES..Minuten
+:i2 refid=&PANEL_ALARM..Minuten
+ 
+:p.In diesem Feld wird die aktuelle Minutenangabe fÅr 
+die Alarmfunktion angezeigt. Diese Angabe kann mit 
+den Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_ASECONDS..Sekunden
+:i2 refid=&PANEL_ALARM..Sekunden
+ 
+:p.In diesem Feld wird die aktuelle Sekundenangabe fÅr 
+die Alarmfunktion angezeigt. Diese Angabe kann mit 
+den Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_AMONTH..Monat
+:i2 refid=&PANEL_ALARM..Monat
+  
+:p.In diesem Feld wird die aktuelle Monatsangabe fÅr 
+die Alarmfunktion angezeigt. Diese Angabe kann mit 
+den Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ADAY..Tag
+:i2 refid=&PANEL_ALARM..Tag
+ 
+:p.In diesem Feld wird die aktuelle Tagesangabe fÅr die 
+Alarmfunktion angezeigt. Diese Angabe kann mit den 
+Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus. 
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_AYEAR..Jahr
+:i2 refid=&PANEL_ALARM..Jahr
+ 
+:p.In diesem Feld wird die aktuelle Jahresangabe fÅr 
+die Alarmfunktion angezeigt. Diese Angabe kann mit 
+den Pfeilen rechts geÑndert werden. WÑhlen Sie 
+anschlie·end einen anderen Bereich in diesem 
+Fenster aus.   
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SINGLE..Einmal
+:i2 refid=&PANEL_ALARM..Einmal
+ 
+:p.Mit diesem Auswahlknopf wird festgelegt, da· ein eingestellter Alarm nur einmal
+ausgefÅhrt werden soll. In diesem Fall wechselt die Darstellung dieser Dialogbox
+so, da· ein Datum eingegeben werden kann.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_WEEKDAY..Wochentag Mo...So
+:i2 refid=&PANEL_ALARM..Wochentag MO...So
+ 
+:p.Mit diesen Auswahlknîpfen wird der Wochentag festgelegt, an dem der eingestellte Alarm
+ausgefÅhrt werden soll.
+
+.*----------------------------------------------------------
+.*  Alarm Seite 2/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_ALARM2..Alarm Seite 2/3
+:i1.Alarm Seite 2/3
+
+:p.Auf dieser Seite kann ein Text vorgegeben werden, der zur Alarmzeit im Nachrichtenfenster
+erscheint. Wird diese Seite leer gelassen, erscheint ein Standardtext.
+Die LÑnge des Textes ist auf maximal 128 Zeichen begrenzt (einschlie·lich der Zeilenschaltung).
+
+:p.FÅr die Texteingabe sind austauschbare Parameter erlaubt. Dies sind&colon.
+:dl compact tsize=4.
+:dt.%t
+:dd.Aktuelle Uhrzeit
+:dt.%d
+:dd.Aktuelles Datum
+:dt.%z
+:dd.Eingestellte Zeitzone
+:edl.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:eul.
+  
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+.*  Alarm Seite 3/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_ALARM3..Alarm Seite 3/3
+:i1.Alarm Seite 3/3
+
+:p.Mit der Auswahl :hp2.Pfad und Dateiname:ehp2. kann eine Programmdatei
+festgelegt werden, die zu dem auf der Seite :link reftype=hd res=&PANEL_ALARM..Alarm Seite 1/3:elink.
+angegebenen Zeitpunkt gestartet wird.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_ALARM_PATH..Pfad und Dateiname:elink.
+:li.:link reftype=hd res=&PANEL_SEARCH..AuswÑhlen...:elink.
+:li.:link reftype=hd res=&PANEL_ALARM_PARM..Parameter:elink.
+:li.:link reftype=hd res=&PANEL_ALARM_DIR..Arbeitsverzeichnis:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:eul.
+  
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ALARM_PATH..Pfad und Dateiname
+:i2 refid=&PANEL_ALARM3..Pfad und Dateiname
+ 
+:p.Dieses Eingabefeld dient zur Eingabe von Pfad und Programmdateiname des Programmes, das
+zum Alarmzeitpunkt gestartete werden soll. Die Angabe von DOS- oder Windows-Programmen
+ist erlaubt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ALARM_PARM..Parameter
+:i2 refid=&PANEL_ALARM3..Parameter
+ 
+:p.Dieses Eingabefeld legt den Aufrufparameter des Programmes fest, das unter
+:link reftype=hd res=&PANEL_ALARM_PATH..Pfad und Dateiname:elink. angegeben wurde.
+Die Eingabe dieses Parameters ist wahlfrei.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_ALARM_DIR..Arbeitsverzeichnis
+:i2 refid=&PANEL_ALARM3..Arbeitsverzeichnis
+
+:p.Dieses Eingabefeld legt das Arbeitsverzeichnis des Programmes fest, das unter
+:link reftype=hd res=&PANEL_ALARM_PATH..Pfad und Dateiname:elink. angegeben wurde.
+Die Eingabe dieses Parameters ist wahlfrei.
+
+.*----------------------------------------------------------
+.*  Programmdatei auswÑhlen
+.*----------------------------------------------------------
+:h2 res=&PANEL_SEARCH..Programmdatei auswÑhlen
+:i2 refid=&PANEL_ALARM3..Programmdatei auswÑhlen
+
+:p.Mit Hilfe dieser Dialogbox kann eine Programmdatei ausgewÑhlt werden, die zum angegebenen Alarmzeitpunkt
+gestartet wird, wenn der Auswahlknopf :link reftype=hd res=&PANEL_LAUNCH..Programm starten:elink.
+gedrÅckt wurde. An dieser Stelle ist auch die Auswahl von DOS- und Windows-Programmen mîglich.
+Der ausgewÑhlte Dateiname erscheint im Feld :link reftype=hd res=&PANEL_ALARM_PATH..Pfad und Dateiname:elink..
+
+.*----------------------------------------------------------
+.*  DCF77-Einstellungen Seite 1/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_DCF77_1..DCF77/GPS-Einstellungen Seite 1/3
+:i1.DCF77/GPS-Einstellungen Seite 1/3
+
+:p.Ist ein DCF77/GPS-Treiber installiert, kann auf der Notizbuchseite
+:hp2.DCF77/GPS-Einstellungen Seite 1/3:ehp2. die vom Uhrenmodul verwendete
+Schnittstelle geÑndert werden. Folgende Schnittstellen werden
+angeboten&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_SERIAL..Serielle n:elink.
+:li.:link reftype=hd res=&PANEL_GAME..Spieleadapter (Standard):elink.
+:li.:link reftype=hd res=&PANEL_SERIALX..Seriell, Port:elink.
+:li.:link reftype=hd res=&PANEL_GAMEX..Spieleadapter:elink.
+:eul.   
+
+:p.DarÅber hinaus sind folgende, weitere Auswahlelemente verfÅgbar&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SERIAL..Serielle n
+:i2 refid=&PANEL_DCF77_1..Serielle n
+
+:p.Mit diesen Radioknîpfen kann eine der vier mîglichen seriellen Schnittstellen
+des PC mit Standardadresse ausgewÑhlt werden (COM1...COM4).
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_GAME..Spieleadapter (Standard)
+:i2 refid=&PANEL_DCF77_1..Spieleadapter (Standard)
+
+:p.Mit diesem Radioknopf kann ein Standard-Spieleadapter ausgewÑhlt werden.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SERIALX..Seriell, Port
+:i2 refid=&PANEL_DCF77_1..Seriell, Port
+
+:p.Mit diesem Radioknopf kann eine serielle Schnittstelle ausgewÑhlt werden, die nicht
+auf einer Standard-I/O-Adresse liegt. Wird diese Einstellung ausgewÑhlt, erscheint
+abhÑngig vom installierten Treibertyp entweder eine Dialogbox, in der die gewÅnschte
+:link reftype=hd res=&PANEL_IOADDR..I/O-Adresse:elink. oder die
+:link reftype=hd res=&PANEL_COMPORT..COM-Port Nummer:elink.
+eingegeben werden kann.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_GAMEX..Spieleadapter
+:i2 refid=&PANEL_DCF77_1..Spieleadapter
+
+:p.Mit diesem Radioknopf kann ein Spiele- oder Ñhnliches Adapter ausgewÑhlt werden, das
+nicht auf der Standard-I/O-Adresse liegt. Wird diese Einstellung ausgewÑhlt, erscheint eine
+Dialogbox, in der die gewÅnschte :link reftype=hd res=&PANEL_IOADDR..I/O-Adresse:elink.
+eingegeben werden mu·.
+
+.*----------------------------------------------------------
+.*  DCF77-I/O-Adresse
+.*----------------------------------------------------------
+:h1 res=&PANEL_IOADDR..I/O-Adresse
+:i1.I/O-Adresse
+
+:p.In dieser Dialogbox kann die Portadresse (hexadezimal) eines seriellen oder Spieleadapters
+eingegeben werden, das nicht dem Standard entspricht.
+Es mu· jedoch beachtet werden, da· solche Adapter nur dann mit dem Treiber zusammenarbeiten, wenn
+sie ein im wesentlichen kompatibles Registerinterface besitzen.
+Das Eingabefeld wird benîtigt, wenn die Radioknîpfe :link reftype=hd res=&PANEL_SERIALX..Seriell, Port:elink.
+bzw. :link reftype=hd res=&PANEL_GAMEX..Spieleadapter:elink. ausgewÑhlt wurden.
+
+.*----------------------------------------------------------
+.*  DCF77-COMx
+.*----------------------------------------------------------
+:h1 res=&PANEL_COMPORT..COM-Port
+:i1.COM-Port
+
+:p.In dieser Dialogbox kann die Nummer der seriellen Schnittstelle (COMx) im Bereich von 
+1 bis 9 eingegeben werden.
+Dieses Eingabefeld wird benîtigt, wenn der Radioknopf :link reftype=hd res=&PANEL_SERIALX..Seriell, Nummer:elink.
+ausgewÑhlt wurde.
+
+.*----------------------------------------------------------
+.* DCF77-Einstellungen Seite 2/3
+.*----------------------------------------------------------
+:h1 res=&PANEL_DCF77_2..DCF77-Einstellungen Seite 2/3
+:i1.DCF77-Einstellungen Seite 2/3
+
+:p.Ist ein DCF77-Treiber installiert, kînnen auf der Notizbuchseite
+:hp2.DCF77-Einstellungen Seite 2/3:ehp2. verschiedene, vom Treiber
+verwendete Intervallzeiten angegeben werden.
+Es handelt sich hierbei um&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_INTERVAL..Updateintervall:elink.
+:li.:link reftype=hd res=&PANEL_IMPLEN..Schwellwert ImpulslÑnge:elink.
+:li.:link reftype=hd res=&PANEL_CHECKREP..WiederholprÅfung:elink.
+:li.:link reftype=hd res=&PANEL_HRTIMER..Hochauflîsender Zeitgeber:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INTERVAL..Updateintervall
+:i2 refid=&PANEL_DCF77_2..Updateintervall
+
+:p.Mit diesem Schieberegler wird eingestellt, nach welcher Zeit frÅhestens die Uhr
+im System bei einer Gangabweichung wieder nachgestellt werden soll.
+Diese Zeit ist im Bereich von 1 Minute bis 1 Tag wÑhlbar.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_IMPLEN..Schwellwert ImpulslÑnge
+:i2 refid=&PANEL_DCF77_2..Schwellwert ImpulslÑnge
+
+:p.Die digitale Zeitinformation wird Åber den DCF77-Sender durch Impulse mit 2 verschiedenen
+LÑngen Åbertragen, die den :hp2.0:ehp2. und :hp2.1:ehp2. Zustand kennzeichnen.
+Die Unterscheidung, welchen Zustand das gerade empfangene Bit hat, wird durch Vergleich
+mit der mit diesem Schieberegler einstellbaren Zeit getroffen.
+Diese Zeit ist in Millisekunden angegeben.
+Da die Zeit fÅr ein :hp2.0:ehp2.-Bit etwa 100ms, die fÅr ein :hp2.1:ehp2.-Bit etwa 200ms
+betrÑgt, ist eine Einstellung von 128ms-160ms fÅr die meisten Uhrenmodule normal.
+
+:p.Der Treiber unterstÅtzt 2 
+:link reftype=hd res=&PANEL_HRTIMER..verschiedene Zeitgebertypen:elink.&colon.
+Den Systemtimer von OS/2 mit seinem Takt von 32ms, sowie einen hochauflîsenden Zeitgeber, der 
+auf eine Auflîsung von 10ms eingestellt ist. Wird dieser hochauflîsende Zeitgeber verwendet, 
+bestimmt der Treiber die optimale Einstellung des Schiebereglers automatisch. 
+Bei Benutzung des Systemtimers ist dies jedoch aufgrund der
+zu geringen Auflîsung nicht mîglich. In diesem Fall mu· der Schwellwert von Hand eingestellt werden.
+Wird ein Wert ausgewÑhlt, der durch eine Beschriftung an der Tickmarke gekennzeichnet ist, ist
+dies direkt ein Vielfaches des Systemtaktes.
+
+:p.Es gibt jedoch Module bestimmter Hersteller, die die Impulse innerhalb ihrer elektronischen
+Auswertung verlÑngern. In einem solchen Fall ist es notwendig, von diesem Standardwert abzuweichen.
+Werden die Impulse unterschiedlich verlÑngert, so da· die Differenz zwischen :hp2.0:ehp2. und
+:hp2.1:ehp2. geringer wird, kann es notwendig werden, bei Verwendung des Systemtimers
+Bruchteile von Ticks einzustellen.
+
+:note.Wenn es nicht unbedingt notwendig ist, sollte man davon Abstand nehmen, nicht ganzzahlige
+Ticks einzustellen, da in einem solchen Fall zur Zeitmessung CPU-Zeit verloren geht.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CHECKREP..WiederholprÅfung
+:i2 refid=&PANEL_DCF77_2..WiederholprÅfung
+
+:p.Der DCF77-Sender ist zur Erkennung von öbertragungsfehler aufgrund atmosphÑrischer Stîrungen
+mit einer ParitÑtssicherung ausgestattet.
+Diese arbeitet jedoch nicht zuverlÑssig, da damit nur 1-Bit-Fehler erkannt werden kînnen.
+Werden 2 Bits falsch detektiert, kann dies der Treiber nicht aufgrund dieser ParitÑtsprÅfung feststellen.
+
+:p.Aus diesem Grund wurde eine weitere Sicherung vorgesehen. Dazu wird die aktuell empfangene
+Zeit mit den letzten :hp1.N-1:ehp1. Zeiten verglichen. Weicht diese mehr als :hp1.N-1:ehp1. Minuten
+von diesen Zeiten ab, wird sie verworfen.
+
+:p.:hp2.Beispiel&colon.:ehp2. Wird hier eine :hp1.N=2:ehp1. eingestellt, darf die letzte empfangene Minute
+maximal :hp1.N-1=1:ehp1. Minute von der aktuell empfangenen Zeit abweichen.
+
+:note.Die Vorgabe eines Wertes fÅr die WiederholprÅfung grî·er als 1 fÅhrt dazu, da·
+die Sommer-/Winterzeitumschaltung einige Minuten spÑter erkannt wird.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_HRTIMER..Hochauflîsender Zeitgeber
+:i2 refid=&PANEL_DCF77_2..Hochauflîsender Zeitgeber
+
+:p.Der GerÑtetreiber fÅr externe DCF77-Module ist in der Lage, anstelle des Systemtaktes
+von 32ms einen hochauflîsenden Zeitgeber zu verwenden. Dieser wird ab OS/2 Warp 4.0 standardmÑ·ig
+mit dem Betriebssystem ausgeliefert. Der Treiber hei· TIMER0.SYS und gehîrt zum Multimedia-Paket.
+Der Treiber kann auch fÅr Ñltere Betriebssystemversionen verwendet werden, vorausgesetzt der 
+Treiber CLOCK0x.SYS wird ebenfalls ausgetauscht.
+
+:p.Dieser hochauflîsende Timer hat einige Vorteile&colon.
+:ul compact.
+:li.Auch bei gewÑhlten Zeiteinheiten, die nicht ein Vielfaches des Systemtaktes sind, wird
+keine CPU-Zeit verbraucht.
+:li.Der Treiber ist bei Verwendung des hochauflîsenden Timers in der Lage, den optimalen
+Schwellwert fÅr die ImpulslÑnge automatisch zu bestimmen.
+:eul.
+
+:p.Da in der aktuellen Implementierung des hochauflîsenden Zeitgebers Probleme mit anderen
+Zeitgeber-Treibern auftreten kînnen (beispielsweise CPPOPA3.SYS von Visual Age C++), lÑ·t
+sich der Treiber auf den Systemtakt umstellen. Als Schwellwert wird dann der bei Verwendung
+des hochauflîsenden Treibers automatisch bestimmte Schwellwert Åbernommen. Beim Umschalten
+auf den Standard-Timer wird der Schieberegler mit einem Knopf und einer neuen Skala versehen.
+Hierbei ist zu beachten, da· alle Einstellungswerte, die zwischen den beschrifteten Ticks liegen,
+CPU-Zeit verbrauchen.
+
+.*----------------------------------------------------------
+:h1 res=&PANEL_DCF77_3..DCF77-Einstellungen Seite 3/3
+:i1.DCF77-Einstellungen Seite 3/3
+
+:p.Ist ein DCF77-Treiber installiert, kînnen auf der Notizbuchseite
+:hp2.DCF77-Einstellungen Seite 3/3:ehp2. die öbertragungsleitungen 
+fÅr die Stromversorgung des Uhrenmoduls sowie dessen Signalleitung
+ausgewÑhlt werden.
+Es gibt folgende Einstellmîglichkeiten&colon.
+
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_POWER..Leitung 1 und 2; Aktiv:elink.
+:li.:link reftype=hd res=&PANEL_CSIGNAL..Steuerleitung:elink.
+:li.:link reftype=hd res=&PANEL_SSIGNAL..Seriell:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_POWER..Leitung 1 und 2; Aktiv
+:i2 refid=&PANEL_DCF77_3..Leitung 1 und 2; Aktiv
+
+:p.Uhrenmodule fÅr serielle Schnittstellen werden dadurch mit Strom versorgt, da· 
+auf der verwendeten Schnittstelle eine oder zwei Steuerleitungen auf ein definiertes
+Potential gelegt werden (negative Spannung = :hp2.1:ehp2., positive Spannung = :hp2.0:ehp2.).
+Es gibt verschiedene Typen solcher Module. Einige kommen mit einer Leitung aus und versorgen
+sich mit einer unipolaren Spannung, andere benîtigen zwei Leitungen fÅr eine bipolare Spannung.
+Es gibt auch Typen, die zwei Leitungen auf demselben Potential benîtigen, um einen hîheren
+Strom entnehmen zu kînnen.
+
+:p.Werden die Uhrenmodule zusammen mit einer Maus auf derselben Schnittstelle verwendet,
+darf die Versorgungsspannung nicht vom DCF77-Treiber angelegt werden, dies mu· durch den 
+Maustreiber geschehen.
+
+:p.Diese drei FÑlle kînnen durch die Einstellungen mit Hilfe der Knîpfe :hp1.Leitung 1/2:ehp1.
+festgelegt werden. Der jeweilige Zustand am Ausgang der Leitung wird durch das Symbol im Knopf dargestellt.
+Es bedeuten&colon.
+
+:dl compact tsize=4.
+:dt.:hp8.+:ehp8.
+:dd.Positive Spannung
+:dt.:hp8.-:ehp8.
+:dd.Negative Spannung
+:edl.
+
+:p.Ist der Knopf :hp1.Aktiv:ehp1. nicht markiert, wird keine Ausgangsleitung beeinflu·t.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_CSIGNAL..Steuerleitung
+:i2 refid=&PANEL_DCF77_3..Steuerleitung
+
+:p.Der Signaleingang des Uhrenmoduls befindet sich auf einer Steuerleitung.
+Wird eine serielle Schnittstelle verwendet, ist hier eine Angabe von 4 bis 7 sinnvoll,
+fÅr nicht standardisierte I/O-Karten kann der gesamte Bereich von 0 bis 7 verwendet werden.
+
+:p.Wird im Kombinationsfeld :hp1.Auto:ehp1. ausgewÑhlt, wird die benutzte Steuerleitung
+vom Treiber automatisch gesucht. Dieses Verfahren funktioniert mit den meisten Uhrenmodulen.
+Probleme treten nur mit solchen Modulen auf, die zwei verschiedenen Signale auf unterschiedlichen
+Signalleitungen ausgeben.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SSIGNAL..Seriell
+:i2 refid=&PANEL_DCF77_3..Seriell
+
+:p.Die Daten eines Uhrenmoduls am seriellen Eingang werden Åber die RxD-Leitung Åbertragen.
+
+.*----------------------------------------------------------
+.*  DCF77-Status
+.*----------------------------------------------------------
+:h1 res=&PANEL_DCF77_STATUS..DCF77/GPS-Status
+:i1.DCF77/GPS-Status
+
+:p.Ist ein DCF77/GPS-Treiber installiert, kînnen Sie mit
+:hp2.DCF77/GPS-Status:ehp2. den aktuellen Status des EmpfÑngers abfragen.
+Folgende Statusanzeigen sind verfÅgbar&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_INFPOL..PolaritÑt:elink.
+:li.:link reftype=hd res=&PANEL_INFVER..Treiberversion:elink.
+:li.:link reftype=hd res=&PANEL_INFCARRIER..TrÑger:elink.
+:li.:link reftype=hd res=&PANEL_INFANT..Ersatzantenne:elink.
+:li.:link reftype=hd res=&PANEL_INFHLEAP..Stundensprung folgt:elink.
+:li.:link reftype=hd res=&PANEL_INFVALID..Zeit gÅltig:elink.
+:li.:link reftype=hd res=&PANEL_INFSLEAP..Schaltsekunde folgt:elink.
+:li.:link reftype=hd res=&PANEL_INFTZ1..Zeitzonenbit 1:elink.
+:li.:link reftype=hd res=&PANEL_INFTZ2..Zeitzonenbit 2:elink.
+:li.:link reftype=hd res=&PANEL_INFSCAN..Auto-Scan lÑuft:elink.
+:li.:link reftype=hd res=&PANEL_INFOK..Richtig erkannt:elink.
+:li.:link reftype=hd res=&PANEL_INFNOK..Verworfen:elink.
+:li.:link reftype=hd res=&PANEL_INFSET..Uhr gesetzt:elink.
+:eul.   
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFPOL..PolaritÑt
+:i2 refid=&PANEL_DCF77_STATUS..PolaritÑt
+
+:p.Die Information des DCF77-Senders wird in Form kurzer Impulse im Sekundenabstand Åbertragen.
+Dieses Textfeld gibt an, welche PolaritÑt diese Impulse am Ausgang des EmpfÑngermoduls besitzen.
+Die Information betrifft nur den Treiber bei der Auswertung dieser Signale.
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFVER..Treiberversion
+:i2 refid=&PANEL_DCF77_STATUS..Treiberversion
+
+:p.Dieses Textfeld zeigt die Versionsnummer des installierten Treibers an.
+Diese Systemuhr arbeitet nur korrekt mit einem Treiber ab Version 2.0.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFCARRIER..TrÑger
+:i2 refid=&PANEL_DCF77_STATUS..TrÑger
+
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· das Uhrenmodul momentan einen
+TrÑger empfÑngt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFANT..Ersatzantenne
+:i2 refid=&PANEL_DCF77_STATUS..Ersatzantenne
+
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· der DCF77-Sender gegenwÑrtig mit
+der Ersatzantenne ÅbertrÑgt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFHLEAP..Stundensprung folgt
+:i2 refid=&PANEL_DCF77_STATUS..Stundensprung folgt
+
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· mit der nÑchsten Minute ein Stundensprung
+erfolgt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFVALID..Zeit gÅltig
+:i2 refid=&PANEL_DCF77_STATUS..Zeit gÅltig
+
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· die zuletzt empfangene Minute 
+aufgrund der ParitÑts- und WiederholprÅfung als gÅltig befunden wurde.
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFSLEAP..Schaltsekunde folgt
+:i2 refid=&PANEL_DCF77_STATUS..Schaltsekunde folgt
+ 
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· die nÑchste Sekunde eine Schaltsekunde ist.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFTZ1..Zeitzone 1
+:i2 refid=&PANEL_DCF77_STATUS..Zeitzone 1
+ 
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· die aktuelle Zeit zur Zeitzone 1 gehîrt
+(Sommerzeit).
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFTZ2..Zeitzone 2
+:i2 refid=&PANEL_DCF77_STATUS..Zeitzone 2
+ 
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· die aktuelle Zeit zur Zeitzone 2 gehîrt
+(Winterzeit).
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFSCAN..Auto-Scan lÑuft
+:i2 refid=&PANEL_DCF77_STATUS..Auto-Scan lÑuft
+ 
+:p.Ein ausgefÅlltes Markierungssymbol gibt an, da· der Treiber gerade die Steuerleitung
+sucht, auf der das Signal Åbertragen wird (siehe auch die Information zur Einstellseite
+:link reftype=hd res=&PANEL_CSIGNAL..Steuerleitung:elink.).
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFOK..Richtig erkannt
+:i2 refid=&PANEL_DCF77_STATUS..Richtig erkannt
+ 
+:p.Dieses Textfeld zeigt die Zahl der seit dem Systemstart korrekt empfangenen Minuten.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFNOK..Verworfen
+:i2 refid=&PANEL_DCF77_STATUS..Verworfen
+
+:p.Dieses Textfeld zeigt die Zahl der seit dem Systemstart empfangenen Minuten an, die nicht
+erkannt werden konnten.
+ 
+.*----------------------------------------------------------
+:h2 res=&PANEL_INFSET..Uhr gesetzt
+:i2 refid=&PANEL_DCF77_STATUS..Uhr gesetzt
+ 
+:p.Dieses Textfeld zeigt die Zahl der seit dem Systemstart vorgenommenen SetzvorgÑnge der Systemuhr
+(siehe dazu :link reftype=hd res=&PANEL_CHECKREP..PrÅfintervall:elink.).
+
+.*----------------------------------------------------------
+.*  Time C/S Server
+.*----------------------------------------------------------
+:h1 res=&PANEL_SERVER..TIME C/S Server
+:i1.Time C/S Server
+
+:p.Ist die Server-Komponente des LAN&colon.&colon.Time-Paketes installiert, erscheint
+diese Seite im Einstellungsnotizbuch. Der Serverproze· ist zustÑndig fÅr die öbertragung
+der aktuellen Uhrzeit sowie des Empfangsstatus Åber das lokale Netzwerk.
+Diese öbertragung geschieht durch regelmÑ·ige Rundsendenachrichten ("broadcasts"), deren
+zeitlichen AbstÑnde in dieser Einstellungsseite festgelegt werden kînnen.
+
+:p.Standard ist ein Intervall von 10 Minuten.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_SERVERINTERVAL..öbertragungsintervall:elink.
+:li.:link reftype=hd res=&PANEL_SERVERSENDTIME..Fehlerverhalten:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+  
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SERVERINTERVAL..öbertragungsintervall
+:i2 refid=&PANEL_SERVER..öbertragungsintervall
+
+:p.Mit Hilfe dieses Schiebereglers wird das Intervall festgelegt, mit dem
+die Uhrzeit sowie der Empfangsstatus Åber das Netz Åbertragen wird.
+
+:p.Die öbertragung erfolgt bei guten Empfangsbedingungen mit diesem Intervall.
+Ist der Empfang lÑngere Zeit gestîrt, werden bei Erkennen einer gÅltigen Zeit
+die Daten auch vor Ablauf dieses Intervalles Åbertragen.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SERVERSENDTIME..Fehlerverhalten
+:i2 refid=&PANEL_SERVER..Fehlerverhalten
+
+:p.Ist dieser Knopf nicht markiert, wird bei schlechtem Empfang keine Zeit versandt.
+Ein Client zeigt daher nur den Status des Servers an, seine lokale Uhrzeit wird nicht
+korrigiert.
+
+:p.In Umgebungen, in denen es auf hohe SynchronitÑt aller Rechner im Netzwerk ankommt,
+kann durch DrÅcken dieses Knopfes bewirkt werden, da· der Server im Falle einer ungÅltig
+empfangenen Zeit seine lokale Uhrzeit verschickt.
+
+.*----------------------------------------------------------
+.*  Statistik-Panel
+.*----------------------------------------------------------
+:h1 res=&PANEL_GRAPH..DCF77/GPS Statistik
+:i1.DCF77/GPS Statistik
+
+:p.Dieses Fenster erfÅllt zwei Zwecke&colon.
+:ul compact.
+:li.Die Darstellung einer Langzeitstatistik (max. ca. 20 Tage) Åber die EmpfangsqualitÑt, sowie
+:li.die Darstellung des Empfangssignals zum Einrichten der Antenne (dabei hÑngt die Darstellungsform
+vom Typ des Empfangsmodules ab).
+:eul.
+
+:p.Im ersten Fall zeigt die Grafik die Zahl der erfolgreichen Empfangsereignisse an.
+Je geringer die Zahl der Empfangsfehler, desto hîher die GÅte. Eine zu schlechte GÅte kann
+viele GrÅnde haben. Beispiele sind&colon.
+:ul compact.
+:li.Die Antenne ist schlecht ausgerichtet. Im Idealfall zeigt die Achse der Ferritantenne
+nach Frankfurt/Main (genauer Mainflingen).
+:li.Die Wetterbedingungen sind schlecht. Vor allem Gewitterwetter fÅhrt oft zu schlechtem
+Empfang.
+:li.Der :link reftype=hd res=&PANEL_IMPLEN..Schwellwert fÅr die ImpulslÑnge:elink.
+ist falsch eingestellt. Es ist zu beachten, da· der Optimalwert fÅr diese Schwelle von der
+EmpfangsfeldstÑrke abhÑngig ist.
+:eul.
+
+:p.Die Aufzeichnung dieser Grafik erfolgt nur, wenn eine der vier Sichten der Uhr offen ist
+(Analog, Digital, Status oder die Grafik selbst). Die Skalierung der x-Achse pa·t sich an 
+die Zahl der bereits aufgezeichneten Me·punkte an und reicht von 10 bis 4000 Stunden.
+
+:p.Im Modus :hp1.Antenne einrichten:ehp1. wird das demodulierte AM-Signal des EmpfÑngers 
+dargestellt. Die Darstellung ist hierbei vom EmpfÑngertyp abhÑngig.
+:ul compact.
+:li.:hp1.hopf 6036-Einsteckkarte&colon.:ehp1. Die dargestellte Zeitdauer betrÑgt etwa 2s, 
+so da· im ungÅnstigsten Fall immer noch mindestens 1 Impuls zu sehen ist. 
+Die Antenne sollte so eingerichtet werden, da· der Abstand zwischen
+der minimalen Amplitude (:hp1.der Impuls:ehp1.) und der maximalen Amplitude (:hp1.der TrÑger:ehp1.)
+maximal ist.
+:li.:hp1.externes Empfangsmodul&colon.:ehp1. Die dargestellte Zeitdauer betrÑgt 1s, es werden
+insgesamt 10 Impulse Åbereinandergezeichnet ("Augenmuster"). Da der Low- und der High-Impuls
+unterschiedliche LÑngen haben (nominal 100 bzw. 200 ms), bildet der Bereich zwischen diesen
+Werten ein sogenanntes "Auge". FÅr die Auswertung ist es optimal, wenn dieses Auge mîglichst
+weit "offen" ist, das hei·t, da· keine Ausrei·er zwischen diesen Werten liegen. Im Optimalfall
+gibt es nur zwei Linien, die ihre fallende Flanke bei 100 bzw. 200 ms haben.
+:eul.
+
+.*----------------------------------------------------------
+.*  Datum/Uhrzeit
+.*----------------------------------------------------------
+:h1 res=&PANEL_SETTING3..Anzeigen Seite 3/3
+:i1 id=&PANEL_SETTING3..Anzeigen Seite 3/3
+
+:p.Wenn in eines der Eingabefelder dieser Seite eine gÅltige Bitmap-Datei eingegeben wird,
+wird in der analogen Ansicht der Uhr anstelle der Default-Darstellung die Bitmap-Datei wiedergegeben.
+Bei den Bitmap-Dateien mu· es sich um gÅltige Bitmap-Dateien (Endung "BMP") fÅr die
+Betriebssysteme OS/2 oder Windows handeln. FÅr die Darstellung ist folgendes zu beachten&colon.
+
+:ul compact.
+:li.Die Bitmapdatei fÅr das Ziffernblatt sollte quadratisch sein, um Verzerrungen zu vermeiden.
+:li.FÅr die Zeiger-Bitmaps kann eine Transparentfarbe verwendet werden, die auf der Einstellungsseite
+:link reftype=hd res=&PANEL_SETTING2..Anzeigen Seite 2/3:elink. eingestellt werden kann.
+:li.Zweifarb-Bitmaps werden nicht schwarz/wei· dargestellt, sondern es wird anstelle von 
+"wei·" die Farbe des Ziffernblattes verwendet (d. h. "wei·" ist die Transparentfarbe). Falls ein
+Zeiger mit den Farben "schwarz" und "wei·" gewÅnscht wird, sollte man eine Bitmapdatei erzeugen,
+das mehr Farben mit einer Palette besitzt (z. B. 16 oder 256 Palettenfarben), von denen eine
+Farbe schwarz, eine wei· ist. Ein dritte Farbe kann dann als Transparentfarbe definiert werden
+(rechteckige Zeiger dÅrften wohl kaum erwÅnscht sein).
+:li.Die Zeiger-Bitmaps besitzen einen "Hotspot"-Wert, der den Punkt der Zeigerachse definiert. Die
+meisten Bitmap-Bearbeitungsprogramme schreiben an die Stelle dieses Wertes im Bitmap-Header
+die Koordinaten (0/0). Zur Modifikation dieser Werte kann das mitgelieferte Programm
+:hp2.HOTSPOT.EXE:ehp2. verwendet werden. Wird dieses Programm ohne Argumente aufgerufen,
+gibt es auf der Konsole eine kurze Hilfe aus.
+:eul.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_HOURHAND..Stundenzeiger:elink.
+:li.:link reftype=hd res=&PANEL_MINHAND..Minutenzeiger:elink.
+:li.:link reftype=hd res=&PANEL_BACKGND..Ziffernblatt:elink.
+:li.:link reftype=hd res=&PANEL_SEARCHBMP..Suchen:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_HOURHAND..Stundenzeiger
+:i2 refid=&PANEL_SETTING3..Stundenzeiger
+
+:p.In diesem Feld wird der komplette Pfad der Bitmapdatei
+angegeben, die als Stundenzeiger verwendet werden soll.
+Die Datei kann von Hand eingegeben, Åber 
+:link reftype=hd res=&PANEL_SEARCHBMP..Suchen:elink.
+ausgewÑhlt oder per Drag&amp.Drop auf das Eingabefeld
+fallengelassen werden.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_MINHAND..Minutenzeiger
+:i2 refid=&PANEL_SETTING3..Minutenzeiger
+
+:p.In diesem Feld wird der komplette Pfad der Bitmapdatei
+angegeben, die als Minutenzeiger verwendet werden soll.
+Die Datei kann von Hand eingegeben, Åber 
+:link reftype=hd res=&PANEL_SEARCHBMP..Suchen:elink.
+ausgewÑhlt oder per Drap&amp.Drop auf das Eingabefeld
+fallengelassen werden.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_BACKGND..Ziffernblatt
+:i2 refid=&PANEL_SETTING3..Ziffernblatt
+
+:p.In diesem Feld wird der komplette Pfad der Bitmapdatei
+angegeben, die als Ziffernblatt verwendet werden soll.
+Die Datei kann von Hand eingegeben, Åber 
+:link reftype=hd res=&PANEL_SEARCHBMP..Suchen:elink.
+ausgewÑhlt oder per Drag&amp.Drop auf das Eingabefeld
+fallengelassen werden.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_SEARCHBMP..Suchen
+:i2 refid=&PANEL_SETTING3..Suchen
+
+:p.Die Auswahl eines dieser Knîpfe îffnet den Dateiauswahldialog,
+mit dessen Hilfe eine Bitmapdatei auf der Festplatte selektiert
+werden kann.
+
+.*----------------------------------------------------------
+.*  Stundengong
+.*----------------------------------------------------------
+:h1 res=&PANEL_AUDIO..Stundengong
+:i1 id=&PANEL_AUDIO..Stundengong
+
+:p.Auf dieser Seite werden die Einstellungen fÅr den Stundengong vorgenommen. Dies erfolgt durch 
+Auswahl einer Wave-Datei, die entweder jeweils zu Beginn einer Stunde einmal abgespielt wird oder
+aber 1 bis 12 mal entsprechend der Uhrzeit.
+
+:p.Werden mehrere Uhren auf dem Rechner instanziert, kann in diesem Auswahldialog nur in 
+einer Instanz eine Einstellung gemacht werden. Dadurch wird dafÅr gesorgt, da· nur genau 1 Uhr
+den Stundengong spielt.
+
+:p.Eine genaue ErklÑrung fÅr jedes Feld wird angezeigt, 
+wenn der entsprechende Begriff aus der 
+untenstehenden Liste ausgewÑhlt wird&colon.
+
+:ul compact.
+:li.:link reftype=hd res=&PANEL_WAVFILE..Pfad und Dateiname:elink.
+:li.:link reftype=hd res=&PANEL_WAVSELECT..AuswÑhlen:elink.
+:li.:link reftype=hd res=&PANEL_PLAY1..1 mal pro Stunde:elink.
+:li.:link reftype=hd res=&PANEL_PLAYN..Anzahl entsprechend der Uhrzeit:elink.
+:li.:link reftype=hd res=&PANEL_CANCEL..Widerrufen:elink.
+:li.:link reftype=hd res=&PANEL_STANDARD..Standard:elink.
+:eul.
+
+:p.Zugehîrige Information&colon.
+
+:p.:link reftype=hd res=10000.Anzeigen von Notizbuchseiten:elink.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_WAVFILE..Pfad und Dateiname
+:i2 refid=&PANEL_AUDIO..Pfad und Dateiname
+
+:p.In diesem Feld wird der komplette Pfad der Audiodatei
+angegeben, die als Stundengong verwendet werden soll.
+Die Datei kann von Hand eingegeben, Åber 
+:link reftype=hd res=&PANEL_WAVSELECT..AuswÑhlen:elink.
+ausgewÑhlt oder per Drap&amp.Drop auf das Eingabefeld
+fallengelassen werden.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_WAVSELECT..AuswÑhlen
+:i2 refid=&PANEL_SELECT..AuswÑhlen
+
+:p.Die Auswahl eines dieser Knîpfe îffnet den Dateiauswahldialog,
+mit dessen Hilfe eine Bitmapdatei auf der Festplatte selektiert
+werden kann.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_PLAY1..1 mal pro Stunde
+:i2 refid=&PANEL_SELECT..1 mal pro Stunde
+
+:p.Wird dieser Knopf gedrÅckt, so wird die unter
+:link reftype=hd res=&PANEL_WAVFILE..Pfad und Dateiname:elink.
+ausgewÑhlte Datei zu Beginn jeder Stunde genau einmal gespielt.
+
+.*----------------------------------------------------------
+:h2 res=&PANEL_PLAYN..Anzahl entsprechend der Uhrzeit
+:i2 refid=&PANEL_SELECT..Anzahl entsprechend der Uhrzeit
+
+:p.Wird dieser Knopf gedrÅckt, so wird die unter
+:link reftype=hd res=&PANEL_WAVFILE..Pfad und Dateiname:elink.
+ausgewÑhlte Datei zu Beginn jeder Stunde 1 bis 12 mal gespielt, entsprechend der 
+jeweiligen Uhrzeit.
+
+
+:euserdoc.
+
+

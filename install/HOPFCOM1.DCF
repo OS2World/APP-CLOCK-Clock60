@@ -1,0 +1,4 @@
+# Driver for Hopf Clock Controller #
+Hopf Clock Controller auf COM1:
+RUN = *\HOPF.EXE -S1; 5
+

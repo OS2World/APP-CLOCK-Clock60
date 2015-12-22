@@ -1,0 +1,11 @@
+zeit.OBJ +
+zeitrout.obj +
+zeitini.obj +
+ini_c.obj +
+trace.obj +
+timer.obj +
+common.obj
+zeit.sys
+zeit.map
+os2286.lib
+zeit.def
